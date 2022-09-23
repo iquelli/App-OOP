@@ -56,7 +56,7 @@
         + setEndTerminal(terminal : Terminal) : void
         + messageSent() : void
         + setDuration(duration : int) : void
-        + setCost(ct : ComunicationType,plan : Plan, charactersNumber : int) : void
+        + setCost(ct : ComunicationType, plan : Plan, charactersNumber : int) : void
     }
 
     Client <--> Terminal
