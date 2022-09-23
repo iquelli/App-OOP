@@ -1,0 +1,89 @@
+    class Client{
+        - key : String 
+        - name : String 
+        - NIF : int 
+
+        Client(String key)
+        + getKey() : String
+        + getName() : String
+        + getNIF() : int
+        + getPlan() : Plan
+        + getTerminal(key : String) : Terminal
+        + getTerminals() : Terminal
+        + getPaidComunications() : Comunication
+        + getDebtComunications() : Comunication
+        + isFriend(client : Client) : boolean
+
+        + setName(name : String) : void
+        + setNIF(NIF : int) : void
+        + setPlan(plan : Plan) : void
+        + addTerminal(terminal : Terminal) : void
+        + addFriend(client : Client) : void
+    }
+    class Terminal{
+        - key : String 
+        
+        + Terminal(key : String)
+        + getClient() : Client
+        + getKey() : String
+        + getComunications() : Comunication
+        + getType() : TerminalType
+        + getStatus() : TerminalStatus
+
+        + setClient(client : Client) : void
+        + addComunication(comunication : Comunication) : void
+        + setType(type : TerminalType) : void
+        + setStatus(status : TerminalStatus) : void
+    }
+
+    class Comunication{
+        - key : int 
+        - wasSent : boolean 
+        - duration : int
+        - cost : int
+
+        + Comunication(key : int) : Comunication
+        + getKey() : int
+        + getType() : ComunicationType
+        + getStartTerminal() : Terminal
+        + getEndTerminal() : Terminal
+        + wasSent() : boolean
+        + getDuration() : int
+        + getCost() : int
+
+        + setType(type : ComunicationType) : void
+        + setStartTerminal(terminal : Terminal) : void
+        + setEndTerminal(terminal : Terminal) : void
+        + messageSent() : void
+        + setDuration(duration : int) : void
+        + setCost(ct : ComunicationType,plan : Plan, charactersNumber : int) : void
+    }
+
+    Client <--> Terminal
+    Client --> Plan
+    Client --> Client
+    Terminal <--> Comunication
+    Terminal --> TerminalType
+    Terminal --> TerminalStatus
+    Comunication --> ComunicationType
+
+    class TerminalType{
+        Basic
+        Sofisticado
+    }
+    class TerminalStatus{
+        Idle
+        Silent
+        Busy
+        Off
+    }
+    class ComunicationType{
+        Text
+        Voice
+        Video
+    }
+    class Plan{
+        Normal
+        Gold
+        Platinium
+    }
