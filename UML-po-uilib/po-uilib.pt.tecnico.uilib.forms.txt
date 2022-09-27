@@ -14,18 +14,19 @@ classDiagram
         +cleared() boolean
         +isReadOnyl() boolean
         +parse(in : String)* boolean
-        +toString() : String
+        +toString() String
     }
 
     <<Abstract>> Field
-    Field~Boolean~ <.. FieldBoolean : extends Field~Boolean~
-    Field~Integer~ <.. FieldInteger : extends Field~Integer~
-    Field~Void~ <.. FieldNone : extends Field~Void~
-    Field~String~ <.. FieldOption : extends Field~String~
-    Field~Double~ <.. FieldReal : extends Field~Double~
-    Field~String~ <.. FieldString : extends Field~String~
+    Field~Boolean~ <|-- FieldBoolean : extends Field~Boolean~
+    Field~Integer~ <|-- FieldInteger : extends Field~Integer~
+    Field~Void~ <|-- FieldNone : extends Field~Void~
+    Field~String~ <|-- FieldOption : extends Field~String~
+    Field~Double~ <|-- FieldReal : extends Field~Double~
+    Field~String~ <|-- FieldString : extends Field~String~
 
     class FieldBoolean{
+        %% estes precisam todos da tag final
         -BOOLEN_WORD_YES String $
         -BOOLEN_WORD_NO String $
         -BOOLEANN_CHAR_YES char $
@@ -105,7 +106,7 @@ classDiagram
         +FormException(msg : String)
     }
 
-    RuntimeException <.. FormException : extends
+    RuntimeException <|-- FormException : extends
 
     class Message{
         -keyAlreadyExists(form : String, key : String)$ String
