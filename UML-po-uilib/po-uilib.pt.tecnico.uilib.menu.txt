@@ -13,20 +13,20 @@ classDiagram
         +Command(last : boolean, title : String, receiver: Receiver, valid : Predicate~Receiver~)
         +Command(title : String, receiver : Receiver)
         +Command(title : String, receiver : Receiver, valid : Predicate~Receiver~)
-        +title() : String
-        +isLast() : boolean
-        +isValid() : boolean
-        +addBooleanField(key : String, prompt : String) : void
-        +addRealField(key : String, prompt : String) : void
-        +addIntegerField(key : String, prompt : String) : void
-        +addStringField(key : String, prompt : String) : void
-        +addOptionField(key : String, prompt : String, options : String...) : void
-        +booleanField(key : String) : boolean
-        +realField(key : String) : Double
-        +integerField(key : String) : Integer
-        +stringField(key : String) : String
-        +optionField(key : String) : String
-        +performCommand() : void
+        +title() String
+        +isLast() boolean
+        +isValid() boolean
+        +addBooleanField(key : String, prompt : String) void
+        +addRealField(key : String, prompt : String) void
+        +addIntegerField(key : String, prompt : String) void
+        +addStringField(key : String, prompt : String) void
+        +addOptionField(key : String, prompt : String, options : String...) void
+        +booleanField(key : String) boolean
+        +realField(key : String) Double
+        +integerField(key : String) Integer
+        +stringField(key : String) String
+        +optionField(key : String) String
+        +performCommand() void
         #execute()* void 
     }
 
@@ -37,7 +37,7 @@ classDiagram
 
         +CommandException(message : String)
         +CommandException(message : String, throwable : Throwable)
-        +toString() : String
+        +toString() String
     }
 
     DoOpenMenu <.. Command~Menu~ : extends
@@ -45,7 +45,7 @@ classDiagram
     class DoOpenMenu {
         
         +DoOpenMenu(label : String, receiver : Menu)
-        #execute() : void
+        #execute() void
     }
 
 
@@ -56,11 +56,11 @@ classDiagram
 
         +Menu(ui : Dialog, title : String, commands : Command~?~...)
         +Menu(title : String, commands : Command~?~...)
-        +title() : String
-        +size() : int
-        +entry(n : int) : Command~?~
-        +entries() : Command~?~[]
-        +open() : void
+        +title() String
+        +size() int
+        +entry(n : int) Command~?~
+        +entries() Command~?~[]
+        +open() void
     }
 
     class Message {
