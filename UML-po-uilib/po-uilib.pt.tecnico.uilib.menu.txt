@@ -3,17 +3,17 @@ classDiagram
     class Command~Receiver~ {
         -_last : boolean
         -_title : String
-        #_receiver : Receiver
+        #final_receiver : Receiver
         #_valid : Predicate~Receiver~
-        -_form : Form
-        #_display : Display
+        -final_form : Form
+        #final_display : Display
         
         +Command(last : boolean, title : String)
         +Command(last : boolean, title : String, receiver: Receiver)
         +Command(last : boolean, title : String, receiver: Receiver, valid : Predicate~Receiver~)
         +Command(title : String, receiver : Receiver)
         +Command(title : String, receiver : Receiver, valid : Predicate~Receiver~)
-        +title() String
+        +finaltitle() String
         +isLast() boolean
         +isValid() boolean
         +addBooleanField(key : String, prompt : String) void
@@ -26,18 +26,18 @@ classDiagram
         +integerField(key : String) Integer
         +stringField(key : String) String
         +optionField(key : String) String
-        +performCommand() void
+        +finalperformCommand() void
         #execute()* void 
     }
 
     Exception <.. CommandException : extends
 
     class CommandException {
-        -serialVersionUID long $
+        -finalserialVersionUID long $
 
         +CommandException(message : String)
         +CommandException(message : String, throwable : Throwable)
-        +toString() String
+        +finaltoString() String
     }
 
     DoOpenMenu <.. Command~Menu~ : extends
@@ -45,7 +45,7 @@ classDiagram
     class DoOpenMenu {
         
         +DoOpenMenu(label : String, receiver : Menu)
-        #execute() void
+        #finalexecute() void
     }
 
 
@@ -64,6 +64,7 @@ classDiagram
     }
 
     class Message {
+
         -operationFailed(error : String)$ String
     }
 

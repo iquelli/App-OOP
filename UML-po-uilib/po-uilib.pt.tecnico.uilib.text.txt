@@ -1,0 +1,96 @@
+classDiagram
+
+    CompositePrintStream <.. PrintStream : extends
+
+    class CompositePrintStream {
+        -_stream : Collection~PrintStream~
+        -_error : boolean
+        
+        -CompositePrintStream()
+        -CompositePrintStream(printStreams : PrintStream...)
+        -finaladd(ps : PrintStream) void
+        +checkError() boolean
+        +close() void
+        +flush() void
+        +print(b : boolean) void
+        +print(c : char) void
+        +print(c : char[]) void
+        +print(d : double) void
+        +print(f : float) void
+        +print(i : int) void
+        +print(l : long) void
+        +print(obj : Object) void
+        +print(str: String) void
+        +println(b : boolean) void
+        +println(c : char) void
+        +println(c : char[]) void
+        +println(d : double) void
+        +println(f : float) void
+        +println(i : int) void
+        +println(l : long) void
+        +println(obj : Object) void
+        +println(str: String) void
+        #setError() void
+        +write(buf : byte[], off : int, len : int) void
+        +write(b : int) void
+        +write(b : byte[]) void 
+    }
+
+    class Message {
+
+        -invalidOperation(error : String)$ String
+        -invalidOption()$ String
+        -errorEOF(e : EOFException)$ String
+        -errorIO(ioe : IOEException)$ String
+        -errorInvalidNumber(e : NumberFormatException)$ String
+        -inputError(e : FileNotFoundException)$ String
+        -errorClosingInput(e : IOEException)$ String
+        -endOfInput()$ String
+        -outputError(e : FileNotFoundException)$ String
+        -logError(e : FileNotFoundException)$ String
+    }
+
+    <<interface>> Message
+
+    class Prompt {
+
+        -option()$ String
+        -exit()$ String
+    }
+
+    <<interface>> Prompt
+
+    class Property {
+        -WRITE_INPUT : String
+        -BOTH_CHANNELS : String
+        -INPUT_CHANNEL : String
+        -OUTPUT_CHANNEL : String
+        -LOG_CHANNEL : String
+    }
+
+    <<interface>> Property
+
+    class RuntimeEOFException {
+
+        -finalserialVersionUID long$
+        -RuntimeEOFException()
+        -RuntimeEOFException(msg : String)
+    }
+
+    RuntimeException <.. RuntimeEOFException : extends
+
+    class TextInteraction {
+        -_in : BufferedReader
+        -_out : PrintStream
+        -_writeInput : boolean
+
+        +TextInteraction()
+        +close() void
+        +open(menu : Menu) void
+        +fill(form : Form) void
+        +render(title : String, text : String) void
+        -finalreadString(prompt : String) String
+        -finalreadInteger(prompt : String) int
+    }
+
+    InteractionDriver <.. TextInteraction : implements
