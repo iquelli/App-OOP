@@ -1,0 +1,227 @@
+classDiagram
+    class Field~Type~{
+        -_prompt : String
+        -_clear : boolean
+        #_value : Type
+
+        #Field(prompt : String)
+
+        +prompt() String
+        +set(value : Type) void
+        +value() Type
+        +clear() void
+        #dirty() void
+        +cleared() boolean
+        +isReadOnyl() boolean
+        +parse(in : String)* boolean
+        +toString() String
+    }
+
+    <<Abstract>> Field
+    Field~Boolean~ <.. FieldBoolean : extends Field~Boolean~
+    Field~Integer~ <.. FieldInteger : extends Field~Integer~
+    Field~Void~ <.. FieldNone : extends Field~Void~
+    Field~String~ <.. FieldOption : extends Field~String~
+    Field~Double~ <.. FieldReal : extends Field~Double~
+    Field~String~ <.. FieldString : extends Field~String~
+
+    class FieldBoolean{
+        %% estes precisam todos da tag final
+        -BOOLEN_WORD_YES String $
+        -BOOLEN_WORD_NO String $
+        -BOOLEANN_CHAR_YES char $
+        -BOOLEAN_CHAR_NO char $
+
+        -FieldBoolean(prompt : String)
+
+        +parse(int : String) boolean
+        +toString() String
+    }
+
+    class FieldInteger{
+        -FieldInteger(prompt : String)
+        +parse(in : String) boolean
+    }
+
+    class FieldNone{
+        -FieldNone(prompt : String)
+        +parse(in : String) : boolean
+        +isReadOnly() boolean
+    }
+
+    class FieldOption{
+        -_options : String[]
+        -FieldOption(prompt : String, options : String[])
+        +parse(in : String) boolean
+    }
+
+    class FieldReal{
+        -FieldReal(prompt : String)
+        +parse(in : String) boolean
+    }
+
+    class FieldString{
+        -FieldString(prompt : String)
+        +parse(in : String)
+    }
+
+    class Form{
+        -_ui : Diaglog
+        -_title : String
+        %% o _fields tem de estar inicializado
+        -_fields : Map~String, Field~?~~
+
+        +Form()
+        +Form(title : String)
+        +Form(ui : Dialog, title : String)
+
+        +title() String
+        +entries() Collection~Field~?~~
+        +field(key : String) Field~?~
+        -add(key : String, in : Field~?~) void
+        +addBooleanField(key : String, lable : String) void
+        +addStringField(key : String, lable : String) void
+        +addRealField(key : String, lable : String) void
+        +addIntegerField(key : String, lable : String) void
+        +addOptionField(key : String, lable : String, options : String...) void
+
+        -get(key : String, type : String) Object
+        +booleanField(key : String) Boolean
+        +stringField(key : String) String
+        +optionField(key : String) String
+        +realField(key : String) Double
+        +integerField(key : String) Integer
+
+        +parse(clear : boolean) Form
+        +clear() void
+        +confirm(prompt : String)$ Boolean
+        +requestInteger(prompt : String)$ Integer
+        +requestReal(prompt : String)$ Double
+        +requestString(prompt : String)$ String
+        +requestOption(prompt : String, options : String...)$ String
+    }
+
+    class FormException{
+        -serialVersionUID long$
+        +FormException(msg : String)
+    }
+
+    RuntimeException <.. FormException : extends
+
+    class Message{
+        -keyAlreadyExists(form : String, key : String)$ String
+        -formNotFilled(form : String)$ String
+        -keyNotFound(form : String, key : String)$ String
+        -typeMismatch(form : String, key : String, actualType : String, requestedType : String)$ String
+    }
+
+    <<interface>> Message
+
+    %% cenas só para separar o forms do swing
+
+    class NewSwingInteraction{
+        -serialVersionUID long$
+        -MAIN_TITLE String§
+        +NewSwingInteraction()
+        +open(menu : Menu) void
+        +fill(form : Form) void
+        +render(title : String, text : String) void
+        +close() void
+        -message(title : String, msg : String) void
+    }
+
+    JFrame <.. newSwingInteraction : extends
+
+    class Prompt{
+        -exit()$ String
+    }
+
+    <<interface>> Prompt
+
+    class SwingDialogForm{
+        -RED_BORDER : final Border
+        -NO_BORDER : final Border
+        -serialVersionUID long $
+        -_inputs : Map~Field~?~, JTextFied~
+
+        -SwingDialogForm(form : Form, frame : Frame)
+        +createFormPanel(form : Form) JPanel
+        +actionPerformed(event : ActionEvent) void
+        -parse() boolean
+    }
+
+    JDialog <.. SwingDialogForm : extends
+
+    class SwingDialogMenu{
+        -serialVersion long $
+        -_option : int
+        -_menu : Menu
+        -_out : JTextArea
+        -_outputTitleLabel : JLabel
+        -_buttonMenu : JButton[]
+        -_selectedButton : JButton
+        -SwingDialogMenu(menu : Menu, frame : Frame, locationComp : Component)
+        -createOutputPane() JPanel
+        +updateOutput(title : String, output : String) void
+        -createMenuPanel() JPanel
+        +actionPerformed(event : ActionEvent) void
+        -updateValidButtons() void
+        -executeOption(option : int) void
+        -option() int
+        -clearAndHide() void
+        -showErrorMessage(title : String, msg : String) void
+    }
+
+    JDialog <.. SwingDialogMenu : extends
+
+    class SwingForm{
+        -serialVersionUID long $
+        -_inputs : Map~Field~?~, JTextField~
+        -SwingForm(form : Form)
+        -parse() boolean
+    }
+
+    SwingPanel <.. SwingForm : extends
+
+    class SwingInteraction{
+        -serialVersionUID long §
+        -MAIN_TITLE String $
+        +SwingInteraction()
+        +open(menu : Menu) void
+        +fill(form : Form) void
+        +render(title : String, text : String) void
+        +close() void
+        -message(title : String, msg : String) void
+    }
+    
+    JFrame <.. SwingInteraction : extends
+
+    class SwingMenu{
+        -serialVersionUID long §
+        -_option : int
+        -SwingMenu(menu : Menu)
+        +actionPerformed(event : ActionEvent) void
+    }
+
+    SwingPanel <.. SwingMenu : extends
+
+    class SwingMessage{
+        -serialVersionUID long §
+        -SwingMessage(title : String, msg : String)
+    }
+
+    SwingPanel <.. SwingMessage : extends
+
+    class SwingPanel{
+        -serialVersionUID long §
+        #_end : boolean
+        final #_lock : Object
+        +actionPerformed(event : ActionEvent) void
+        -synchronized sleep(millis : int) void
+        -synchronized await() void
+    } 
+
+    JPanel <.. SwingPanel : extends
+
+
+
