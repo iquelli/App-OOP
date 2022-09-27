@@ -1,0 +1,45 @@
+classDiagram
+    
+    class Dialog {
+        -finalACTIONCHANNEL String$
+        -finalCHANNEL_SWING String$
+        -finalCHANNEL_NEW_SWING String$
+        -finalCHANNEL_TEXT String$
+        +UI Dialog$
+        -_backend InteractionDriver
+
+        -Dialog()
+        +Dialog(backend : InteractionDriver)
+        +open(menu : Menu) void
+        fill(form : Form) void
+        render(title : String, text : String) void
+        close() void
+    }
+
+    AutoCloseable <.. Dialog : implements
+
+   class Display {
+        -_ui : Dialog
+        _title : String
+        _text : StringBuilder
+
+        +Display()
+        +Display(title : String)
+        +Display(ui : Dialog, title : String)
+        +add(toAdd : Object) Display
+        +addAll(items : Collection~?~) Display
+        +addLine(toAdd : Object) Display
+        +addNewLine(toAdd : Object, force : boolean) Display
+        +display() void
+        +popup(toPop : Object)
+        +popup(toPop : Colection~?~) void
+        +clear() void
+   }
+
+    class InteractionDriver {
+
+        -open(menu : Menu) void
+        -fill(form : Form) void
+        -render(title : String, text : String) void
+        -close() void
+    }
