@@ -1,4 +1,4 @@
-class Diagram
+classDiagram
 
     class Command~Receiver~ {
         -_last : boolean
@@ -30,8 +30,7 @@ class Diagram
         #execute()* void 
     }
 
-    <<Abstract>> Exception
-    Exception <.. CommandException : extends Exception
+    Exception <.. CommandException : extends
 
     class CommandException {
         -serialVersionUID long $
