@@ -20,8 +20,8 @@ classDiagram
 
    class Display {
         -_ui : Dialog
-        _title : String
-        _text : StringBuilder
+        -_title : String
+        -_text : StringBuilder
 
         +Display()
         +Display(title : String)
