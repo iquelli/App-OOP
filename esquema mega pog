@@ -19,7 +19,8 @@ classDiagram
         +setPlan(plan : Plan) : void
         +addTerminal(terminal : Terminal) : void
         +addFriend(client : Client) : void
-    }
+    }  
+
     class Terminal{
         -key : String 
         
