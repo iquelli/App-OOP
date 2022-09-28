@@ -1,8 +1,10 @@
 classDiagram
     class NewSwingInteraction{
-        -serialVersionUID long$
-        -MAIN_TITLE String§
-        +NewSwingInteraction()
+        %% tag final aqui
+        -serialVersionUID long $
+        %% tag final aqui
+        -MAIN_TITLE String §
+		-_currentDialogMenu : SwingDialogMenu
         +open(menu : Menu) void
         +fill(form : Form) void
         +render(title : String, text : String) void
@@ -10,7 +12,8 @@ classDiagram
         -message(title : String, msg : String) void
     }
 
-    JFrame <.. NewSwingInteraction : extends
+    JFrame <|-- NewSwingInteraction
+	InteractionDriver <|.. NewSwingInteraction
 
     class Prompt{
         -exit()$ String
@@ -19,20 +22,24 @@ classDiagram
     <<interface>> Prompt
 
     class SwingDialogForm{
-        -RED_BORDER : final Border
-        -NO_BORDER : final Border
+        %% tag final aqui
+        -RED_BORDER Border $
+        %% tag final
+        -NO_BORDER Border $
+        %% tag final aqui
         -serialVersionUID long $
         -_inputs : Map~Field~?~, JTextFied~
 
-        -SwingDialogForm(form : Form, frame : Frame)
         +createFormPanel(form : Form) JPanel
         +actionPerformed(event : ActionEvent) void
         -parse() boolean
     }
 
-    JDialog <.. SwingDialogForm : extends
+    JDialog <|-- SwingDialogForm
+	ActionListener <|..SwingDialogForm
 
     class SwingDialogMenu{
+        %% tag final aqui
         -serialVersion long $
         -_option : int
         -_menu : Menu
@@ -40,7 +47,6 @@ classDiagram
         -_outputTitleLabel : JLabel
         -_buttonMenu : JButton[]
         -_selectedButton : JButton
-        -SwingDialogMenu(menu : Menu, frame : Frame, locationComp : Component)
         -createOutputPane() JPanel
         +updateOutput(title : String, output : String) void
         -createMenuPanel() JPanel
@@ -52,21 +58,24 @@ classDiagram
         -showErrorMessage(title : String, msg : String) void
     }
 
-    JDialog <.. SwingDialogMenu : extends
+    JDialog <|-- SwingDialogMenu
+	ActionListener <|.. SwingDialogMenu
 
     class SwingForm{
+        %% tag final aqui
         -serialVersionUID long $
         -_inputs : Map~Field~?~, JTextField~
-        -SwingForm(form : Form)
         -parse() boolean
     }
 
-    SwingPanel <.. SwingForm : extends
+    SwingPanel <|-- SwingForm
 
     class SwingInteraction{
+        %% tag final aqui
         -serialVersionUID long §
+        %% tag final aqui
         -MAIN_TITLE String $
-        +SwingInteraction()
+		
         +open(menu : Menu) void
         +fill(form : Form) void
         +render(title : String, text : String) void
@@ -74,34 +83,35 @@ classDiagram
         -message(title : String, msg : String) void
     }
     
-    JFrame <.. SwingInteraction : extends
+    JFrame <|-- SwingInteraction
+	InteractionDriver <|.. SwingInteraction
 
     class SwingMenu{
+        %% tag final aqui
         -serialVersionUID long §
         -_option : int
-        -SwingMenu(menu : Menu)
         +actionPerformed(event : ActionEvent) void
     }
 
-    SwingPanel <.. SwingMenu : extends
+    SwingPanel <|-- SwingMenu
 
     class SwingMessage{
+        %% tag final aqui
         -serialVersionUID long §
-        -SwingMessage(title : String, msg : String)
     }
 
-    SwingPanel <.. SwingMessage : extends
+    SwingPanel <|-- SwingMessage
 
     class SwingPanel{
+        %% tag final aqui
         -serialVersionUID long §
         #_end : boolean
-        final #_lock : Object
+        %% tag final aqui
+        #_lock : Object
         +actionPerformed(event : ActionEvent) void
         -synchronized sleep(millis : int) void
         -synchronized await() void
     } 
 
-    JPanel <.. SwingPanel : extends
-
-
-
+    JPanel <|-- SwingPanel
+	ActionListener <|.. SwingPanel
