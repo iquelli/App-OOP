@@ -32,36 +32,29 @@ classDiagram
         -BOOLEANN_CHAR_YES char $
         -BOOLEAN_CHAR_NO char $
 
-        -FieldBoolean(prompt : String)
-
         +parse(int : String) boolean
         +toString() String
     }
 
     class FieldInteger{
-        -FieldInteger(prompt : String)
         +parse(in : String) boolean
     }
 
     class FieldNone{
-        -FieldNone(prompt : String)
         +parse(in : String) : boolean
         +isReadOnly() boolean
     }
 
     class FieldOption{
         -_options : String[]
-        -FieldOption(prompt : String, options : String[])
         +parse(in : String) boolean
     }
 
     class FieldReal{
-        -FieldReal(prompt : String)
         +parse(in : String) boolean
     }
 
     class FieldString{
-        -FieldString(prompt : String)
         +parse(in : String)
     }
 
@@ -70,10 +63,6 @@ classDiagram
         -_title : String
         %% o _fields tem de estar inicializado
         -_fields : Map~String, Field~?~~
-
-        +Form()
-        +Form(title : String)
-        +Form(ui : Dialog, title : String)
 
         +title() String
         +entries() Collection~Field~?~~
@@ -104,7 +93,6 @@ classDiagram
     class FormException{
         %% tag final aqui
         -serialVersionUID long$
-        +FormException(msg : String)
     }
 
     RuntimeException <|-- FormException
