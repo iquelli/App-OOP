@@ -18,12 +18,12 @@ classDiagram
     }
 
     <<Abstract>> Field
-    Field~Boolean~ <|-- FieldBoolean : extends Field~Boolean~
-    Field~Integer~ <|-- FieldInteger : extends Field~Integer~
-    Field~Void~ <|-- FieldNone : extends Field~Void~
-    Field~String~ <|-- FieldOption : extends Field~String~
-    Field~Double~ <|-- FieldReal : extends Field~Double~
-    Field~String~ <|-- FieldString : extends Field~String~
+    Field~Boolean~ <|-- FieldBoolean : Type -> Boolean
+    Field~Integer~ <|-- FieldInteger : Type -> Integer
+    Field~Void~ <|-- FieldNone : Type -> Void
+    Field~String~ <|-- FieldOption : Type -> String
+    Field~Double~ <|-- FieldReal : Type -> Double
+    Field~String~ <|-- FieldString : Type -> String
 
     class FieldBoolean{
         %% estes precisam todos da tag final
@@ -102,11 +102,12 @@ classDiagram
     }
 
     class FormException{
+        %% tag final aqui
         -serialVersionUID long$
         +FormException(msg : String)
     }
 
-    RuntimeException <|-- FormException : extends
+    RuntimeException <|-- FormException
 
     class Message{
         -keyAlreadyExists(form : String, key : String)$ String
