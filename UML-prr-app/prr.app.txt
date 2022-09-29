@@ -1,4 +1,5 @@
 classDiagram
-    class App{
+    class App {
+
         +main(args : String[])$ void
     }
