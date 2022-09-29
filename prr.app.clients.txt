@@ -1,0 +1,84 @@
+classDiagram
+    class DoDisableClientNotifications{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoDisableClientNotifications
+
+    class DoEnableClientNotifications{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoEnableClientNotifications
+
+    class DoRegisterClient{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoRegisterClient
+
+    class DoDisableClientNotifications{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoDisableClientNotifications
+
+    class DoShowAllClients{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoShowAllClients
+
+    class DoShowClient{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoShowClient
+
+    class DoShowClientPaymentAndDebts{
+        %% tag final aqui
+        #execute()
+    }
+
+    Comand~Network~ <|-- DoShowClientPaymentAndDebts
+
+    class Label{
+        -TITLE : String
+        -SHOW_CLIENT : String
+        -SHOW_ALL_CLIENTS : String
+        -REGISTER_CLIENT : String
+        -ENABLE_CLIENT_NOTIFICATIONS : String
+        -DISABLE_CLIENT_NOTIFICATIONS : String
+        -SHOW_CLIENT_BALANCE : String
+    }
+
+    <<interface>> Label
+
+    class Menu{
+
+    }
+
+    %% este Menu extends o menu de pt.tecnico.uilib.menus.Menu
+    uilibmenusMenu <|-- Menu
+
+    class Message{
+        -clientNotificationsAlreadyEnabled()$ String
+        -clientNotificationsAlreadyDisabled()$ String
+        -clientPaymentsAndDebts(key : String, payments : long, debts : long)$ String
+    }
+
+    <<interface>> Message
+
+    class Prompt{
+        -key()$ String
+        -name()$ String
+        -taxId()$ String
+    }
+
+    <<interface>> Prompt
