@@ -1,0 +1,29 @@
+classDiagram
+
+    Exception -- ImportFileException
+    Exception -- MissingFileAssociationException
+    Exception -- UnavailableFileException
+    Exception -- UnrecognizedEntryException
+
+    class ImportFileException{
+        %% tag final aqui
+        -serialVersionUID long $
+    }
+
+    class MissingFileAssociationException{
+        %% tag final aqui
+        -serialVersionUID long $
+    }
+
+    class UnavailableFileException{
+        %% tag final aqui
+        -serialVersionUID long $
+        +getFileName() String
+    }
+
+    class UnrecognizedEntryException{
+        %% tag final aqui
+        -serialVersionUID long $
+        -_entrySpecification  String
+        +getEntrySpecification() String
+    }
