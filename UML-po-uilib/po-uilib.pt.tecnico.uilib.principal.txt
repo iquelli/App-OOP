@@ -16,7 +16,7 @@ classDiagram
         close() void
     }
 
-    AutoCloseable <.. Dialog : implements
+    AutoCloseable <|.. Dialog
 
    class Display {
         -_ui : Dialog

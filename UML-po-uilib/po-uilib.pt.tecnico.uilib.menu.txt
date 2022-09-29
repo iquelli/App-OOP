@@ -30,7 +30,7 @@ classDiagram
         #execute()* void 
     }
 
-    Exception <.. CommandException : extends
+    Exception <|-- CommandException
 
     class CommandException {
         -finalserialVersionUID long $

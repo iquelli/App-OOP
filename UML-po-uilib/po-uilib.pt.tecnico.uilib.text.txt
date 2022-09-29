@@ -1,6 +1,6 @@
 classDiagram
 
-    CompositePrintStream <.. PrintStream : extends
+    CompositePrintStream <|-- PrintStream 
 
     class CompositePrintStream {
         -_stream : Collection~PrintStream~
@@ -77,7 +77,7 @@ classDiagram
         -RuntimeEOFException(msg : String)
     }
 
-    RuntimeException <.. RuntimeEOFException : extends
+    RuntimeException <|-- RuntimeEOFException
 
     class TextInteraction {
         -_in : BufferedReader
@@ -93,4 +93,4 @@ classDiagram
         -finalreadInteger(prompt : String) int
     }
 
-    InteractionDriver <.. TextInteraction : implements
+    InteractionDriver <|.. TextInteraction
