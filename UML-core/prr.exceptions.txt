@@ -1,9 +1,9 @@
 classDiagram
 
-    Exception -- ImportFileException
-    Exception -- MissingFileAssociationException
-    Exception -- UnavailableFileException
-    Exception -- UnrecognizedEntryException
+    Exception <|-- ImportFileException
+    Exception <|-- MissingFileAssociationException
+    Exception <|-- UnavailableFileException
+    Exception <|-- UnrecognizedEntryException
 
     class ImportFileException{
         %% tag final aqui
