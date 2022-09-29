@@ -23,9 +23,6 @@ classDiagram
         -_title : String
         -_text : StringBuilder
 
-        +Display()
-        +Display(title : String)
-        +Display(ui : Dialog, title : String)
         +add(toAdd : Object) Display
         +addAll(items : Collection~?~) Display
         +addLine(toAdd : Object) Display

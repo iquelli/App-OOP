@@ -6,8 +6,6 @@ classDiagram
         -_stream : Collection~PrintStream~
         -_error : boolean
         
-        -CompositePrintStream()
-        -CompositePrintStream(printStreams : PrintStream...)
         -finaladd(ps : PrintStream) void
         +checkError() boolean
         +close() void
@@ -84,7 +82,6 @@ classDiagram
         -_out : PrintStream
         -_writeInput : boolean
 
-        +TextInteraction()
         +close() void
         +open(menu : Menu) void
         +fill(form : Form) void

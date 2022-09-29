@@ -35,8 +35,6 @@ classDiagram
     class CommandException {
         -finalserialVersionUID long $
 
-        +CommandException(message : String)
-        +CommandException(message : String, throwable : Throwable)
         +finaltoString() String
     }
 
@@ -44,7 +42,6 @@ classDiagram
 
     class DoOpenMenu {
         
-        +DoOpenMenu(label : String, receiver : Menu)
         #finalexecute() void
     }
 

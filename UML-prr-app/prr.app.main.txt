@@ -1,0 +1,61 @@
+classDiagram
+
+    Command~NetworkManager~ <|-- DoOpenFile
+
+    class DoOpenFile {
+
+        #finalexecute() void
+    }
+
+    Command~NetworkManager~ <|-- DoSaveFile
+
+    class DoSaveFile {
+
+        #finalexecute() void
+    }
+
+    Command~NetworkManager~ <|-- DoShowGlobalBalance
+
+    class DoShowGlobalBalance {
+
+        #finalexecute() void
+    }
+
+    class Label {
+        -TITLE : String
+        -OPEN_FILE : String
+        -SAVE_FILE : String
+        -OPEN_MENU_CLIENTS : String
+        -OPEN_MENU_TERMINALS : String
+        -OPEN_MENU_LOOKUPS : String
+        -SHOW_GLOBAL_BALANCE : String
+    }
+
+    <<interface>> Label
+
+    %% este Menu extends o menu de pt.tecnico.uilib.menus.Menu
+    uilibmenusMenu <|-- Menu
+
+    class Menu {
+
+    }
+
+    class Message {
+
+        -fileNotFound()$ String
+        -fileNotFound(filename : String)$ String
+        -globalPaymentsAndDebts(payments : long, debts : long)$ String
+    }
+
+    <<interface>> Message
+
+    class Prompt {
+        
+        -openFile()$ String
+        -newSaveAs()$ String
+        -saveAs()$ String
+        -saveBeforeExit()$ String
+        -daysToAdvance()$ String
+    }
+
+    <<interface>> Prompt     

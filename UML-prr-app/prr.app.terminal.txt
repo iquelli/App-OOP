@@ -142,3 +142,5 @@ classDiagram
     class TerminalCommand {
         #_network : Network
     }
+
+    <<abstract>> TerminalCommand

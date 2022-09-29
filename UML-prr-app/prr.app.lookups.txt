@@ -1,0 +1,84 @@
+classDiagram
+
+    Comand~Network~ <|-- DoShowAllCommunications
+
+    class DoShowAllCommunications {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowClientsWithDebts
+
+    class DoShowClientsWithDebts {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowClientsWithoutDebts
+
+    class DoShowClientsWithoutDebts {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowCommunicationsFromClient
+
+    class DoShowCommunicationsFromClient {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowCommunicationsToClient
+
+    class DoShowCommunicationsToClient {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowTerminalsWithPositiveBalance
+
+    class DoShowTerminalsWithPositiveBalance {
+
+        #finalexecute() void
+    }
+
+    Comand~Network~ <|-- DoShowUnusedTerminals
+
+    class DoShowUnusedTerminals {
+
+        #finalexecute() void
+    }
+
+    class Label {
+        -TITLE : String
+        -SHOW_ALL_COMMUNICATIONS : String
+        -SHOW_COMMUNICATIONS_FROM_CLIENT : String
+        -SHOW_COMMUNICATIONS_TO_CLIENT : String
+        -SHOW_CLIENTS_WITHOUT_DEBTS : String
+        -SHOW_CLIENTS_WITH_DEBTS : String
+        -SHOW_UNUSED_TERMINALS : String
+        -SHOW_TERMINALS_WITH_POSITIVE_BALANCE : String
+    }
+
+    <<interface>> Label
+
+    %% este Menu extends o menu de pt.tecnico.uilib.menus.Menu
+    uilibmenusMenu <|-- Menu
+
+    class Menu {
+
+    }
+
+    class Message {
+
+    }
+
+    <<interface>> Message
+
+    class Prompt {
+
+        -clientKey()$ String
+        -terminalKey()$ String
+    }
+
+    <<interface>> Prompt
