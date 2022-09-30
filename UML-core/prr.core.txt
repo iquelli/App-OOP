@@ -1,0 +1,165 @@
+classDiagram
+
+    Terminal --> "1" Client : _client
+    Client *-- "*" Terminal : _terminals
+    Terminal --> "1" TerminalType : _type
+    Terminal --> "1" TerminalStatus : _status
+    Communication --> "2" Terminal : _terminalFrom, _terminalTo
+    Communication --> "1" CommunicationStatus : _status
+    Client --> "1" Tariff : _tariff
+    Terminal *-- "*" Communication : _communications
+
+    class Client{
+        %% tag final aqui
+        -serialVersionUID long $
+        -_key : String
+        -_name : String
+        -_nif : int
+        -_tariff : Tariff
+        -_terminals : List~Terminal~
+        -_payments : int
+        -_debts : int
+        -_canReceiveFailedCommunications : boolean
+
+        +getBalance() int
+        +addTerminal(terminal : Terminal) void
+        +debtPaid(payment : int) void
+        +addDebt(debt : int) void
+        +enableFailedCommunicationsNotifications() void
+        +disableFailedCommunicationsNotifications() void
+    }
+
+    class Tariff{
+        NORMAL
+        GOLD
+        PLATINIUM
+    }
+
+    <<enumeration>> Tariff
+
+    class Communication{
+        %% tag final aqui
+        -serialVersionUID long $
+        -_key : int;
+        -_terminalFrom : Terminal
+        -_terminalTo : Terminal
+        -_status : CommunicationStatus
+        -_cost : int
+
+        +setCost(tariff : Tariff)* void
+    }
+
+    <<abstract>> Communication
+    Communication <|-- InteractiveCommunication
+    Communication <|-- TextCommunication
+
+    class TextCommunication{
+        -_messageSent : String
+
+        +setCost(tariff : Tariff) void
+    }
+
+    class InteractiveCommunication{
+        -_duration : int
+        -_isVideoCommunication : boolean
+
+        +setCost(tarif : Tariff) void
+    }
+
+    class CommunicationStatus{
+        ONGOING
+        ENDED
+    }
+
+    <<enumeration>> CommunicationStatus
+
+    class Terminal{
+        %% tag final aqui
+        -serialVersionUID long $
+        -_key : String
+        -_client : Client
+        -_type : TerminalType
+        -_status : TerminalStatus
+        -_communications : List~Communication~
+        -_payments : int
+        -_debts : int
+        -_friends : List~Terminal~
+        -_notificationsToBeDelivered : List~Notification~
+
+        +canEndCurrentCommunication() boolean
+        +canStartCommunication() boolean
+        +changeStatus(statusFrom : TerminalStatus, statusTo : TerminalStatus) void
+        -isTransitionable(statusFrom : TerminalStatus, statusTo : TerminalStatus) boolean
+        -notifyClientsWaitingForAvailability() void
+    }
+
+    class TerminalStatus{
+        IDLE
+        SILENT
+        BUSY
+        OFF
+    }
+
+    <<enumeration>> TerminalStatus
+
+    class TerminalType{
+        BASIC
+        SOFISTICATED
+    }
+
+    <<enumeration>> TerminalType
+
+    class Notification{
+        %% tag final aqui
+        -serialVersionUID long $
+        -_meanOfDelivery : MeanOfDelivery
+        -_terminalFrom : Terminal
+        -_type : NotificationType
+    }
+
+    Notification --> "1" MeanOfDelivery : _meanOfDelivery
+    Notification --> "1" NotificationType : _type
+    Notification --> "1" Terminal : _terminalFrom
+    NotificationType --> "1" Communication : _communication
+
+    class MeanOfDelivery{
+        SMS
+        EMAIL
+        POST_CARD
+        APP_REGISTER
+    }
+
+    <<enumeration>> MeanOfDelivery
+
+    class NotificationType{
+        OFF_TO_SILENT
+        OFF_TO_IDLE
+        SILENT_TO_IDLE
+        BUSY_TO_IDLE
+    }
+
+    <<enumeration>> NotificationType
+
+    class Network{
+        %% tag final aqui
+        -serialVersionUID long $
+        -importFile(name : String) void
+    }
+
+    class NetworkManager{
+        -_network : Network
+        +load(filename : String) void
+        +save() void
+        +saveAs(filename : String) void
+        +importFile(filename : String) void
+    }
+
+    NetworkManager --> "1" Network : _network
+
+    class Serializable
+    <<interface>> Serializable
+    Network ..|> Serializable
+    Communication ..|> Serializable
+    Terminal ..|> Serializable
+    Client ..|> Serializable
+    Notification ..|> Serializable
