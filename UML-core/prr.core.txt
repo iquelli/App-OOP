@@ -8,6 +8,9 @@ classDiagram
     Communication --> "1" CommunicationStatus : _status
     Client --> "1" Tariff : _tariff
     Terminal *-- "*" Communication : _communications
+    Network *-- "*" Client : _clients
+    Network *-- "*" Terminal : _terminals
+    Network *-- "*" Communication : _communications
 
     class Client{
         %% tag final aqui
@@ -85,12 +88,22 @@ classDiagram
         -_debts : int
         -_friends : List~Terminal~
         -_notificationsToBeDelivered : List~Notification~
+        -_communication : InteractiveCommunication
 
         +canEndCurrentCommunication() boolean
         +canStartCommunication() boolean
-        +changeStatus(statusFrom : TerminalStatus, statusTo : TerminalStatus) void
-        -isTransitionable(statusFrom : TerminalStatus, statusTo : TerminalStatus) boolean
-        -notifyClientsWaitingForAvailability() void
+
+        +addFriend(friend : Terminal) void
+        +endInteractiveCommunication(duration : int) void
+        +performPayment(communicationKey : int) void
+        +removeFriend(terminalKey : String) void
+        +sendTextCommunication(terminalToKey : String, message : String) void
+        +showOngoingCommunication() String
+        +showTerminalBalance() String
+        +silenceTerminal() void
+        +startInteractiveCommunication(terminalToKey : String, communicationType : String) void
+        +turnoOffTerminal() void
+        +turnOnTerminal() void
     }
 
     class TerminalStatus{
@@ -115,6 +128,7 @@ classDiagram
         -_meanOfDelivery : MeanOfDelivery
         -_terminalFrom : Terminal
         -_type : NotificationType
+
     }
 
     Notification --> "1" MeanOfDelivery : _meanOfDelivery
@@ -143,7 +157,31 @@ classDiagram
     class Network{
         %% tag final aqui
         -serialVersionUID long $
+        -_clients : List~Client~
+        -_terminals : List~Terminal~
+        -_communication : List~Communication~
+
         -importFile(name : String) void
+        +disableClientNotifcations(key : String) void
+        +enableClientNotifications(key : String) void
+        +registerClient(key : String) void
+        +showAllClients() String
+        +showClient(key : String) String
+        +showClientPaymentsAndDebts(key : String) String
+
+        +showAllCommunications() String
+        +showClientsWithDebts() String
+        +showClientsWithoutDebts() String
+        +showCommunicationsFromClient(key : String) String
+        +showCommunicationToClient(key : String) String
+        +showTerminalsWithPositiveBalance() String
+        +showUnusedTerminals() String
+
+        +showGlobalBalance() String
+
+        +openMenuTerminalConsole(terminalKey : String) void
+        +registerTerminal(terminalKey : String, terminalType : String, clientKey : String) void
+        +showAllTerminals() String
     }
 
     class NetworkManager{
@@ -152,6 +190,9 @@ classDiagram
         +save() void
         +saveAs(filename : String) void
         +importFile(filename : String) void
+
+        +openFile(fileName : String) void
+        +saveFile(fileName : String) void
     }
 
     NetworkManager --> "1" Network : _network
