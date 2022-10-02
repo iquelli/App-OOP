@@ -33,18 +33,7 @@ classDiagram
     }
 
     class Tariff{
-        -_plan : TariffPlan
-        #setPlan(plan : TariffPlan) void
-        +changePlan(clientBalance : double) void
-	    +increaseTextCommunicationsCount() void
-        +increateVideoCommunicationsCount() void
-	    +resetCommunicationsCount() void
-    }
-
-    Tariff "1" <--> "1" TariffPlan : _plan / _tariff
-
-    class TariffPlan{
-        #_tariff : Tariff
+        -_client : Client
         #_textCommunications : int
         #_videoCommunications : int
         
@@ -58,11 +47,11 @@ classDiagram
         +changePlan(clientBalance : double)* void
     }
 
-    <<abstract>> TariffPlan
+    <<abstract>> Tariff
 
-    TariffPlan <|-- NormalPlan
-    TariffPlan <|--  GoldPlan
-    TariffPlan <|--  PlatiniumPlan
+    Tariff <|-- NormalPlan
+    Tariff <|--  GoldPlan
+    Tariff <|--  PlatiniumPlan
 
     class NormalPlan{
         +getTextCommunicationCost(charactersNumber : int) int
@@ -233,18 +222,40 @@ classDiagram
 
     }
 
-    Notification --> "1" MeanOfDelivery : _meanOfDelivery
+    Notification --> "1" NotificationMeanOfDelivery : _meanOfDelivery
     Notification --> "1" NotificationType : _type
     Notification --> "1" Terminal : _terminalFrom
 
-    class MeanOfDelivery{
-        SMS
-        EMAIL
-        POST_CARD
-        APP_REGISTER
+    class NotificationMeanOfDelivery{
+        +isDefault() boolean
+        +sendNotification() void
     }
 
-    <<enumeration>> MeanOfDelivery
+    <<interface>> NotificationMeanOfDelivery
+    NotificationMeanOfDelivery <|.. Email
+    NotificationMeanOfDelivery <|.. SMS
+    NotificationMeanOfDelivery <|.. PostCard
+    NotificationMeanOfDelivery <|.. RegisterOnApp
+
+    class Email{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class SMS{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class PostCard{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class RegisterOnApp{
+        +isDefault() boolean
+        +sendNotification() void
+    }
 
     class NotificationType{
         O2S
