@@ -5,6 +5,7 @@ classDiagram
     Client *-- "*" Notification : _notificationsUnread
     Terminal --> "1" TerminalType : _type
     Terminal --> "1" TerminalState : _state
+    Terminal *-- "*" Notification : _notificationsToBeDelivered
     Communication --> "2" Terminal : _terminalFrom, _terminalTo
     Communication --> "1" CommunicationStatus : _status
     Client --> "1" Tariff : _tariff
@@ -24,7 +25,7 @@ classDiagram
         -_payments : double
         -_debts : double
         -_canReceiveFailedCommunications : boolean
-        -_notificationsUnread : List<Notification>
+        -_notificationsUnread : List~Notification~
 
         +getBalance() int
         +addTerminal(terminal : Terminal) void
@@ -224,12 +225,13 @@ classDiagram
         -_client : Client
         -_meanOfDelivery : MeanOfDelivery
         -_type : NotificationType
+        -_terminal : Terminal
         +isRegisteredOnApp() boolean
     }
 
     Notification --> "1" NotificationMeanOfDelivery : _meanOfDelivery
     Notification --> "1" NotificationType : _type
-    Notification --> "1" Terminal : _terminalFrom
+    Notification --> "1" Terminal : _terminal
 
     class NotificationMeanOfDelivery{
         +isDefault() boolean
