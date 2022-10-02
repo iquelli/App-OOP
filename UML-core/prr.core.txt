@@ -20,8 +20,8 @@ classDiagram
         -_nif : int
         -_tariff : Tariff
         -_terminals : List~Terminal~
-        -_payments : int
-        -_debts : int
+        -_payments : double
+        -_debts : double
         -_canReceiveFailedCommunications : boolean
 
         +getBalance() int
@@ -30,6 +30,8 @@ classDiagram
         +addDebt(debt : int) void
         +enableFailedCommunicationsNotifications() void
         +disableFailedCommunicationsNotifications() void
+        +receiveNotification(notification : Notification) void
+        +clearNotifications() void
     }
 
     class Tariff{
@@ -113,13 +115,13 @@ classDiagram
         -_key : String
         -_client : Client
         -_type : TerminalType
-        -_status : TerminalStatus
+        -_state : TerminalState
         -_communications : List~Communication~
-        -_payments : int
-        -_debts : int
+        -_payments : double
+        -_debts : double
         -_friends : List~Terminal~
         -_notificationsToBeDelivered : List~Notification~
-        -_communication : InteractiveCommunication
+        -_communicationOngoing : InteractiveCommunication
 
         +canEndCurrentCommunication() boolean
         +canStartCommunication() boolean
@@ -131,6 +133,7 @@ classDiagram
         +sendTextCommunication(terminalToKey : String, message : String) void
         +showOngoingCommunication() String
         +showTerminalBalance() String
+        +idleTerminal() void
         +silenceTerminal() void
         +startInteractiveCommunication(terminalToKey : String, communicationType : String) void
         +turnoOffTerminal() void
@@ -216,10 +219,10 @@ classDiagram
     class Notification{
         %% tag final aqui
         -serialVersionUID long $
+        -_client : Client
         -_meanOfDelivery : MeanOfDelivery
-        -_terminalFrom : Terminal
         -_type : NotificationType
-
+        +isRegisteredOnApp() boolean
     }
 
     Notification --> "1" NotificationMeanOfDelivery : _meanOfDelivery
@@ -277,23 +280,23 @@ classDiagram
         +disableClientNotifcations(key : String) void
         +enableClientNotifications(key : String) void
         +registerClient(key : String) void
-        +showAllClients() String
+        +showAllClients() List~String~
         +showClient(key : String) String
         +showClientPaymentsAndDebts(key : String) String
 
-        +showAllCommunications() String
-        +showClientsWithDebts() String
-        +showClientsWithoutDebts() String
-        +showCommunicationsFromClient(key : String) String
+        +showAllCommunications() List~String~
+        +showClientsWithDebts() List~String~
+        +showClientsWithoutDebts() List~String~
+        +showCommunicationsFromClient(key : String) List~String~
         +showCommunicationToClient(key : String) String
-        +showTerminalsWithPositiveBalance() String
-        +showUnusedTerminals() String
+        +showTerminalsWithPositiveBalance() List~String~
+        +showUnusedTerminals() List~String~
 
         +showGlobalBalance() String
 
         +openMenuTerminalConsole(terminalKey : String) void
         +registerTerminal(terminalKey : String, terminalType : String, clientKey : String) void
-        +showAllTerminals() String
+        +showAllTerminals() List~String~
     }
 
     class NetworkManager{
