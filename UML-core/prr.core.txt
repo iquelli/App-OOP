@@ -3,7 +3,7 @@ classDiagram
     Terminal --> "1" Client : _client
     Client *-- "*" Terminal : _terminals
     Terminal --> "1" TerminalType : _type
-    Terminal --> "1" TerminalStatus : _status
+    Terminal --> "1" TerminalState : _state
     Communication --> "2" Terminal : _terminalFrom, _terminalTo
     Communication --> "1" CommunicationStatus : _status
     Client --> "1" Tariff : _tariff
@@ -33,12 +33,54 @@ classDiagram
     }
 
     class Tariff{
-        NORMAL
-        GOLD
-        PLATINIUM
+        -_plan : TariffPlan
+        #setPlan(plan : TariffPlan) void
+        +changePlan(clientBalance : double) void
+	    +increaseTextCommunicationsCount() void
+        +increateVideoCommunicationsCount() void
+	    +resetCommunicationsCount() void
     }
 
-    <<enumeration>> Tariff
+    Tariff "1" <--> "1" TariffPlan : _plan / _tariff
+
+    class TariffPlan{
+        #_tariff : Tariff
+        #_textCommunications : int
+        #_videoCommunications : int
+        
+        +increaseTextCommunicationsCount() void
+        +increateVideoCommunicationsCount() void
+        +resetCommunicationsCount() void
+        
+        +getTextCommunicationCost(charactersNumber : int)* int
+        +getInteractiveCommunicationCost(type : CommunicationType)* int
+        
+        +changePlan(clientBalance : double)* void
+    }
+
+    <<abstract>> TariffPlan
+
+    TariffPlan <|-- NormalPlan
+    TariffPlan <|--  GoldPlan
+    TariffPlan <|--  PlatiniumPlan
+
+    class NormalPlan{
+        +getTextCommunicationCost(charactersNumber : int) int
+        +getInteractiveCommunicationCost(type : CommunicationType) int
+        +changePlan(clientBalance : double) void
+    }
+
+    class GoldPlan{
+        +getTextCommunicationCost(charactersNumber : int) int
+        +getInteractiveCommunicationCost(type : CommunicationType) int
+        +changePlan(clientBalance : double) void
+    }
+
+    class PlatiniumPlan{
+        +getTextCommunicationCost(charactersNumber : int) int
+        +getInteractiveCommunicationCost(type : CommunicationType) int
+        +changePlan(clientBalance : double) void
+    }
 
     class Communication{
         %% tag final aqui
@@ -106,18 +148,78 @@ classDiagram
         +turnOnTerminal() void
     }
 
-    class TerminalStatus{
-        IDLE
-        SILENT
-        BUSY
-        OFF
+    class TerminalState{
+        #_terminal : Terminal
+	
+	    +canSendTextCommunication()* boolean
+	    +canReceiveTextCommunication()* boolean
+	    +canStartInteractiveCommunication()* boolean
+	    +canReceiveInteractiveCommunication()* boolean
+	
+	    +becomeIdle()* void
+	    +becomeSilent()* void
+	    +becomeBusy()* void
+	    +turnOff()* void
     }
 
-    <<enumeration>> TerminalStatus
+    <<abstract>> TerminalState
+
+    TerminalState <|-- Idle
+    TerminalState <|-- Silent
+    TerminalState <|-- Busy
+    TerminalState <|-- Off
+
+    class Idle{
+	    +canSendTextCommunication() boolean
+	    +canReceiveTextCommunication() boolean
+	    +canStartInteractiveCommunication() boolean
+	    +canReceiveInteractiveCommunication() boolean
+	
+	    +becomeIdle() void
+	    +becomeSilent() void
+	    +becomeBusy() void
+	    +turnOff() void
+    }
+
+    class Silent{
+	    +canSendTextCommunication() boolean
+	    +canReceiveTextCommunication() boolean
+	    +canStartInteractiveCommunication() boolean
+	    +canReceiveInteractiveCommunication() boolean
+	
+	    +becomeIdle() void
+	    +becomeSilent() void
+	    +becomeBusy() void
+	    +turnOff() void
+    }
+
+    class Busy{
+	    +canSendTextCommunication() boolean
+	    +canReceiveTextCommunication() boolean
+	    +canStartInteractiveCommunication() boolean
+	    +canReceiveInteractiveCommunication() boolean
+	
+	    +becomeIdle() void
+	    +becomeSilent() void
+	    +becomeBusy() void
+	    +turnOff() void
+    }
+
+    class Off{
+	    +canSendTextCommunication() boolean
+	    +canReceiveTextCommunication() boolean
+	    +canStartInteractiveCommunication() boolean
+	    +canReceiveInteractiveCommunication() boolean
+	
+	    +becomeIdle() void
+	    +becomeSilent() void
+	    +becomeBusy() void
+	    +turnOff() void
+    }
 
     class TerminalType{
         BASIC
-        SOFISTICATED
+        FANCY
     }
 
     <<enumeration>> TerminalType
@@ -134,7 +236,6 @@ classDiagram
     Notification --> "1" MeanOfDelivery : _meanOfDelivery
     Notification --> "1" NotificationType : _type
     Notification --> "1" Terminal : _terminalFrom
-    NotificationType --> "1" Communication : _communication
 
     class MeanOfDelivery{
         SMS
@@ -146,10 +247,10 @@ classDiagram
     <<enumeration>> MeanOfDelivery
 
     class NotificationType{
-        OFF_TO_SILENT
-        OFF_TO_IDLE
-        SILENT_TO_IDLE
-        BUSY_TO_IDLE
+        O2S
+        O2I
+        S2I
+        B2I
     }
 
     <<enumeration>> NotificationType
