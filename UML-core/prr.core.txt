@@ -2,8 +2,10 @@ classDiagram
 
     Terminal --> "1" Client : _client
     Client *-- "*" Terminal : _terminals
+    Client *-- "*" Notification : _notificationsUnread
     Terminal --> "1" TerminalType : _type
     Terminal --> "1" TerminalState : _state
+    Terminal *-- "*" Notification : _notificationsToBeDelivered
     Communication --> "2" Terminal : _terminalFrom, _terminalTo
     Communication --> "1" CommunicationStatus : _status
     Client --> "1" Tariff : _tariff
@@ -20,9 +22,10 @@ classDiagram
         -_nif : int
         -_tariff : Tariff
         -_terminals : List~Terminal~
-        -_payments : int
-        -_debts : int
+        -_payments : double
+        -_debts : double
         -_canReceiveFailedCommunications : boolean
+        -_notificationsUnread : List~Notification~
 
         +getBalance() int
         +addTerminal(terminal : Terminal) void
@@ -30,21 +33,12 @@ classDiagram
         +addDebt(debt : int) void
         +enableFailedCommunicationsNotifications() void
         +disableFailedCommunicationsNotifications() void
+        +receiveNotification(notification : Notification) void
+        +clearNotifications() void
     }
 
     class Tariff{
-        -_plan : TariffPlan
-        #setPlan(plan : TariffPlan) void
-        +changePlan(clientBalance : double) void
-	    +increaseTextCommunicationsCount() void
-        +increateVideoCommunicationsCount() void
-	    +resetCommunicationsCount() void
-    }
-
-    Tariff "1" <--> "1" TariffPlan : _plan / _tariff
-
-    class TariffPlan{
-        #_tariff : Tariff
+        -_client : Client
         #_textCommunications : int
         #_videoCommunications : int
         
@@ -58,11 +52,11 @@ classDiagram
         +changePlan(clientBalance : double)* void
     }
 
-    <<abstract>> TariffPlan
+    <<abstract>> Tariff
 
-    TariffPlan <|-- NormalPlan
-    TariffPlan <|--  GoldPlan
-    TariffPlan <|--  PlatiniumPlan
+    Tariff <|-- NormalPlan
+    Tariff <|--  GoldPlan
+    Tariff <|--  PlatiniumPlan
 
     class NormalPlan{
         +getTextCommunicationCost(charactersNumber : int) int
@@ -124,13 +118,13 @@ classDiagram
         -_key : String
         -_client : Client
         -_type : TerminalType
-        -_status : TerminalStatus
+        -_state : TerminalState
         -_communications : List~Communication~
-        -_payments : int
-        -_debts : int
+        -_payments : double
+        -_debts : double
         -_friends : List~Terminal~
         -_notificationsToBeDelivered : List~Notification~
-        -_communication : InteractiveCommunication
+        -_communicationOngoing : InteractiveCommunication
 
         +canEndCurrentCommunication() boolean
         +canStartCommunication() boolean
@@ -142,6 +136,7 @@ classDiagram
         +sendTextCommunication(terminalToKey : String, message : String) void
         +showOngoingCommunication() String
         +showTerminalBalance() String
+        +idleTerminal() void
         +silenceTerminal() void
         +startInteractiveCommunication(terminalToKey : String, communicationType : String) void
         +turnoOffTerminal() void
@@ -227,24 +222,47 @@ classDiagram
     class Notification{
         %% tag final aqui
         -serialVersionUID long $
+        -_client : Client
         -_meanOfDelivery : MeanOfDelivery
-        -_terminalFrom : Terminal
         -_type : NotificationType
-
+        -_terminal : Terminal
+        +isRegisteredOnApp() boolean
     }
 
-    Notification --> "1" MeanOfDelivery : _meanOfDelivery
+    Notification --> "1" NotificationMeanOfDelivery : _meanOfDelivery
     Notification --> "1" NotificationType : _type
-    Notification --> "1" Terminal : _terminalFrom
+    Notification --> "1" Terminal : _terminal
 
-    class MeanOfDelivery{
-        SMS
-        EMAIL
-        POST_CARD
-        APP_REGISTER
+    class NotificationMeanOfDelivery{
+        +isDefault() boolean
+        +sendNotification() void
     }
 
-    <<enumeration>> MeanOfDelivery
+    <<interface>> NotificationMeanOfDelivery
+    NotificationMeanOfDelivery <|.. Email
+    NotificationMeanOfDelivery <|.. SMS
+    NotificationMeanOfDelivery <|.. PostCard
+    NotificationMeanOfDelivery <|.. RegisterOnApp
+
+    class Email{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class SMS{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class PostCard{
+        +isDefault() boolean
+        +sendNotification() void
+    }
+
+    class RegisterOnApp{
+        +isDefault() boolean
+        +sendNotification() void
+    }
 
     class NotificationType{
         O2S
@@ -266,23 +284,23 @@ classDiagram
         +disableClientNotifcations(key : String) void
         +enableClientNotifications(key : String) void
         +registerClient(key : String) void
-        +showAllClients() String
+        +showAllClients() List~String~
         +showClient(key : String) String
         +showClientPaymentsAndDebts(key : String) String
 
-        +showAllCommunications() String
-        +showClientsWithDebts() String
-        +showClientsWithoutDebts() String
-        +showCommunicationsFromClient(key : String) String
+        +showAllCommunications() List~String~
+        +showClientsWithDebts() List~String~
+        +showClientsWithoutDebts() List~String~
+        +showCommunicationsFromClient(key : String) List~String~
         +showCommunicationToClient(key : String) String
-        +showTerminalsWithPositiveBalance() String
-        +showUnusedTerminals() String
+        +showTerminalsWithPositiveBalance() List~String~
+        +showUnusedTerminals() List~String~
 
         +showGlobalBalance() String
 
         +openMenuTerminalConsole(terminalKey : String) void
         +registerTerminal(terminalKey : String, terminalType : String, clientKey : String) void
-        +showAllTerminals() String
+        +showAllTerminals() List~String~
     }
 
     class NetworkManager{
