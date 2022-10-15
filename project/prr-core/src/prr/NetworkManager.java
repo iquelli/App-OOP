@@ -25,12 +25,21 @@ public class NetworkManager {
 	private Network _network = new Network();
         //FIXME  addmore fields if needed
 	
-	/** name of the file analyzed */
+	/** The network manager. */
 	private String _fileName = "";
 
-
+	/**
+     * @return network
+     */
 	public Network getNetwork() {
 		return _network;
+	}
+
+	/**
+     * @return String
+     */
+	public String getFileName() {
+		return _fileName;
 	}
 
 	/**
@@ -40,13 +49,11 @@ public class NetworkManager {
          *         an error while processing this file.
 	 */
 	public void load(String filename) throws UnavailableFileException {
-		try {
-			ObjectInputStream ois = new ObjectInputStream(
-									new BufferedInputStream(
-									new FileInputStream(filename)));
+		try (ObjectInputStream ois = new ObjectInputStream(
+									 new BufferedInputStream(
+									 new FileInputStream(filename)))) {
 			_network = (Network) ois.readObject();
-			ois.close();
-			_fileName = filename
+			_fileName = filename;
 		} catch (IOException | ClassNotFoundException e) {
 			throw new UnavailableFileException(filename);
 		}
@@ -62,7 +69,11 @@ public class NetworkManager {
 	public void save() throws FileNotFoundException, MissingFileAssociationException, IOException {
 		if(_fileName == null || _fileName.isBlank())
 			throw new MissingFileAssociationException();
-		//FIXME faltam os outros dois erros
+		try (ObjectOutputStream oos = new ObjectOutputStream(
+									  new BufferedOutputStream(
+									  new FileOutputStream(_fileName)))) {
+			oos.writeObject(_network);
+		}
 	}
 
 	/**
@@ -93,12 +104,11 @@ public class NetworkManager {
 		}
 	}
 	
-	public void openFile(String fileName) {
-		
+	/**
+	 * Resets the network.
+	 */
+	public void reset() {
+		_network = new Network();
+		_fileName = null;
 	}
-	
-	public void saveFile(String fileName) {
-		
-	}
-
 }
