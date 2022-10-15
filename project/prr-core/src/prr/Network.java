@@ -7,10 +7,7 @@ import java.io.FileReader;
 
 import java.util.List;
 
-import prr.clients.Client;
-import prr.communications.Communication;
-import prr.exceptions.UnrecognizedEntryException;
-import prr.terminals.Terminal;
+
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -37,78 +34,26 @@ public class Network implements Serializable {
          * @throws UnrecognizedEntryException if some entry is not correct
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
-	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
-		try {
-			BufferedReader text = new BufferedReader(new FileReader(filename));
+	void importFile(String filename) throws UnrecognizedEntryException, IOException { // FIXME maybe other exceptions 
+		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
+			String line;
+			while((line = text.readLine()) != null) {
+				// a acrescentar funcoes para intepretar texto
+			}
 		}
-		//FIXME implement method
 	}
 	
-	public void disableClientNotifications(String key) {
-		
+	
+	public Client getClient(String key) throws UnknwonClientKeyException {
+		Client client = this.clients.get(key);
+		if (client == null)
+			throw new UnknwonClientKeyException(key);
+		return client;
 	}
 	
-	public void enableClientNotifications(String key) {
-		
+	public void registerClient() {
+
 	}
-	
-	public void registerClient(String key, String name, int nif) {
-		
-	}
-	
-	public List<String> showAllClients() {
-		return null;
-	}
-	
-	public String showClient(String key) {
-		return null;
-	}
-	
-	public String showClientPaymentsAndDebts(String key) {
-		return null;
-	}
-	
-	public List<String> showAllCommunications() {
-		return null;
-	}
-	
-	public List<String> showClientsWithDebts() {
-		return null;
-	}
-	
-	public List<String> showClientsWithoutDebts() {
-		return null;
-	}
-	
-	public List<String> showCommunicationsFromClient(String key) {
-		return null;
-	}
-	
-	public String showCommunicationToClient(String key) {
-		return null;
-	}
-	
-	public List<String> showTerminalsWithPositiveBalance() {
-		return null;
-	}
-	
-	public List<String> showUnusedTerminals() {
-		return null;
-	}
-	
-	public String showGlobalBalance() {
-		return null;
-	}
-	
-	public void openMenuTerminalConsole(String terminalKey) {
-		
-	}
-	
-	public void registerTerminal(String terminalKey, String terminalType, String clientKey) {
-		
-	}
-	
-	public List<String> showAllTerminals() {
-		return null;
-	}
+
+
 }

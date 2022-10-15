@@ -13,6 +13,8 @@ class DoShowClient extends Command<Network> {
 
 	DoShowClient(Network receiver) {
 		super(Label.SHOW_CLIENT, receiver);
+		addStringField( "? nao sei" , Prompt.name());
+		
 		//FIXME add command fields
 	}
 
