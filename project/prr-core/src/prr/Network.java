@@ -6,6 +6,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import java.exceptions.DuplicateClientKeyException;
+import java.exceptions.UnknownClientKeyException;
 
 
 
@@ -19,7 +24,7 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 	
-	private List<Client> _clients;
+	private Map<String, Client> _clients = new TreeMap<>;
 	private List<Terminal> _terminals;
 	private List<Communication> _communication;
 
@@ -45,14 +50,17 @@ public class Network implements Serializable {
 	
 	
 	public Client getClient(String key) throws UnknwonClientKeyException {
-		Client client = this.clients.get(key);
+		Client client = _clients.get(key);
 		if (client == null)
 			throw new UnknwonClientKeyException(key);
 		return client;
 	}
 	
-	public void registerClient() {
-
+	public void registerClient(String key, String name, int nif) throws DuplicateClientKeyException {
+		if (_clients.containsKey(key))
+			throw new DuplicateClientKeyException(key);
+		Client client = new Client(key, name, nif);
+		_clients.put(key, Client);
 	}
 
 
