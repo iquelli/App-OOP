@@ -19,7 +19,7 @@ public class NetworkManager {
 	private Network _network = new Network();
         //FIXME  addmore fields if needed
 
-        public Network getNetwork() {
+	public Network getNetwork() {
 		return _network;
 	}
 
@@ -65,10 +65,18 @@ public class NetworkManager {
 	 */
 	public void importFile(String filename) throws ImportFileException {
 		try {
-                        _network.importFile(filename);
-                } catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
-                        throw new ImportFileException(filename, e);
-    }
+			_network.importFile(filename);
+		} catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
+			throw new ImportFileException(filename, e);
+		}
+	}
+	
+	public void openFile(String fileName) {
+		
+	}
+	
+	public void saveFile(String fileName) {
+		
 	}
 
 }
