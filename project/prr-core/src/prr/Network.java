@@ -1,8 +1,11 @@
 package prr;
 
 import java.io.Serializable;
-import java.util.List;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+import java.util.List;
 
 import prr.clients.Client;
 import prr.communications.Communication;
@@ -35,6 +38,9 @@ public class Network implements Serializable {
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
+		try {
+			BufferedReader text = new BufferedReader(new FileReader(filename));
+		}
 		//FIXME implement method
 	}
 	
