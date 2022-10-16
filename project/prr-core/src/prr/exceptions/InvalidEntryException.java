@@ -10,7 +10,7 @@ public class InvalidEntryException extends Exception {
 
     private String _args [];
 
-    public InvalidEntryException(String args) {
+    public InvalidEntryException(String [] args) {
         _args = args;
     }
 }

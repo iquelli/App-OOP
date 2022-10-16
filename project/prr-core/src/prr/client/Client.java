@@ -20,7 +20,7 @@ public class Client implements Serializable{
     public Client(String key, String name, int taxId) {
         _key = key;
         _name = name;
-        _taxId = nif;
+        _taxId = taxId;
         _level = new Level(); // normal level
     }
 }

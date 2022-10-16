@@ -16,6 +16,8 @@ import prr.exceptions.InvalidEntryException;
 
 import prr.client.Client;
 
+import prr.util.KeyComparator;
+
 /**
  * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
 
@@ -27,7 +29,7 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 	
-	private Map<String, Client> _clients = new TreeMap<>();
+	private Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
 	private List<Terminal> _terminals;
 	private List<Communication> _communication;
 
@@ -55,7 +57,7 @@ public class Network implements Serializable {
 	 * Evaluates the entry and calls the right function to evaluate the arguments.
 	 * 
 	 * @param args array with the input that was on the line
-	 * @throws InvalidEntryException if the first word of the entry doesnt correspond
+	 * @throws InvalidEntryException if the first word of the entry does not correspond
 	 * 								to any option
 	 */
 	void interpretsLine(String args []) throws InvalidEntryException{
@@ -76,11 +78,9 @@ public class Network implements Serializable {
 	void evaluateClientEntry(String args[]) throws InvalidEntryException {
 		if (args.length != 4)
 			throw new InvalidEntryException(args);
-		if(_clients.containsKey(args[1]))
-			throw new DuplicateClientKeyException(args[1]);
 		//FIXME falta verificar se cada entrada ta correta (ex: se args[3] eh um numero)
 		else 
-			registerClient(args[1], args[2], parseInt(args[3]));
+			registerClient(args[1], args[2], Integer.parseInt(args[3]));
 	}
 
 	/**
