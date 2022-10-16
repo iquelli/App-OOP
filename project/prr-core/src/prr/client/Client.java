@@ -1,4 +1,4 @@
-package gcc.clients;
+package prr.clients;
 
 public class Client implements Serializable{
 

@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import java.exceptions.DuplicateClientKeyException;
-import java.exceptions.UnknownClientKeyException;
+import prr.exceptions.DuplicateClientKeyException;
+import prr.exceptions.UnknownClientKeyException;
 
 
 
-// FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
+/**
+ * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
 
 /**
  * Class Store implements a store.
@@ -24,7 +25,7 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 	
-	private Map<String, Client> _clients = new TreeMap<>;
+	private Map<String, Client> _clients = new TreeMap<>();
 	private List<Terminal> _terminals;
 	private List<Communication> _communication;
 
@@ -48,19 +49,35 @@ public class Network implements Serializable {
 		}
 	}
 	
-	
+
+	/**
+	 * Gets a client by its key. 
+	 *
+	 *@param key      key of the client to get
+	 *@return Client  client associated with the key
+	 *@throws UnknownClientKeyException when there is no client with the key
+	 */
 	public Client getClient(String key) throws UnknwonClientKeyException {
 		Client client = _clients.get(key);
 		if (client == null)
 			throw new UnknwonClientKeyException(key);
-		return client;
+		return Client;
 	}
-	
-	public void registerClient(String key, String name, int nif) throws DuplicateClientKeyException {
+
+	/**
+	 * Adds a client to the list of clients.
+	 *
+	 *@param key   key of the client
+	 *@param name  name of the client
+	 *@param nif   fiscal number of the client
+	 *@throws DuplicateClientKeyException if the key given already exists
+	 */
+	public void registerClient(String key, String name, int nif) 
+			throws DuplicateClientKeyException {
 		if (_clients.containsKey(key))
 			throw new DuplicateClientKeyException(key);
 		Client client = new Client(key, name, nif);
-		_clients.put(key, Client);
+		_clients.put(key, client);
 	}
 
 
