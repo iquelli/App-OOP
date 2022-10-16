@@ -60,7 +60,7 @@ public class Network implements Serializable {
 	 * @throws InvalidEntryException if the first word of the entry does not correspond
 	 * 								to any option
 	 */
-	void interpretsLine(String args []) throws InvalidEntryException{
+	private void interpretsLine(String args[]) throws InvalidEntryException{
 		switch (args[0]) {
 			case "CLIENT" -> evaluateClientEntry(args);
 			// FIXME falta adicionar os outros casos
@@ -75,7 +75,7 @@ public class Network implements Serializable {
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if it is not a valid client entry
 	 */
-	void evaluateClientEntry(String args[]) throws InvalidEntryException {
+	private void evaluateClientEntry(String args[]) throws InvalidEntryException {
 		if (args.length != 4)
 			throw new InvalidEntryException(args);
 		//FIXME falta verificar se cada entrada ta correta (ex: se args[3] eh um numero)

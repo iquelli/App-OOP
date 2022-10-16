@@ -24,7 +24,6 @@ public class KeyComparator implements Comparator<String>, Serializable {
         return text1.compareTo(text2);
     }
 
-
     /**
      * Extracts numbers that were in a string and converts them to
      * integers.
