@@ -12,9 +12,9 @@ import java.util.TreeMap;
 import prr.exceptions.DuplicateClientKeyException;
 import prr.exceptions.UnknownClientKeyException;
 import prr.exceptions.UnrecognizedEntryException;
-import prr.clients.Client;
+import prr.exceptions.InvalidEntryException;
 
-
+import prr.client.Client;
 
 /**
  * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
@@ -39,24 +39,55 @@ public class Network implements Serializable {
 	 * Read text input file and create corresponding domain entities.
 	 * 
 	 * @param filename name of the text input file
-         * @throws UnrecognizedEntryException if some entry is not correct
+     * @throws UnrecognizedEntryException if some entry is not correct
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException { // FIXME maybe other exceptions 
 		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while((line = text.readLine()) != null) {
-				// a acrescentar funcoes para intepretar texto
+				interpretsLine(line.split("|"));
 			}
 		}
 	}
+
+	/**
+	 * Evaluates the entry and calls the right function to evaluate the arguments.
+	 * 
+	 * @param args array with the input that was on the line
+	 * @throws InvalidEntryException if the first word of the entry doesnt correspond
+	 * 								to any option
+	 */
+	void interpretsLine(String args []) throws InvalidEntryException{
+		switch (args[0]) {
+			case "CLIENT" -> evaluateClientEntry(args);
+			// FIXME falta adicionar os outros casos
+			
+			default -> throw new InvalidEntryException(args);
+		}
+	}
 	
+	/**
+	 * Sees if the entry is a valid client entry.
+	 * 
+	 * @param args array with the input that was on the line
+	 * @throws InvalidEntryException if it is not a valid client entry
+	 */
+	void evaluateClientEntry(String args[]) throws InvalidEntryException {
+		if (args.length != 4)
+			throw new InvalidEntryException(args);
+		if(_clients.containsKey(args[1]))
+			throw new DuplicateClientKeyException(args[1]);
+		//FIXME falta verificar se cada entrada ta correta (ex: se args[3] eh um numero)
+		else 
+			registerClient(args[1], args[2], parseInt(args[3]));
+	}
 
 	/**
 	 * Gets a client by its key. 
 	 *
 	 *@param key      key of the client to get
-	 *@return Client  client associated with the key
+	 *@return client  client associated with the key
 	 *@throws UnknownClientKeyException when there is no client with the key
 	 */
 	public Client getClient(String key) throws UnknownClientKeyException {
@@ -71,16 +102,15 @@ public class Network implements Serializable {
 	 *
 	 *@param key   key of the client
 	 *@param name  name of the client
-	 *@param nif   fiscal number of the client
+	 *@param taxId   fiscal number of the client
 	 *@throws DuplicateClientKeyException if the key given already exists
 	 */
-	public void registerClient(String key, String name, int nif) 
+	public void registerClient(String key, String name, int taxId) 
 			throws DuplicateClientKeyException {
 		if (_clients.containsKey(key))
 			throw new DuplicateClientKeyException(key);
-		Client client = new Client(key, name, nif);
+		Client client = new Client(key, name, taxId);
 		_clients.put(key, client);
 	}
-
 
 }
