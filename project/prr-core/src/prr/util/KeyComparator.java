@@ -27,6 +27,7 @@ public class KeyComparator implements Comparator<String>, Serializable {
     /**
      * Extracts numbers that were in a string and converts them to
      * integers.
+     * 
      * @param s string with numbers
      * @return numbers in the form of int that were in the string
      */
@@ -37,6 +38,7 @@ public class KeyComparator implements Comparator<String>, Serializable {
 
     /**
      * Takes out numbers that are in string format.
+     * 
      * @param s  string with numbers
      * @return string without numbers
      */

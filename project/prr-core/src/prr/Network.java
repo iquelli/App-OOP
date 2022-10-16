@@ -98,6 +98,15 @@ public class Network implements Serializable {
 	}
 
 	/**
+	 * Gets the list of clients. 
+	 *
+	 *@return _clients  list of all the clients
+	 */
+	public Map<String,Client> getAllClients() {
+		return _clients;
+	}
+
+	/**
 	 * Adds a client to the list of clients.
 	 *
 	 *@param key   key of the client
