@@ -2,7 +2,7 @@ package prr.exceptions;
 
 import java.io.Serial;
 
-public class UnknownClientKeyException extends Client {
+public class UnknownClientKeyException extends Exception {
 
     /** Class serial number.*/
     @Serial

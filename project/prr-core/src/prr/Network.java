@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 import prr.exceptions.DuplicateClientKeyException;
 import prr.exceptions.UnknownClientKeyException;
+import prr.exceptions.UnrecognizedEntryException;
+import prr.clients.Client;
 
 
 
@@ -57,11 +59,11 @@ public class Network implements Serializable {
 	 *@return Client  client associated with the key
 	 *@throws UnknownClientKeyException when there is no client with the key
 	 */
-	public Client getClient(String key) throws UnknwonClientKeyException {
+	public Client getClient(String key) throws UnknownClientKeyException {
 		Client client = _clients.get(key);
 		if (client == null)
-			throw new UnknwonClientKeyException(key);
-		return Client;
+			throw new UnknownClientKeyException(key);
+		return client;
 	}
 
 	/**
