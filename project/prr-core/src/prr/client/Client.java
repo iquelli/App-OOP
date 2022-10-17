@@ -1,6 +1,9 @@
 package prr.client;
 
 import java.io.Serializable;
+
+import prr.terminals.Terminal;
+
 import java.io.Serial;
 
 public class Client implements Serializable{
@@ -16,6 +19,7 @@ public class Client implements Serializable{
     private double _debts = 0.0;
     private Level _level;
     private boolean _allowNotifications;
+    private Terminal _terminals;
     // FIX ME ainda falta métodos por definir (terminais e tipo de comunicação)
 
     public Client(String key, String name, int taxId) {

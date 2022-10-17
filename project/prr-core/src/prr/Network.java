@@ -38,7 +38,7 @@ public class Network implements Serializable {
 	private static final String basicTerminalText = "BASIC";
 	
 	private Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
-	private Map<String, Terminal> _terminals;
+	private Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
 	private List<Communication> _communication;
 
     // FIXME define attributes
@@ -54,8 +54,14 @@ public class Network implements Serializable {
 	 * @throws InvalidEntryException 
 	 * @throws DuplicateClientKeyException 
 	 * @throws NumberFormatException 
+	 * @throws DuplicateTerminalKeyException
+	 * @throws InvalidTerminalKeyException
+	 * @throws UnknownClientKeyException
 	 */
-	void importFile(String filename) throws UnrecognizedEntryException, IOException, InvalidEntryException, NumberFormatException, DuplicateClientKeyException { // FIXME maybe other exceptions 
+	void importFile(String filename) throws UnrecognizedEntryException, IOException,
+	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException { 
+
 		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while((line = text.readLine()) != null) {
@@ -73,12 +79,17 @@ public class Network implements Serializable {
 	 * @throws DuplicateClientKeyException 
 	 * @throws NumberFormatException 
 	 */
-	private void interpretsLine(String args[]) throws InvalidEntryException, NumberFormatException, DuplicateClientKeyException{
+	private void interpretsLine(String args[]) throws InvalidEntryException, NumberFormatException,
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException{
 		switch (args[0]) {
-			case "CLIENT" -> evaluateClientEntry(args);
+			case "CLIENT": evaluateClientEntry(args);
+			case "BASIC" :
+			case "FANCY" :
+							evaluateTerminalEntry(args);
+							break;
 			// FIXME falta adicionar os outros casos
 			
-			default -> throw new InvalidEntryException(args);
+			default : throw new InvalidEntryException(args);
 		}
 	}
 	
@@ -210,6 +221,25 @@ public class Network implements Serializable {
 		return globalBalance;
 	}
 
+
+	/**
+	 * Sees if the entry is a valid Terminal entry.
+	 * 
+	 * @param args array with the input that was on the line
+	 * @throws InvalidEntryException if it is not a valid Terminal entry
+	 * @throws DuplicateTerminalKeyException if the key is already associated to an existing terminal
+	 * @throws InvalidTerminalKeyException if the key does not have 6 digits
+	 * @throws UnknownClientKeyException if the client key doesnt exist
+	 */
+
+	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException, UnknownClientKeyException,
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException {
+		if (args.length != 3)
+			throw new InvalidEntryException(args);
+		else 
+			registerTerminal(args[1], args[2], args[0]);
+	}
+
 	/**
 	 * Gets the global balance of registered clients.
 	 *
@@ -217,11 +247,12 @@ public class Network implements Serializable {
 	 * @param clientKey  the key from the user who will be the owner
 	 * @throws InvalidTerminalKeyException  if the key does not have 6 digits
 	 * @throws DuplicateTerminalKeyException  if the key is already associated to an existing terminal
-	 * @throws UnknowClientKeyException
+	 * @throws UnknowClientKeyException if the client key doesnt exist
 	 */
-	public void registerTerminal(String terminalKey, String clientKey, String type) throws UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	public void registerTerminal(String terminalKey, String clientKey, String type) throws 
+	 UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
 		if (!isValidTerminalKey(terminalKey)) {
-			throw new InvalidTerminalKeyException(null); // FIXME Não sei que args meter nos args disto 
+			throw new InvalidTerminalKeyException(terminalKey);
 		}
 		
 		if (_terminals.containsKey(terminalKey)) {
