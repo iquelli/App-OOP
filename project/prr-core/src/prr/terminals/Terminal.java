@@ -3,11 +3,8 @@ package prr.terminals;
 import java.io.Serializable;
 import java.util.List;
 
-import prr.NetworkManager;
-import prr.clients.Client;
+import prr.client.Client;
 import prr.communications.Communication;
-import prr.communications.InteractiveCommunication;
-import prr.notifications.Notification;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -21,14 +18,19 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
 	private String _key;
 	private Client _client;
-	private TerminalType _type;
-	private TerminalState _state;
+//	private TerminalType _type;
+//	private TerminalState _state;
 	private List<Communication> _communications;
 	private double _payments;
 	private double _debts;
 	private List<Terminal> _friends;
-	private List<Notification> _notificationsToBeSend;
-	private InteractiveCommunication _communicationOngoing;
+//	private List<Notification> _notificationsToBeSend;
+//	private InteractiveCommunication _communicationOngoing;
+	
+	public Terminal(String key, Client client) {
+		_key = key;
+		_client = client;
+	}
 
     /**
      * Checks if this terminal can end the current interactive communication.
@@ -50,7 +52,38 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
             // FIXME add implementation code
 			return false;
     }
+
+//  **************************
+//  *        Balance		 *
+//  **************************
     
+    /**
+     * Checks if this terminal can start a new communication.
+     *
+     * @return true if this terminal is neither off neither busy, false otherwise.
+     **/
+    public double getBalance() {
+    	return _payments - _debts;
+    }
+    
+    public double getPayments() {
+    	return _payments;
+    }
+    
+    public double getDebts() {
+    	return _debts;
+    }
+
+//  **************************
+//  *     Communications	 *
+//  **************************
+    
+    public List<Communication> getPastCommunications() {
+    	return _communications;
+    }
+    
+    public abstract String getType();
+        
     public void addFriend(String friendKey) {
     	
     }

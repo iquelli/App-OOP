@@ -9,7 +9,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import prr.exceptions.DuplicateClientKeyException;
 import prr.exceptions.ImportFileException;
+import prr.exceptions.InvalidEntryException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.UnavailableFileException;
 import prr.exceptions.UnrecognizedEntryException;
@@ -95,8 +97,11 @@ public class NetworkManager {
 	 * 
 	 * @param filename name of the text input file
 	 * @throws ImportFileException
+	 * @throws DuplicateClientKeyException 
+	 * @throws InvalidEntryException 
+	 * @throws NumberFormatException 
 	 */
-	public void importFile(String filename) throws ImportFileException {
+	public void importFile(String filename) throws ImportFileException, NumberFormatException, InvalidEntryException, DuplicateClientKeyException {
 		try {
 			_network.importFile(filename);
 		} catch (IOException | UnrecognizedEntryException /** FIXME maybe other exceptions */ e) {

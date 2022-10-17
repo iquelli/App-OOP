@@ -15,6 +15,7 @@ public class Client implements Serializable{
     private double _payments = 0.0;
     private double _debts = 0.0;
     private Level _level;
+    private boolean _allowNotifications;
     // FIX ME ainda falta métodos por definir (terminais e tipo de comunicação)
 
     public Client(String key, String name, int taxId) {
@@ -22,5 +23,21 @@ public class Client implements Serializable{
         _name = name;
         _taxId = taxId;
         _level = new Level(); // normal level
+    }
+    
+    public boolean canReceiveNotifications() {
+    	return _allowNotifications;
+    }
+    
+    public void enableNotifications() {
+    	_allowNotifications = true;
+    }
+    
+    public void disableNotifications() {
+    	_allowNotifications = false;
+    }
+    
+    public double getBalance() {
+    	return _payments - _debts;
     }
 }
