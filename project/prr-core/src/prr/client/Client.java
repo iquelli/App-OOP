@@ -1,10 +1,13 @@
 package prr.client;
 
 import java.io.Serializable;
+import java.io.Serial;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 import prr.terminals.Terminal;
-
-import java.io.Serial;
+import prr.util.KeyComparator;
 
 public class Client implements Serializable{
 
@@ -18,15 +21,23 @@ public class Client implements Serializable{
     private double _payments = 0.0;
     private double _debts = 0.0;
     private Level _level;
-    private boolean _allowNotifications;
-    private Terminal _terminals;
-    // FIX ME ainda falta métodos por definir (terminais e tipo de comunicação)
+    private boolean _allowNotifications = true;
+	private Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
+    // FIX ME ainda falta métodos por definir (tipo de comunicação)
 
     public Client(String key, String name, int taxId) {
         _key = key;
         _name = name;
         _taxId = taxId;
         _level = new Level(); // normal level
+    }
+
+    public Map<String,Terminal> getTerminals() {
+        return _terminals;
+    }
+
+    public void addTerminal(Terminal terminal) {
+        _terminals.put(terminal.getTerminalKey(), terminal);
     }
     
     public boolean canReceiveNotifications() {

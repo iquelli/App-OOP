@@ -32,6 +32,10 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 		_client = client;
 	}
 
+    public String getTerminalKey() {
+        return _key;
+    }
+
     /**
      * Checks if this terminal can end the current interactive communication.
      *

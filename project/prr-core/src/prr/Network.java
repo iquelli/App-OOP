@@ -134,8 +134,8 @@ public class Network implements Serializable {
 	 *
 	 *@return _clients  list of all the clients
 	 */
-	public Map<String,Client> getAllClients() {
-		return _clients;
+	public List<Client> getAllClients() {
+		return _clients.values().stream().collect(Collectors.toList());
 	}
 
 
@@ -173,7 +173,7 @@ public class Network implements Serializable {
 	
 
 	/**
-	 * Gets all terminals
+	 * Gets all terminals.
 	 *
 	 *@return list of all terminals
 	 */	
@@ -274,16 +274,18 @@ public class Network implements Serializable {
 			throw new DuplicateTerminalKeyException(terminalKey);
 		}
 		
+		Client client = getClient(clientKey);
 		Terminal terminal = type.equals(basicTerminalText) ? 
-				new BasicTerminal(terminalKey, getClient(clientKey)) : 
-				new FancyTerminal(terminalKey, getClient(clientKey));
+				new BasicTerminal(terminalKey, client) : 
+				new FancyTerminal(terminalKey, client);
 		
 		_terminals.put(terminalKey, terminal);
+		client.addTerminal(terminal);
 	}
 
 
 	/**
-	 * Validates if a key is valid
+	 * See if a terminal key is valid.
 	 *
 	 * @param key  the key that will be tested
 	 * @return if the key is valid 
