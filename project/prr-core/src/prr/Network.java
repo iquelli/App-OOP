@@ -45,6 +45,7 @@ public class Network implements Serializable {
     // FIXME define contructor
     // FIXME define methods
 
+
 	/**
 	 * Read text input file and create corresponding domain entities.
 	 * 
@@ -70,6 +71,7 @@ public class Network implements Serializable {
 		}
 	}
 
+
 	/**
 	 * Evaluates the entry and calls the right function to evaluate the arguments.
 	 * 
@@ -93,6 +95,7 @@ public class Network implements Serializable {
 		}
 	}
 	
+
 	/**
 	 * Sees if the entry is a valid client entry.
 	 * 
@@ -101,13 +104,15 @@ public class Network implements Serializable {
 	 * @throws DuplicateClientKeyException 
 	 * @throws NumberFormatException 
 	 */
-	private void evaluateClientEntry(String args[]) throws InvalidEntryException, NumberFormatException, DuplicateClientKeyException {
+	private void evaluateClientEntry(String args[]) throws
+	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException {
 		if (args.length != 4)
 			throw new InvalidEntryException(args);
 		//FIXME falta verificar se cada entrada ta correta (ex: se args[3] eh um numero)
 		else 
 			registerClient(args[1], args[2], Integer.parseInt(args[3]));
 	}
+
 
 	/**
 	 * Gets a client by its key. 
@@ -123,6 +128,7 @@ public class Network implements Serializable {
 		return client;
 	}
 
+
 	/**
 	 * Gets the list of clients. 
 	 *
@@ -131,6 +137,7 @@ public class Network implements Serializable {
 	public Map<String,Client> getAllClients() {
 		return _clients;
 	}
+
 
 	/**
 	 * Adds a client to the list of clients.
@@ -148,6 +155,7 @@ public class Network implements Serializable {
 		_clients.put(key, client);
 	}
 
+
 	/**
 	 * Gets a terminal by its key. 
 	 *
@@ -163,6 +171,7 @@ public class Network implements Serializable {
 		return _terminals.get(key);
 	}
 	
+
 	/**
 	 * Gets all terminals
 	 *
@@ -171,6 +180,7 @@ public class Network implements Serializable {
 	public List<Terminal> getTerminals() {
 		return _terminals.values().stream().collect(Collectors.toList());
 	}
+
 
 	/**
 	 * Gets all terminals with a positive balance.
@@ -189,6 +199,7 @@ public class Network implements Serializable {
 		return terminalsWithPositiveBalance;		
 	}
 
+
 	/**
 	 * Gets all terminals that had never received or sent a communication.
 	 *
@@ -205,6 +216,7 @@ public class Network implements Serializable {
 		
 		return terminalsUnused;
 	}
+
 
 	/**
 	 * Gets the global balance of registered clients.
@@ -227,18 +239,20 @@ public class Network implements Serializable {
 	 * 
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if it is not a valid Terminal entry
-	 * @throws DuplicateTerminalKeyException if the key is already associated to an existing terminal
+	 * @throws DuplicateTerminalKeyException if the key is already associated 
+	 *                                       to an existing terminal
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits
 	 * @throws UnknownClientKeyException if the client key doesnt exist
 	 */
 
-	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException, UnknownClientKeyException,
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException,
+	 UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
 		if (args.length != 3)
 			throw new InvalidEntryException(args);
 		else 
 			registerTerminal(args[1], args[2], args[0]);
 	}
+
 
 	/**
 	 * Gets the global balance of registered clients.
@@ -246,7 +260,8 @@ public class Network implements Serializable {
 	 * @param terminalKey  the key that will be associated to the terminal
 	 * @param clientKey  the key from the user who will be the owner
 	 * @throws InvalidTerminalKeyException  if the key does not have 6 digits
-	 * @throws DuplicateTerminalKeyException  if the key is already associated to an existing terminal
+	 * @throws DuplicateTerminalKeyException  if the key is already associated 
+	 *                                       to an existing terminal
 	 * @throws UnknowClientKeyException if the client key doesnt exist
 	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type) throws 
@@ -265,6 +280,7 @@ public class Network implements Serializable {
 		
 		_terminals.put(terminalKey, terminal);
 	}
+
 
 	/**
 	 * Validates if a key is valid

@@ -10,13 +10,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import prr.exceptions.DuplicateClientKeyException;
+import prr.exceptions.DuplicateTerminalKeyException;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.InvalidEntryException;
+import prr.exceptions.InvalidTerminalKeyException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.UnavailableFileException;
+import prr.exceptions.UnknownClientKeyException;
 import prr.exceptions.UnrecognizedEntryException;
-
-//FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
 /**
  * Manage access to network and implement load/save operations.
@@ -100,8 +101,13 @@ public class NetworkManager {
 	 * @throws DuplicateClientKeyException 
 	 * @throws InvalidEntryException 
 	 * @throws NumberFormatException 
+	 * @throws DuplicateTerminalKeyException
+	 * @throws InvalidTerminalKeyException
+	 * @throws UnknownClientKeyException
 	 */
-	public void importFile(String filename) throws ImportFileException, NumberFormatException, InvalidEntryException, DuplicateClientKeyException {
+	public void importFile(String filename) throws ImportFileException, NumberFormatException,
+	 InvalidEntryException, DuplicateClientKeyException, UnknownClientKeyException, 
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException {
 		try {
 			_network.importFile(filename);
 		} catch (IOException | UnrecognizedEntryException /** FIXME maybe other exceptions */ e) {
