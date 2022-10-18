@@ -1,6 +1,7 @@
 package prr.client;
 
 import java.io.Serializable;
+import java.net.PortUnreachableException;
 import java.io.Serial;
 
 import java.util.Map;
@@ -8,8 +9,10 @@ import java.util.TreeMap;
 
 import prr.terminals.Terminal;
 import prr.util.KeyComparator;
+import prr.visits.ClientVisitor;
+import prr.visits.Visitable;
 
-public class Client implements Serializable{
+public class Client implements Serializable, Visitable{
 
     @Serial
 	/** Serial number for serialization. */
@@ -30,6 +33,26 @@ public class Client implements Serializable{
         _name = name;
         _taxId = taxId;
         _level = new Level(); // normal level
+    }
+
+    public String getKey() {
+        return _key;
+    }
+
+    public String getName() {
+        return _name;
+    }
+
+    public int getTaxId() {
+        return _taxId;
+    }
+
+    public boolean getNotif() {
+        return _allowNotifications;
+    }
+
+    public String getLevelName() {
+        return _level.getLevel();
     }
 
     public Map<String,Terminal> getTerminals() {
@@ -55,4 +78,10 @@ public class Client implements Serializable{
     public double getBalance() {
     	return _payments - _debts;
     }
+
+    @Override
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
 }
