@@ -47,7 +47,7 @@ public class Client implements Serializable, Visitable{
         return _taxId;
     }
 
-    public boolean getNotif() {
+    public boolean allowNotifications() {
         return _allowNotifications;
     }
 

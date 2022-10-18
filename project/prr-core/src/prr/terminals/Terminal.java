@@ -6,6 +6,7 @@ import java.util.List;
 import prr.client.Client;
 import prr.communications.Communication;
 import prr.visits.Visitable;
+import prr.visits.Visitor;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
