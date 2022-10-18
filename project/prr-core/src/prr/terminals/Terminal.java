@@ -37,6 +37,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
         return _key;
     }
 
+    public String getClientKey() {
+        return _client.getKey();
+    }
+
     /**
      * Checks if this terminal can end the current interactive communication.
      *
