@@ -2,10 +2,11 @@ package prr.app.visitors;
 
 import prr.visits.Visitor;
 import prr.client.Client;
+import prr.terminals.Terminal;
 
 import java.util.StringJoiner;
 
-public class RenderClient implements Visitor<String> {
+public class RenderClient extends Visitor<String> {
     
     private String textToPresent = "";
 
@@ -25,5 +26,11 @@ public class RenderClient implements Visitor<String> {
         textToPresent += text;
 
         return textToPresent;
+    }
+
+    @Override
+    public String visit(Terminal terminal) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
