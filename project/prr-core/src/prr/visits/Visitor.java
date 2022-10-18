@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 public abstract class Visitor<T> implements Serializable{
     
-    public abstract String visit(Client client);
-    public abstract String visit(Terminal terminal);
+    public abstract T visit(Client client);
+    public abstract T visit(Terminal terminal);
 }
