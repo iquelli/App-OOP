@@ -5,13 +5,14 @@ import java.util.List;
 
 import prr.client.Client;
 import prr.communications.Communication;
+import prr.visits.Visitable;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
 /**
  * Abstract terminal.
  */
-abstract public class Terminal implements Serializable /* FIXME maybe addd more interfaces */{
+abstract public class Terminal implements Serializable, Visitable /* FIXME maybe addd more interfaces */{
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
@@ -134,6 +135,11 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
     
     public void turnOnTerminal() {
     	
+    }
+
+    @Override
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visit(this);
     }
     
 }

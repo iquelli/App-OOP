@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 import prr.terminals.Terminal;
 import prr.util.KeyComparator;
-import prr.visits.ClientVisitor;
+import prr.visits.Visitor;
 import prr.visits.Visitable;
 
 public class Client implements Serializable, Visitable{
