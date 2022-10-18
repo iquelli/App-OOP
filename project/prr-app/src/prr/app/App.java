@@ -14,7 +14,8 @@ import pt.tecnico.uilib.Dialog;
  */
 public class App {
 
-	public static void main(String[] args) throws NumberFormatException, InvalidEntryException, DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	public static void main(String[] args) throws NumberFormatException, InvalidEntryException,
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
 		try (var ui = Dialog.UI) {
 			var receiver = new NetworkManager();
 
