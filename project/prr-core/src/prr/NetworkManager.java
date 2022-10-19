@@ -88,7 +88,8 @@ public class NetworkManager {
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
-	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
+	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, 
+	 IOException {
 		_fileName = filename;
 		save();
 	}
@@ -97,7 +98,7 @@ public class NetworkManager {
 	 * Read text input file and create domain entities..
 	 * 
 	 * @param filename name of the text input file
-	 * @throws ImportFileException
+	 * @throws ImportFileException 
 	 * @throws DuplicateClientKeyException 
 	 * @throws InvalidEntryException 
 	 * @throws NumberFormatException 
@@ -114,7 +115,7 @@ public class NetworkManager {
 			throw new ImportFileException(filename, e);
 		}
 	}
-	
+		
 	/**
 	 * Resets the network.
 	 */

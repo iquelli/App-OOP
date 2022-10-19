@@ -49,12 +49,13 @@ public class Network implements Serializable {
 	 * @param filename name of the text input file
      * @throws UnrecognizedEntryException if some entry is not correct
 	 * @throws IOException if there is an IO error while processing the text file
-	 * @throws InvalidEntryException 
-	 * @throws DuplicateClientKeyException 
-	 * @throws NumberFormatException 
-	 * @throws DuplicateTerminalKeyException
-	 * @throws InvalidTerminalKeyException
-	 * @throws UnknownClientKeyException
+	 * @throws InvalidEntryException if the first word of the entry does not correspond
+	 * 								to any option
+	 * @throws NumberFormatException if the string doenst have numbers
+	 * @throws DuplicateClientKeyException if the key given already exist
+	 * @throws UnknownClientKeyException when there is no client with the key
+	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
+	 * @throws DuplicateTerminalKeyException if the key given already exists
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException,
 	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
@@ -75,8 +76,11 @@ public class Network implements Serializable {
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if the first word of the entry does not correspond
 	 * 								to any option
-	 * @throws DuplicateClientKeyException 
-	 * @throws NumberFormatException 
+	 * @throws NumberFormatException if the string doenst have numbers
+	 * @throws DuplicateClientKeyException if the key given already exists
+	 * @throws UnknownClientKeyException when there is no client with the key
+	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
+	 * @throws DuplicateTerminalKeyException  if the key given already exists
 	 */
 	private void interpretsLine(String args[]) throws InvalidEntryException, NumberFormatException,
 	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException{
@@ -98,11 +102,11 @@ public class Network implements Serializable {
 	 * 
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if it is not a valid client entry
-	 * @throws DuplicateClientKeyException 
-	 * @throws NumberFormatException 
+	 * @throws DuplicateClientKeyException if the key given already exists
+	 * @throws NumberFormatException if the string doenst have numbers
 	 */
 	private void evaluateClientEntry(String args[]) throws
-	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException {
+	 InvalidEntryException, DuplicateClientKeyException, NumberFormatException {
 		if (args.length != 4)
 			throw new InvalidEntryException(args);
 		else 
@@ -160,9 +164,8 @@ public class Network implements Serializable {
 	 *@throws UnknownTerminalKeyException  when there is no terminal with the key
 	 */
 	public Terminal getTerminal(String key) throws UnknownTerminalKeyException {
-		if (!_terminals.containsKey(key)) {
+		if (!_terminals.containsKey(key))
 			throw new UnknownTerminalKeyException(key);
-		}
 		
 		return _terminals.get(key);
 	}
@@ -187,9 +190,8 @@ public class Network implements Serializable {
 		List<Terminal> terminalsWithPositiveBalance = new ArrayList<Terminal>();
 		
 		for (Terminal terminal : _terminals.values()) {
-			if (terminal.getBalance() > 0) {
+			if (terminal.getBalance() > 0)
 				terminalsWithPositiveBalance.add(terminal);
-			}
 		}
 		
 		return terminalsWithPositiveBalance;		
@@ -205,9 +207,8 @@ public class Network implements Serializable {
 		List<Terminal> terminalsUnused = new ArrayList<Terminal>();
 		
 		for (Terminal terminal : _terminals.values()) {
-			if (terminal.getPastCommunications().size() == 0) {
+			if (terminal.getPastCommunications().size() == 0)
 				terminalsUnused.add(terminal);
-			}
 		}
 		
 		return terminalsUnused;
@@ -242,7 +243,7 @@ public class Network implements Serializable {
 	 */
 
 	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException,
-	 UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	 DuplicateTerminalKeyException, InvalidTerminalKeyException, UnknownClientKeyException {
 		if (args.length != 3)
 			throw new InvalidEntryException(args);
 		else 
@@ -261,7 +262,7 @@ public class Network implements Serializable {
 	 * @throws UnknowClientKeyException if the client key doesnt exist
 	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type) throws 
-	 UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException {
 		if (!isValidTerminalKey(terminalKey)) {
 			throw new InvalidTerminalKeyException(terminalKey);
 		}
@@ -287,13 +288,11 @@ public class Network implements Serializable {
 	 * @return if the key is valid 
 	 */
 	private boolean isValidTerminalKey(String key) {
-		if (key.length() != 6) {
+		if (key.length() != 6)
 			return false;
-		}
 		
-		if (!key.chars().allMatch(Character::isDigit)) {
+		if (!key.chars().allMatch(Character::isDigit))
 			return false;
-		}
 		
 		return true;
 	}

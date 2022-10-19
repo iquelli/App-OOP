@@ -6,6 +6,9 @@ import java.io.Serial;
 import java.io.Serializable;
 
 
+/**
+ * This class serves to sort alphanumeric strings.
+ */
 public class KeyComparator implements Comparator<String>, Serializable {
 
     /** Serial number for serialization. */
@@ -18,7 +21,8 @@ public class KeyComparator implements Comparator<String>, Serializable {
         String text2 = extractString(key2);
         
         if ((text1.isEmpty() && text2.isEmpty()) || text1.equals(text2)) {
-        	return text1.equals(key1) && text2.equals(key2) ? 0 : extractInt(key1) - extractInt(key2);
+        	return text1.equals(key1) && text2.equals(key2) ? 
+        			0 : extractInt(key1) - extractInt(key2);
         }
         
         return text1.compareTo(text2);
@@ -36,7 +40,7 @@ public class KeyComparator implements Comparator<String>, Serializable {
     }
 
     /**
-     * Takes out numbers that are in string format.
+     * Takes out numbers that are in a string.
      * 
      * @param s  string with numbers
      * @return string without numbers
