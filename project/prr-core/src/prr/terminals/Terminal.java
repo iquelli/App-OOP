@@ -33,7 +33,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	public Terminal(String key, Client client) {
 		_key = key;
 		_client = client;
-		_state = new Idle();
+		_state = new Idle(this);
 		_communications = new ArrayList<Communication>();
 		_payments = 0.0;
 		_debts = 0.0;
@@ -48,8 +48,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
         return _client.getKey();
     }
     
-    public String getState() {
-    	return _state.getType();
+    public TerminalState getState() {
+    	return _state;
     }
 
     /**
@@ -71,6 +71,31 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public boolean canStartCommunication() {
             // FIXME add implementation code
 			return false;
+    }
+
+//  **************************
+//  *          State		 *
+//  **************************
+    
+    public abstract class TerminalState {
+    	
+    	protected void setState(TerminalState state) {
+    		_state = state;
+    	}
+    	
+    	protected Terminal getTerminal() {
+    		return Terminal.this;
+    	}
+    	
+    	public abstract void turnOff();
+    	public abstract void becomeIdle();
+    	public abstract void silence();
+    	public abstract void becomeBusy();
+    	
+    	public abstract boolean isOnState(TerminalState state);
+    	
+    	@Override
+    	public abstract String toString();
     }
 
 //  **************************
@@ -117,7 +142,11 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  **************************
         
     public void addFriend(String friendKey) {
+    	if (_friends.contains(friendKey)) {
+    		return;
+    	}
     	
+    	_friends.add(friendKey);
     }
     
     public boolean isFriendWith(String terminalKey) {    	

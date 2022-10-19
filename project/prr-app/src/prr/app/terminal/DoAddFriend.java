@@ -10,13 +10,15 @@ import pt.tecnico.uilib.menus.CommandException;
  */
 class DoAddFriend extends TerminalCommand {
 
+	private final static String friendKeyText = "friendKey";
+	
 	DoAddFriend(Network context, Terminal terminal) {
 		super(Label.ADD_FRIEND, context, terminal);
-		//FIXME add command fields
+		addStringField(friendKeyText, Prompt.terminalKey());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
+		_receiver.addFriend(stringField(friendKeyText));
 	}
 }

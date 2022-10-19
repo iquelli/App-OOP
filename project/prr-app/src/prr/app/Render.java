@@ -31,7 +31,7 @@ public class Render extends Visitor<String> {
 				.add(terminal.getType())
 				.add(terminal.getTerminalKey())
 				.add(terminal.getClientKey())
-				.add(terminal.getState())
+				.add(terminal.getState().toString())
 				.add(Integer.toString(terminal.getPaymentsRounded()))
 				.add(Integer.toString(terminal.getDebtsRounded()));
 		
