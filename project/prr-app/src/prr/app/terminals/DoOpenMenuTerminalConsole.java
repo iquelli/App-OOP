@@ -28,7 +28,7 @@ class DoOpenMenuTerminalConsole extends Command<Network> {
 		String terminalKey = stringField(terminalIdText);
 		
 		try {
-			_display.popup(_receiver.getTerminal(terminalKey));
+			new prr.app.terminal.Menu(_receiver, _receiver.getTerminal(terminalKey)).open();
 		}
 		catch (prr.exceptions.UnknownTerminalKeyException e) {
 			throw new UnknownTerminalKeyException(terminalKey);
