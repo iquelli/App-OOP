@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="project/po-uilib-202209081626/src"/>
+	<classpathentry kind="src" path="project/prr-app/src"/>
+	<classpathentry kind="src" path="project/prr-core/src"/>
+	<classpathentry kind="lib" path="project/prr-core/prr-core.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

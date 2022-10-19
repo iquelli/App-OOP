@@ -37,8 +37,8 @@ public class Network implements Serializable {
 	
 	private static final String basicTerminalText = "BASIC";
 	
-	private Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
-	private Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
+	private final Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
+	private final Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
 	private List<Communication> _communication;
 
     // FIXME define attributes

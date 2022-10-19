@@ -26,8 +26,7 @@ class DoShowClient extends Command<Network> {
 	protected final void execute() throws CommandException {
         try{
 			Render renderer = new Render();
-			_receiver.getClient(stringField(keyText)).accept(renderer);
-			_display.popup(renderer);
+			_display.popup(_receiver.getClient(stringField(keyText)).accept(renderer));
 		} catch(prr.exceptions.UnknownClientKeyException e) {
 			throw new UnknownClientKeyException(e.getKey());
 		}

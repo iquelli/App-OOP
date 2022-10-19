@@ -16,5 +16,9 @@ public class DuplicateClientKeyException extends Exception {
     public DuplicateClientKeyException(String key) {
         _key = key;
     }
+    
+    public String getKey() {
+    	return _key;
+    }
 
 }
