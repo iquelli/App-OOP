@@ -3,6 +3,9 @@ package prr.app.main;
 import prr.NetworkManager;
 import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.Command;
+import pt.tecnico.uilib.menus.CommandException;
+
+import java.io.IOException;
 //FIXME add more imports if needed
 
 /**
@@ -15,7 +18,25 @@ class DoSaveFile extends Command<NetworkManager> {
 	}
 
 	@Override
-	protected final void execute() {
-                //FIXME implement command and create a local Form
+	protected final void execute() throws CommandException {
+		try {
+			try {
+				_receiver.save();
+			} 
+			catch(prr.exceptions.MissingFileAssociationException e) {
+				saveAs();	
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveAs() throws IOException {
+		try {
+			_receiver.saveAs(Form.requestString(Prompt.newSaveAs()));
+		} catch(prr.exceptions.MissingFileAssociationException e) {
+			saveAs();
+		}
 	}
 }

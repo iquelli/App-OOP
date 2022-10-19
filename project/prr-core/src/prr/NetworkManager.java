@@ -84,11 +84,10 @@ public class NetworkManager {
          * associated to this file.
          *
 	 * @param filename the name of the file.
-	 * @throws FileNotFoundException if for some reason the file cannot be created or opened.
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
-	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, 
+	public void saveAs(String filename) throws MissingFileAssociationException, 
 	 IOException {
 		_fileName = filename;
 		save();
