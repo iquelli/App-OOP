@@ -22,10 +22,19 @@ public class Render extends Visitor<String> {
 
 	@Override
 	public String visit(Terminal terminal) {
-		return new StringJoiner("|")
+		StringJoiner terminalString = new StringJoiner("|")
 				.add(terminal.getType())
 				.add(terminal.getTerminalKey())
 				.add(terminal.getClientKey())
-				.toString();
+				.add(terminal.getState())
+				.add(Integer.toString(terminal.getPaymentsRounded()))
+				.add(Integer.toString(terminal.getDebtsRounded()));
+		
+		String friends = terminal.getFriends();
+		if (friends != null) {
+			terminalString.add(friends);
+		}
+		
+		return terminalString.toString();
 	}
 }

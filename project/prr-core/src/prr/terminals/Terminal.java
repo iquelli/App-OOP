@@ -1,7 +1,9 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import prr.client.Client;
 import prr.communications.Communication;
@@ -20,18 +22,22 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 
 	private String _key;
 	private Client _client;
-//	private TerminalType _type;
-//	private TerminalState _state;
+	private TerminalState _state;
 	private List<Communication> _communications;
 	private double _payments;
 	private double _debts;
-	private List<Terminal> _friends;
+	private List<String> _friends;
 //	private List<Notification> _notificationsToBeSend;
 //	private InteractiveCommunication _communicationOngoing;
 	
 	public Terminal(String key, Client client) {
 		_key = key;
 		_client = client;
+		_state = new Idle();
+		_communications = new ArrayList<Communication>();
+		_payments = 0.0;
+		_debts = 0.0;
+		_friends = new ArrayList<String>();
 	}
 
     public String getTerminalKey() {
@@ -40,6 +46,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 
     public String getClientKey() {
         return _client.getKey();
+    }
+    
+    public String getState() {
+    	return _state.getType();
     }
 
     /**
@@ -83,6 +93,14 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public double getDebts() {
     	return _debts;
     }
+    
+    public int getPaymentsRounded() {
+    	return (int)Math.round(_payments);
+    }
+    
+    public int getDebtsRounded() {
+    	return (int)Math.round(_debts);
+    }
 
 //  **************************
 //  *     Communications	 *
@@ -93,9 +111,30 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     }
     
     public abstract String getType();
+
+//  **************************
+//  *         Friends	     *
+//  **************************
         
     public void addFriend(String friendKey) {
     	
+    }
+    
+    public boolean isFriendWith(String terminalKey) {    	
+    	return _friends.contains(terminalKey);
+    }
+    
+    public String getFriends() {
+    	if (_friends.size() == 0) {
+    		return null;
+    	}
+    	
+    	StringJoiner friends = new StringJoiner(", ");
+    	for (String friendKey : _friends) {
+    		friends.add(friendKey);
+    	}
+    	
+    	return friends.toString();
     }
     
     public void endInteractiveCommunication(int duration) {
