@@ -21,7 +21,6 @@ import prr.terminals.Terminal;
 import prr.exceptions.InvalidEntryException;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.client.Client;
-import prr.communications.Communication;
 import prr.util.KeyComparator;
 
 /**
@@ -39,19 +38,17 @@ public class Network implements Serializable {
 	
 	private final Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
 	private final Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
-	private List<Communication> _communication;
 
     // FIXME define attributes
-    // FIXME define contructor
+    // FIXME define constructor
     // FIXME define methods
-
 
 	/**
 	 * Read text input file and create corresponding domain entities.
 	 * 
 	 * @param filename name of the text input file
      * @throws UnrecognizedEntryException if some entry is not correct
-	 * @throws IOException if there is an IO erro while processing the text file
+	 * @throws IOException if there is an IO error while processing the text file
 	 * @throws InvalidEntryException 
 	 * @throws DuplicateClientKeyException 
 	 * @throws NumberFormatException 
