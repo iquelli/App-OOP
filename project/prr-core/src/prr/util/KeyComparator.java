@@ -19,6 +19,8 @@ public class KeyComparator implements Comparator<String>, Serializable {
         
         
         if((text1.isEmpty() && text2.isEmpty()) || text1.equals(text2)) {
+            if(text1.equals(key1) && text2.equals(key2))
+        	return 0;
             return  extractInt(key1) - extractInt(key2);
         }
         
