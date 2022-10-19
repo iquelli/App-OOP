@@ -15,8 +15,13 @@ public class Render extends Visitor<String> {
 		return new StringJoiner("|")
 				.add("CLIENT")
 				.add(client.getKey())
+				.add(client.getName())
 				.add(Integer.toString(client.getTaxId()))
+				.add(client.getLevelName())
 				.add(client.allowNotifications() ? "YES" : "NO")
+				.add(Integer.toString(client.getAmountOfTerminals()))	
+				.add(Integer.toString(client.getRoundedPayments()))
+				.add(Integer.toString(client.getRoundedDebts()))
 				.toString();
 	}
 

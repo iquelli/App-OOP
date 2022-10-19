@@ -86,7 +86,7 @@ public class Network implements Serializable {
 			case "FANCY" :
 							evaluateTerminalEntry(args);
 							break;
-			// FIXME falta adicionar os outros casos
+			// FIXME falta adicionar o caso FRIENDS
 			
 			default : throw new InvalidEntryException(args);
 		}
@@ -105,7 +105,6 @@ public class Network implements Serializable {
 	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException {
 		if (args.length != 4)
 			throw new InvalidEntryException(args);
-		//FIXME falta verificar se cada entrada ta correta (ex: se args[3] eh um numero)
 		else 
 			registerClient(args[1], args[2], Integer.parseInt(args[3]));
 	}

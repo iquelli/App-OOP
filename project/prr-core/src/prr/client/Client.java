@@ -1,11 +1,11 @@
 package prr.client;
 
 import java.io.Serializable;
-import java.net.PortUnreachableException;
 import java.io.Serial;
-
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import prr.terminals.Terminal;
 import prr.util.KeyComparator;
@@ -46,6 +46,14 @@ public class Client implements Serializable, Visitable{
     public int getTaxId() {
         return _taxId;
     }
+    
+    public int getRoundedPayments() {
+        return (int)Math.round(_payments);
+    }
+    
+    public int getRoundedDebts() {
+        return (int)Math.round(_debts);
+    }
 
     public boolean allowNotifications() {
         return _allowNotifications;
@@ -55,9 +63,13 @@ public class Client implements Serializable, Visitable{
         return _level.getLevel();
     }
 
-    public Map<String,Terminal> getTerminals() {
-        return _terminals;
-    }
+	public List<Terminal> getTerminals() {
+		return _terminals.values().stream().collect(Collectors.toList());
+	}
+	
+	public int getAmountOfTerminals() {
+		return _terminals.size();
+	}
 
     public void addTerminal(Terminal terminal) {
         _terminals.put(terminal.getTerminalKey(), terminal);
