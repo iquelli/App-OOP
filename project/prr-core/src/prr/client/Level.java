@@ -3,7 +3,7 @@ package prr.client;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class Level implements Serializable {
+public abstract class Level implements Serializable {
     
     @Serial
 	/** Serial number for serialization. */
@@ -14,7 +14,5 @@ public class Level implements Serializable {
      * 
      * @return String clients' level in string format
      */
-    public String getLevel() {
-        return "NORMAL";
-    }
+    public abstract String getLevel();
 }
