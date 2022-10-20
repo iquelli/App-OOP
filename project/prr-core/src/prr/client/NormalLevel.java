@@ -17,7 +17,4 @@ public class NormalLevel extends Level {
     public String getLevel() {
         return "NORMAL";
     }
-    
-    
-
 }
