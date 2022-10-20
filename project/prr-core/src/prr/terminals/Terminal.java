@@ -26,7 +26,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private List<Communication> _communications;
 	private double _payments;
 	private double _debts;
-	private List<String> _friends;
+	private List<Terminal> _friends;
 //	private List<Notification> _notificationsToBeSend;
 //	private InteractiveCommunication _communicationOngoing;
 	
@@ -37,7 +37,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_communications = new ArrayList<Communication>();
 		_payments = 0.0;
 		_debts = 0.0;
-		_friends = new ArrayList<String>();
+		_friends = new ArrayList<Terminal>();
 	}
 
     public String getTerminalKey() {
@@ -144,16 +144,22 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  *         Friends	     *
 //  **************************
         
-    public void addFriend(String friendKey) {
-    	if (_friends.contains(friendKey)) {
+    public void addFriend(Terminal friend) {
+    	if (isFriendWith(friend.getTerminalKey())) {
     		return;
     	}
     	
-    	_friends.add(friendKey);
+    	_friends.add(friend);
     }
     
-    public boolean isFriendWith(String terminalKey) {    	
-    	return _friends.contains(terminalKey);
+    public boolean isFriendWith(String terminalKey) {
+    	for (Terminal friend : _friends) {
+    		if (friend.getTerminalKey().equals(terminalKey)) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
     
     public String getFriends() {
@@ -162,8 +168,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	StringJoiner friends = new StringJoiner(", ");
-    	for (String friendKey : _friends) {
-    		friends.add(friendKey);
+    	for (Terminal friend : _friends) {
+    		friends.add(friend.getTerminalKey());
     	}
     	
     	return friends.toString();

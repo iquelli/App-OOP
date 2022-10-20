@@ -32,7 +32,7 @@ public class Client implements Serializable, Visitable{
         _key = key;
         _name = name;
         _taxId = taxId;
-        _level = new Level(); // normal level
+        _level = new NormalLevel(); // normal level
     }
 
     public String getKey() {
