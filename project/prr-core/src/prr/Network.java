@@ -38,11 +38,25 @@ public class Network implements Serializable {
 	
 	private final Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
 	private final Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
+	
+	private boolean _wasModified = false;
 
     // FIXME define attributes
     // FIXME define constructor
     // FIXME define methods
 
+	public boolean wasModified() {
+		return _wasModified;
+	}
+	
+	public void modified() {
+		_wasModified = true;
+	}
+	
+	public void modificationsSaved() {
+		_wasModified = false;
+	}
+	
 	/**
 	 * Read text input file and create corresponding domain entities.
 	 * 
@@ -56,15 +70,15 @@ public class Network implements Serializable {
 	 * @throws UnknownClientKeyException when there is no client with the key
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
 	 * @throws DuplicateTerminalKeyException if the key given already exists
+	 * @throws UnknownTerminalKeyException 
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException,
 	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException { 
-
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException { 
 		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while((line = text.readLine()) != null) {
-				interpretsLine(line.split("|"));
+				interpretsLine(line.split("\\|"));
 			}
 		}
 	}
@@ -81,15 +95,18 @@ public class Network implements Serializable {
 	 * @throws UnknownClientKeyException when there is no client with the key
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
 	 * @throws DuplicateTerminalKeyException  if the key given already exists
+	 * @throws UnknownTerminalKeyException 
 	 */
 	private void interpretsLine(String args[]) throws InvalidEntryException, NumberFormatException,
-	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException{
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException{
 		switch (args[0]) {
-			case "CLIENT": evaluateClientEntry(args);
+			case "CLIENT": 
+				evaluateClientEntry(args);
+				break;
 			case "BASIC" :
 			case "FANCY" :
-							evaluateTerminalEntry(args);
-							break;
+				evaluateTerminalEntry(args);
+				break;
 			// FIXME falta adicionar o caso FRIENDS
 			
 			default : throw new InvalidEntryException(args);
@@ -123,8 +140,10 @@ public class Network implements Serializable {
 	 */
 	public Client getClient(String key) throws UnknownClientKeyException {
 		Client client = _clients.get(key);
-		if (client == null)
+		if (client == null) {
 			throw new UnknownClientKeyException(key);
+		}
+		
 		return client;
 	}
 
@@ -153,6 +172,7 @@ public class Network implements Serializable {
 			throw new DuplicateClientKeyException(key);
 		Client client = new Client(key, name, taxId);
 		_clients.put(key, client);
+		modified();
 	}
 
 
@@ -240,14 +260,15 @@ public class Network implements Serializable {
 	 *                                       to an existing terminal
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits
 	 * @throws UnknownClientKeyException if the client key doesnt exist
+	 * @throws UnknownTerminalKeyException 
 	 */
 
 	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException,
-	 DuplicateTerminalKeyException, InvalidTerminalKeyException, UnknownClientKeyException {
-		if (args.length != 3)
+	 DuplicateTerminalKeyException, InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException {
+		if (args.length != 4)
 			throw new InvalidEntryException(args);
 		else 
-			registerTerminal(args[1], args[2], args[0]);
+			registerTerminal(args[1], args[2], args[0], args[3]);
 	}
 
 
@@ -271,13 +292,25 @@ public class Network implements Serializable {
 			throw new DuplicateTerminalKeyException(terminalKey);
 		}
 		
-		Client client = getClient(clientKey);
+		Client client = getClient(clientKey);		
 		Terminal terminal = type.equals(basicTerminalText) ? 
 				new BasicTerminal(terminalKey, client) : 
 				new FancyTerminal(terminalKey, client);
 		
 		_terminals.put(terminalKey, terminal);
 		client.addTerminal(terminal);
+		modified();
+	}
+	
+	public void registerTerminal(String terminalKey, String clientKey, String type, String state) throws 
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException {
+		registerTerminal(terminalKey, clientKey, type);
+		Terminal terminal = getTerminal(terminalKey);
+		switch (state) {
+		case "OFF": terminal.getState().turnOff();
+		case "SILENCE": terminal.getState().silence();
+		}
+		
 	}
 
 

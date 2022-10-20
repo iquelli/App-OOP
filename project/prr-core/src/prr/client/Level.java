@@ -1,8 +1,9 @@
 package prr.client;
 
 import java.io.Serial;
+import java.io.Serializable;
 
-public class Level{
+public class Level implements Serializable {
     
     @Serial
 	/** Serial number for serialization. */

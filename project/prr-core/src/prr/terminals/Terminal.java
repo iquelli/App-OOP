@@ -70,16 +70,19 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      **/
     public boolean canStartCommunication() {
             // FIXME add implementation code
-			return false;
+			return true;
     }
 
 //  **************************
 //  *          State		 *
 //  **************************
     
-    public abstract class TerminalState {
-    	
-    	protected void setState(TerminalState state) {
+    public abstract class TerminalState implements Serializable {
+
+    	/** Serial number for serialization. */
+    	private static final long serialVersionUID = 202208091753L;
+
+		protected void setState(TerminalState state) {
     		_state = state;
     	}
     	

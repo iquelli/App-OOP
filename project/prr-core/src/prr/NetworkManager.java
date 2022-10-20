@@ -17,6 +17,7 @@ import prr.exceptions.InvalidTerminalKeyException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.UnavailableFileException;
 import prr.exceptions.UnknownClientKeyException;
+import prr.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.UnrecognizedEntryException;
 
 /**
@@ -70,12 +71,17 @@ public class NetworkManager {
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
 	public void save() throws FileNotFoundException, MissingFileAssociationException, IOException {
-		if(_fileName == null || _fileName.isBlank())
+		if (_fileName == null || _fileName.isBlank()) {
 			throw new MissingFileAssociationException();
-		try (ObjectOutputStream oos = new ObjectOutputStream(
-									  new BufferedOutputStream(
-									  new FileOutputStream(_fileName)))) {
-			oos.writeObject(_network);
+		}
+		
+		if (_network.wasModified()) {
+			try (ObjectOutputStream oos = new ObjectOutputStream(
+					  new BufferedOutputStream(
+					  new FileOutputStream(_fileName)))) {
+				oos.writeObject(_network);
+			}
+			_network.modificationsSaved();
 		}
 	}
 
@@ -104,13 +110,14 @@ public class NetworkManager {
 	 * @throws DuplicateTerminalKeyException
 	 * @throws InvalidTerminalKeyException
 	 * @throws UnknownClientKeyException
+	 * @throws UnknownTerminalKeyException 
 	 */
 	public void importFile(String filename) throws ImportFileException, NumberFormatException,
 	 InvalidEntryException, DuplicateClientKeyException, UnknownClientKeyException, 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException {
 		try {
 			_network.importFile(filename);
-		} catch (IOException | UnrecognizedEntryException /** FIXME maybe other exceptions */ e) {
+		} catch (IOException | UnrecognizedEntryException | InvalidEntryException /** FIXME maybe other exceptions */ e) {
 			throw new ImportFileException(filename, e);
 		}
 	}

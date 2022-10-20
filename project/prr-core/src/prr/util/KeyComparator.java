@@ -17,12 +17,16 @@ public class KeyComparator implements Comparator<String>, Serializable {
 
     @Override
     public int compare(String key1, String key2) {
+    	if (key1.equals(key2)) {
+    		return 0;
+    	}
+    	
         String text1 = extractString(key1);
         String text2 = extractString(key2);
         
         if ((text1.isEmpty() && text2.isEmpty()) || text1.equals(text2)) {
-        	return text1.equals(key1) && text2.equals(key2) ? 
-        			0 : extractInt(key1) - extractInt(key2);
+        	return text1.equals(key1) || text2.equals(key2) ? 
+        			-1 : extractInt(key1) - extractInt(key2);
         }
         
         return text1.compareTo(text2);

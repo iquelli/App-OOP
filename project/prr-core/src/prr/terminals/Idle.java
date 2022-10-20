@@ -15,8 +15,7 @@ public class Idle extends Terminal.TerminalState {
 
 	@Override
 	public void turnOff() {
-		// TODO Auto-generated method stub
-		
+		setState(new Off(getTerminal()));
 	}
 
 	@Override
@@ -27,8 +26,7 @@ public class Idle extends Terminal.TerminalState {
 
 	@Override
 	public void silence() {
-		// TODO Auto-generated method stub
-		
+		setState(new Silence(getTerminal()));		
 	}
 
 	@Override

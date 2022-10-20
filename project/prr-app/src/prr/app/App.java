@@ -7,6 +7,7 @@ import prr.exceptions.ImportFileException;
 import prr.exceptions.InvalidEntryException;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.exceptions.UnknownClientKeyException;
+import prr.exceptions.UnknownTerminalKeyException;
 import pt.tecnico.uilib.Dialog;
 
 /**
@@ -15,7 +16,7 @@ import pt.tecnico.uilib.Dialog;
 public class App {
 
 	public static void main(String[] args) throws NumberFormatException, InvalidEntryException,
-	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException {
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException {
 		try (var ui = Dialog.UI) {
 			var receiver = new NetworkManager();
 
