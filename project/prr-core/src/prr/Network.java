@@ -18,7 +18,6 @@ import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.BasicTerminal;
 import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
-import prr.exceptions.InvalidEntryException;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.client.Client;
 import prr.util.KeyComparator;
@@ -73,7 +72,7 @@ public class Network implements Serializable {
 	 * @throws UnknownTerminalKeyException 
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException,
-	 InvalidEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
+	 UnrecognizedEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
 	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException { 
 		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
 			String line;
@@ -96,9 +95,10 @@ public class Network implements Serializable {
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
 	 * @throws DuplicateTerminalKeyException  if the key given already exists
 	 * @throws UnknownTerminalKeyException 
+	 * @throws UnrecognizedEntryException 
 	 */
-	private void interpretsLine(String args[]) throws InvalidEntryException, NumberFormatException,
-	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException{
+	private void interpretsLine(String args[]) throws NumberFormatException,
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException, UnrecognizedEntryException{
 		switch (args[0]) {
 			case "CLIENT": 
 				evaluateClientEntry(args);
@@ -109,7 +109,7 @@ public class Network implements Serializable {
 				break;
 			// FIXME falta adicionar o caso FRIENDS
 			
-			default : throw new InvalidEntryException(args);
+			default : throw new UnrecognizedEntryException(args[0]);
 		}
 	}
 	
@@ -123,9 +123,9 @@ public class Network implements Serializable {
 	 * @throws NumberFormatException if the string doenst have numbers
 	 */
 	private void evaluateClientEntry(String args[]) throws
-	 InvalidEntryException, DuplicateClientKeyException, NumberFormatException {
+	 UnrecognizedEntryException, DuplicateClientKeyException, NumberFormatException {
 		if (args.length != 4)
-			throw new InvalidEntryException(args);
+			throw new UnrecognizedEntryException(args[0]);
 		else 
 			registerClient(args[1], args[2], Integer.parseInt(args[3]));
 	}
@@ -261,12 +261,13 @@ public class Network implements Serializable {
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits
 	 * @throws UnknownClientKeyException if the client key doesnt exist
 	 * @throws UnknownTerminalKeyException 
+	 * @throws UnrecognizedEntryException 
 	 */
 
-	public void evaluateTerminalEntry(String args[]) throws InvalidEntryException,
-	 DuplicateTerminalKeyException, InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException {
+	public void evaluateTerminalEntry(String args[]) throws DuplicateTerminalKeyException, 
+					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, UnrecognizedEntryException {
 		if (args.length != 4)
-			throw new InvalidEntryException(args);
+			throw new UnrecognizedEntryException(args[0]);
 		else 
 			registerTerminal(args[1], args[2], args[0], args[3]);
 	}
