@@ -8,7 +8,6 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import prr.terminals.Terminal;
-import prr.util.KeyComparator;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
 
@@ -25,7 +24,7 @@ public class Client implements Serializable, Visitable{
     private double _debts = 0.0;
     private Level _level;
     private boolean _allowNotifications = true;
-	private Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
+	private Map<String, Terminal> _terminals = new TreeMap<>();
     // FIX ME ainda falta metodos por definir (tipo de comunicacao)
 
     public Client(String key, String name, int taxId) {

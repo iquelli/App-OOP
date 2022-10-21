@@ -20,7 +20,6 @@ import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.client.Client;
-import prr.util.KeyComparator;
 
 /**
  * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
@@ -35,8 +34,8 @@ public class Network implements Serializable {
 	
 	private static final String basicTerminalText = "BASIC";
 	
-	private final Map<String, Client> _clients = new TreeMap<>(new KeyComparator());
-	private final Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
+	private final Map<String, Client> _clients = new TreeMap<>();
+	private final Map<String, Terminal> _terminals = new TreeMap<>();
 	
 	private boolean _wasModified = false;
 
