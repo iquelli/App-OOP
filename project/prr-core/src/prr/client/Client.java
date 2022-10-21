@@ -26,7 +26,7 @@ public class Client implements Serializable, Visitable{
     private Level _level;
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<>(new KeyComparator());
-    // FIX ME ainda falta métodos por definir (tipo de comunicação)
+    // FIX ME ainda falta metodos por definir (tipo de comunicacao)
 
     public Client(String key, String name, int taxId) {
         _key = key;
