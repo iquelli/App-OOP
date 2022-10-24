@@ -21,7 +21,7 @@ class DoAddFriend extends TerminalCommand {
 	@Override
 	protected final void execute() throws CommandException {
 		String terminalKey = stringField(friendKeyText);
-		Terminal terminal = null;
+		Terminal terminal;
 		try {
 			terminal = _network.getTerminal(terminalKey);
 			_receiver.addFriend(terminal);

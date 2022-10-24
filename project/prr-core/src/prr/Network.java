@@ -262,7 +262,6 @@ public class Network implements Serializable {
 	 * @throws UnknownTerminalKeyException 
 	 * @throws UnrecognizedEntryException 
 	 */
-
 	public void evaluateTerminalEntry(String args[]) throws DuplicateTerminalKeyException, 
 					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, UnrecognizedEntryException {
 		if (args.length != 4)
@@ -308,11 +307,10 @@ public class Network implements Serializable {
 		Terminal terminal = getTerminal(terminalKey);
 		switch (state) {
 		case "OFF": terminal.getState().turnOff();
-		case "SILENCE": terminal.getState().silence();
+		case "SILENCE": terminal.getState().turnOn();
 		}
 		
 	}
-
 
 	/**
 	 * See if a terminal key is valid.

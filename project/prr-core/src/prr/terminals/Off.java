@@ -3,32 +3,30 @@ package prr.terminals;
 import prr.terminals.Terminal.TerminalState;
 
 public class Off extends Terminal.TerminalState {
-	
-	public Off(Terminal terminal) {
-		terminal.super();
-	}
 
-	@Override
-	public String toString() {
-		return "OFF";
+	/** Serial number for serialization. */
+	private static final long serialVersionUID = 202208091753L;
+	
+	private Terminal.TerminalState _previousState;
+	
+	public Off(Terminal terminal, Terminal.TerminalState previousState) {
+		terminal.super();
+		_previousState = previousState;
 	}
 
 	@Override
 	public void turnOff() {
-		// TODO Auto-generated method stub
-		
+		// Empty
 	}
 
 	@Override
-	public void becomeIdle() {
-		// TODO Auto-generated method stub
-		
+	public void turnOn() {
+		setState(_previousState);
 	}
 
 	@Override
-	public void silence() {
-		// TODO Auto-generated method stub
-		
+	public void becomeBusy() {
+		// Empty
 	}
 
 	@Override
@@ -37,9 +35,8 @@ public class Off extends Terminal.TerminalState {
 	}
 
 	@Override
-	public void becomeBusy() {
-		// TODO Auto-generated method stub
-		
+	public String toString() {
+		return "OFF";
 	}
 
 }

@@ -63,8 +63,8 @@ public class NetworkManager {
 	}
 
 	/**
-         * Saves the serialized application's state into the file associated to the current network.
-         *
+     * Saves the serialized application's state into the file associated to the current network.
+     *
 	 * @throws FileNotFoundException if for some reason the file cannot be created or opened. 
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
@@ -85,9 +85,9 @@ public class NetworkManager {
 	}
 
 	/**
-         * Saves the serialized application's state into the specified file. The current network is
-         * associated to this file.
-         *
+     * Saves the serialized application's state into the specified file. The current network is
+     * associated to this file.
+     *
 	 * @param filename the name of the file.
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
@@ -111,12 +111,12 @@ public class NetworkManager {
 	 * @throws UnknownClientKeyException
 	 * @throws UnknownTerminalKeyException 
 	 */
-	public void importFile(String filename) throws ImportFileException, NumberFormatException,
-	 DuplicateClientKeyException, UnknownClientKeyException, 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException {
+	public void importFile(String filename) throws ImportFileException {
 		try {
 			_network.importFile(filename);
-		} catch (IOException | UnrecognizedEntryException /** FIXME maybe other exceptions */ e) {
+		} catch (IOException | UnrecognizedEntryException | NumberFormatException | DuplicateClientKeyException | 
+				UnknownClientKeyException | InvalidTerminalKeyException | DuplicateTerminalKeyException | 
+				UnknownTerminalKeyException e) {
 			throw new ImportFileException(filename, e);
 		}
 	}

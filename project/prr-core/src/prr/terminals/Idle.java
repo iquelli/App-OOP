@@ -3,6 +3,9 @@ package prr.terminals;
 import prr.terminals.Terminal.TerminalState;
 
 public class Idle extends Terminal.TerminalState {
+
+	/** Serial number for serialization. */
+	private static final long serialVersionUID = 202208091753L;
 	
 	public Idle(Terminal terminal) {
 		terminal.super();
@@ -15,29 +18,22 @@ public class Idle extends Terminal.TerminalState {
 
 	@Override
 	public void turnOff() {
-		setState(new Off(getTerminal()));
+		setState(new Off(getTerminal(), this));
 	}
 
 	@Override
-	public void becomeIdle() {
-		// TODO Auto-generated method stub
-		
+	public void turnOn() {
+		setState(new Silence(getTerminal()));
 	}
 
 	@Override
-	public void silence() {
-		setState(new Silence(getTerminal()));		
+	public void becomeBusy() {
+		setState(new Busy(getTerminal(), this));		
 	}
 
 	@Override
 	public boolean isOnState(TerminalState state) {
 		return state.toString().equals(toString());
-	}
-
-	@Override
-	public void becomeBusy() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -85,9 +85,18 @@ public class Client implements Serializable, Visitable{
     public void disableNotifications() {
     	_allowNotifications = false;
     }
+
+//  **************************
+//  *        Balance		 *
+//  **************************
     
     public double getBalance() {
     	return _payments - _debts;
+    }
+    
+    public void performPayment(double price) {
+    	_payments += price;
+    	_debts -= price;
     }
 
     @Override

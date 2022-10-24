@@ -3,10 +3,14 @@ package prr.terminals;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 
 import prr.client.Client;
 import prr.communications.Communication;
+import prr.exceptions.SameTerminalStateException;
+import prr.exceptions.UnknownCommunicationKeyException;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
 
@@ -23,7 +27,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private String _key;
 	private Client _client;
 	private TerminalState _state;
-	private List<Communication> _communications;
+	private Map<Integer, Communication> _communications;
 	private double _payments;
 	private double _debts;
 	private List<Terminal> _friends;
@@ -34,7 +38,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_key = key;
 		_client = client;
 		_state = new Idle(this);
-		_communications = new ArrayList<Communication>();
+		_communications = new TreeMap<Integer, Communication>();
 		_payments = 0.0;
 		_debts = 0.0;
 		_friends = new ArrayList<Terminal>();
@@ -77,6 +81,27 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  *          State		 *
 //  **************************
     
+    private void checkIfIsOnSameState(Terminal.TerminalState newState) throws SameTerminalStateException {
+    	if (newState.toString().equals(_state.toString())) {
+    		throw new SameTerminalStateException(newState);
+    	}
+    }
+    
+    public void turnOff() throws SameTerminalStateException {
+    	checkIfIsOnSameState(new Off(this, _state));
+    	_state.turnOff();
+    }
+    
+    public void turnOn() throws SameTerminalStateException {
+    	checkIfIsOnSameState(new Idle(this));
+    	_state.turnOn();
+    }
+    
+    public void silence() throws SameTerminalStateException {
+    	checkIfIsOnSameState(new Silence(this));
+    	_state.turnOn();
+    }
+    
     public abstract class TerminalState implements Serializable {
 
     	/** Serial number for serialization. */
@@ -91,8 +116,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	public abstract void turnOff();
-    	public abstract void becomeIdle();
-    	public abstract void silence();
+    	public abstract void turnOn();
     	public abstract void becomeBusy();
     	
     	public abstract boolean isOnState(TerminalState state);
@@ -129,13 +153,34 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public int getDebtsRounded() {
     	return (int)Math.round(_debts);
     }
+    
+    public void performPayment(int communicationKey) throws UnknownCommunicationKeyException {
+    	Communication communication = getCommunication(communicationKey);
+    	
+    	double price = communication.getPrice();
+    	
+    	_payments += price;
+    	_debts -= price;
+    	
+    	_client.performPayment(price);
+    	communication.performPayment();
+    }
 
 //  **************************
 //  *     Communications	 *
 //  **************************
     
+    public Communication getCommunication(int communicationKey) throws UnknownCommunicationKeyException {
+    	Communication communication = _communications.get(communicationKey);
+    	if (communication == null) {
+    		throw new UnknownCommunicationKeyException(communicationKey);
+    	}
+    	
+    	return communication;
+    }
+    
     public List<Communication> getPastCommunications() {
-    	return _communications;
+    	return _communications.values().stream().toList();
     }
     
     public abstract String getType();
@@ -150,6 +195,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	_friends.add(friend);
+    }
+    
+    public void removeFriend(Terminal friend) {
+    	_friends.remove(friend);
     }
     
     public boolean isFriendWith(String terminalKey) {
@@ -179,14 +228,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	
     }
     
-    public void performPayment(int communicationKey) {
-    	
-    }
-    
-    public void removeFriend(String terminalKey) {
-    	
-    }
-    
     public void sendTextCommunication(String terminalToKey, String message) {
     	
     }
@@ -199,23 +240,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	return null;
     }
     
-    public void idleTerminal() {
-    	
-    }
-    
-    public void silenceTerminal() {
-    	
-    }
-    
     public void startInteractiveCommunication(String terminalToKey, String communicationType) {
-    	
-    }
-    
-    public void turnOffTerminal() {
-    	
-    }
-    
-    public void turnOnTerminal() {
     	
     }
 

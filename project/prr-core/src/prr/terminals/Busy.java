@@ -4,8 +4,14 @@ import prr.terminals.Terminal.TerminalState;
 
 public class Busy extends Terminal.TerminalState {
 
-	public Busy(Terminal terminal) {
+	/** Serial number for serialization. */
+	private static final long serialVersionUID = 202208091753L;
+	
+	private Terminal.TerminalState _previousState;
+
+	public Busy(Terminal terminal, Terminal.TerminalState previousState) {
 		terminal.super();
+		_previousState = previousState;
 	}
 
 	@Override
@@ -14,19 +20,13 @@ public class Busy extends Terminal.TerminalState {
 	}
 
 	@Override
-	public void becomeIdle() {
-		setState(new Idle(getTerminal()));		
-	}
-
-	@Override
-	public void silence() {
-		// TODO Auto-generated method stub		
+	public void turnOn() {
+		setState(_previousState);		
 	}
 
 	@Override
 	public void becomeBusy() {
-		// Empty
-		
+		// Empty		
 	}
 
 	@Override
