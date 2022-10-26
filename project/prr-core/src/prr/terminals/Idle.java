@@ -10,10 +10,20 @@ public class Idle extends Terminal.TerminalState {
 	public Idle(Terminal terminal) {
 		terminal.super();
 	}
-
+	
 	@Override
-	public String toString() {
-		return "IDLE";
+	public boolean canStartCommunication() {
+		return true;
+	}
+	
+	@Override
+	public boolean canReceiveTextCommunication() {
+		return true;
+	}
+	
+	@Override
+	public boolean canReceiveInteractiveCommunication() {
+		return true;
 	}
 
 	@Override
@@ -34,6 +44,11 @@ public class Idle extends Terminal.TerminalState {
 	@Override
 	public boolean isOnState(TerminalState state) {
 		return state.toString().equals(toString());
+	}
+
+	@Override
+	public String toString() {
+		return "IDLE";
 	}
 
 }

@@ -37,6 +37,7 @@ public class Network implements Serializable {
 	private final Map<String, Client> _clients = new TreeMap<>();
 	private final Map<String, Terminal> _terminals = new TreeMap<>();
 	
+	private int _communicationsAmount = 0;
 	private boolean _wasModified = false;
 
     // FIXME define attributes
@@ -53,6 +54,14 @@ public class Network implements Serializable {
 	
 	public void modificationsSaved() {
 		_wasModified = false;
+	}
+	
+	public int getCommunicationsAmount() {
+		return _communicationsAmount;
+	}
+	
+	public void addCommunication() {
+		_communicationsAmount++;
 	}
 	
 	/**
@@ -326,6 +335,11 @@ public class Network implements Serializable {
 			return false;
 		
 		return true;
+	}
+	
+	
+	public boolean canReceiveTextCommunications(String terminalKey) throws UnknownTerminalKeyException {
+		return getTerminal(terminalKey).canReceiveTextCommunication();
 	}
 
 }

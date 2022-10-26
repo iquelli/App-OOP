@@ -13,6 +13,21 @@ public class Busy extends Terminal.TerminalState {
 		terminal.super();
 		_previousState = previousState;
 	}
+	
+	@Override
+	public boolean canStartCommunication() {
+		return false;
+	}
+	
+	@Override
+	public boolean canReceiveTextCommunication() {
+		return true;
+	}
+	
+	@Override
+	public boolean canReceiveInteractiveCommunication() {
+		return false;
+	}
 
 	@Override
 	public void turnOff() {

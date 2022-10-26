@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import prr.client.Client;
 import prr.communications.Communication;
+import prr.communications.TextCommunication;
 import prr.exceptions.SameTerminalStateException;
 import prr.exceptions.UnknownCommunicationKeyException;
 import prr.visits.Visitable;
@@ -47,6 +48,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public String getTerminalKey() {
         return _key;
     }
+    
+    public Client getClient() {
+    	return _client;
+    }
 
     public String getClientKey() {
         return _client.getKey();
@@ -73,8 +78,22 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      * @return true if this terminal is neither off neither busy, false otherwise.
      **/
     public boolean canStartCommunication() {
-            // FIXME add implementation code
-			return true;
+		return _state.canStartCommunication();
+    }
+    
+    public boolean canReceiveTextCommunication() {
+    	return _state.canReceiveTextCommunication();
+    }
+    
+    public void sendTextCommunication(Terminal destinationTerminal, String message, int communicationId) {
+    	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
+    	
+    	_communications.put(communicationId, textCommunication);
+    	destinationTerminal.receiveCommunication(communicationId, textCommunication);
+    }
+    
+    public void receiveCommunication(int communicationId, Communication communication) {
+    	_communications.put(communicationId, communication);
     }
 
 //  **************************
@@ -114,6 +133,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	protected Terminal getTerminal() {
     		return Terminal.this;
     	}
+    	
+    	public abstract boolean canStartCommunication();
+    	public abstract boolean canReceiveTextCommunication();
+    	public abstract boolean canReceiveInteractiveCommunication();
     	
     	public abstract void turnOff();
     	public abstract void turnOn();
@@ -225,10 +248,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     }
     
     public void endInteractiveCommunication(int duration) {
-    	
-    }
-    
-    public void sendTextCommunication(String terminalToKey, String message) {
     	
     }
     

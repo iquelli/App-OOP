@@ -1,34 +1,41 @@
 package prr.communications;
 
-public class Communication {
+import prr.client.Level;
+import prr.terminals.Terminal;
+
+public abstract class Communication {
 	
-    private String _key;
-    private String _senderId;
-    private String _receiverId;
-    private int _units;
-    private double _price;
+    private int _key;
+    private Terminal _sender;
+    private Terminal _receiver;
+    protected double _price;
     private boolean _wasPaid;
-    private boolean _status;
+    private boolean _finished;
     
-    public Communication(String key, String senderId, String receiverId, int units, double price, boolean status) {
+    public Communication(int key, Terminal sender, Terminal receiver) {
     	_key = key;
-    	_senderId = senderId;
-    	_receiverId = receiverId;
-    	_units = units;
-    	_price = price;
+    	_sender = sender;
+    	_receiver = receiver;
     	_wasPaid = false;
-    	_status = status;
+    	_finished = false;
     }
 
 //  **************************
 //  *        Balance		 *
 //  **************************
-    
-    public double getPrice() {
+
+	public double getPrice() {
     	return _price;
     }
     
+    public abstract int definePrice(Level clientLevel);
+    
     public void performPayment() {
     	_wasPaid = true;
+    }
+    
+    public void endCommunication(int duration) {
+    	_price = definePrice(_sender.getClient().getLevel());
+    	_finished = true;
     }
 }

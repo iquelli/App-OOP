@@ -57,6 +57,10 @@ public class Client implements Serializable, Visitable{
     public boolean allowNotifications() {
         return _allowNotifications;
     }
+    
+    public Level getLevel() {
+    	return _level;
+    }
 
     public String getLevelName() {
         return _level.getLevel();

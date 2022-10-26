@@ -10,10 +10,20 @@ public class Silence extends Terminal.TerminalState {
 	public Silence(Terminal terminal) {
 		terminal.super();
 	}
-
+	
 	@Override
-	public String toString() {
-		return "SILENCE";
+	public boolean canStartCommunication() {
+		return true;
+	}
+	
+	@Override
+	public boolean canReceiveTextCommunication() {
+		return true;
+	}
+	
+	@Override
+	public boolean canReceiveInteractiveCommunication() {
+		return false;
 	}
 
 	@Override
@@ -34,6 +44,11 @@ public class Silence extends Terminal.TerminalState {
 	@Override
 	public boolean isOnState(TerminalState state) {
 		return state.toString().equals(toString());
+	}
+
+	@Override
+	public String toString() {
+		return "SILENCE";
 	}
 
 }
