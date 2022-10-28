@@ -35,6 +35,12 @@ public class TextCommunication extends Communication {
 		return prices.get(2);		
 	}
 	
+	@Override
+	public int getUnits() {
+		return _message.length();
+	}
+	
+	@Override
 	public String getType() {
 		return _type;
 	}

@@ -10,6 +10,15 @@ public class BasicTerminal extends Terminal {
 	public BasicTerminal(String key, Client client) {
 		super(key, client);
 	}
+	
+	@Override
+	public boolean canHandleCommunication(String communicationType) {
+		switch (communicationType) {
+		case "VOICE": return true;
+		case "VIDEO": return false;
+		default: return false;
+		}
+	}
 
 	public String getType() {
 		return terminalType;

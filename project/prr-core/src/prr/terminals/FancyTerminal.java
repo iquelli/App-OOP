@@ -10,6 +10,15 @@ public class FancyTerminal extends Terminal {
 	public FancyTerminal(String key, Client client) {
 		super(key, client);
 	}
+	
+	@Override
+	public boolean canHandleCommunication(String communicationType) {
+		switch (communicationType) {
+		case "VOICE": return true;
+		case "VIDEO": return true;
+		default: return false;
+		}
+	}
 
 	public String getType() {
 		return terminalType;

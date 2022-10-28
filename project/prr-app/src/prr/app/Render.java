@@ -3,6 +3,7 @@ package prr.app;
 import java.util.StringJoiner;
 
 import prr.client.Client;
+import prr.communications.Communication;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 
@@ -41,5 +42,18 @@ public class Render extends Visitor<String> {
 		}
 		
 		return terminalString.toString();
+	}
+	
+	@Override
+	public String visit(Communication communication) {
+		return new StringJoiner("|")
+				.add(communication.getType())
+				.add(Integer.toString(communication.getKey()))
+				.add(communication.getSender().getTerminalKey())
+				.add(communication.getReceiver().getTerminalKey())
+				.add(Integer.toString(communication.getUnits()))
+				.add(Double.toString(communication.getPrice()))
+				.add(communication.isFinished() ? "ONGOING" : "FINISHED")
+				.toString();
 	}
 }

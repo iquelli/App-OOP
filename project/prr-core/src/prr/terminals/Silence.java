@@ -1,7 +1,5 @@
 package prr.terminals;
 
-import prr.terminals.Terminal.TerminalState;
-
 public class Silence extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
@@ -39,11 +37,6 @@ public class Silence extends Terminal.TerminalState {
 	@Override
 	public void becomeBusy() {
 		setState(new Busy(getTerminal(), this));
-	}
-	
-	@Override
-	public boolean isOnState(TerminalState state) {
-		return state.toString().equals(toString());
 	}
 
 	@Override

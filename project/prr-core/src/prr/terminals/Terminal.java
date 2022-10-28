@@ -7,11 +7,21 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 
+import prr.Network;
 import prr.client.Client;
 import prr.communications.Communication;
 import prr.communications.TextCommunication;
+import prr.communications.VideoCommunication;
+import prr.communications.VoiceCommunication;
+import prr.exceptions.CommunicationUnsupportedAtDestinationException;
+import prr.exceptions.CommunicationUnsupportedAtOriginException;
+import prr.exceptions.DestinationIsBusyException;
+import prr.exceptions.DestinationIsOffException;
+import prr.exceptions.DestinationIsSilenceException;
+import prr.exceptions.NoOngoingCommunicationException;
 import prr.exceptions.SameTerminalStateException;
 import prr.exceptions.UnknownCommunicationKeyException;
+import prr.exceptions.UnknownTerminalKeyException;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
 
@@ -33,7 +43,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private double _debts;
 	private List<Terminal> _friends;
 //	private List<Notification> _notificationsToBeSend;
-//	private InteractiveCommunication _communicationOngoing;
+	private Communication _ongoingCommunication;
 	
 	public Terminal(String key, Client client) {
 		_key = key;
@@ -60,6 +70,14 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public TerminalState getState() {
     	return _state;
     }
+    
+    public Communication getOngoingCommunication() throws NoOngoingCommunicationException {
+    	if (_ongoingCommunication == null) {
+    		throw new NoOngoingCommunicationException();
+    	}
+    	
+    	return _ongoingCommunication;
+    }
 
     /**
      * Checks if this terminal can end the current interactive communication.
@@ -68,8 +86,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      *          it was the originator of this communication.
      **/
     public boolean canEndCurrentCommunication() {
-            // FIXME add implementation code
-			return false;
+		return _ongoingCommunication != null & _ongoingCommunication.getSender().getTerminalKey().equals(_key);
     }
 
     /**
@@ -85,40 +102,126 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	return _state.canReceiveTextCommunication();
     }
     
-    public void sendTextCommunication(Terminal destinationTerminal, String message, int communicationId) {
+    public boolean canReceiveInteractiveCommunication() {
+    	return _state.canReceiveInteractiveCommunication();
+    }
+    
+    public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws DestinationIsOffException, UnknownTerminalKeyException {
+    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
+    	
+    	int communicationId = network.getCommunicationsAmount() + 1;
+    	network.addCommunication();
+    	
+    	if (destinationTerminal.isOnState(new Off(this, _state))) {
+    		throw new DestinationIsOffException();
+    	}
+    	    	
     	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
     	
     	_communications.put(communicationId, textCommunication);
-    	destinationTerminal.receiveCommunication(communicationId, textCommunication);
+    	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
     }
     
-    public void receiveCommunication(int communicationId, Communication communication) {
+    public void sendInteractiveCommunication(String destinationTerminalKey, String communicationType, Network network) throws 
+    DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
+    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
+    	
+    	if (destinationTerminal.isOnState(new Off(this, _state))) {
+    		throw new DestinationIsOffException();
+    	}
+    	
+    	if (destinationTerminal.isOnState(new Busy(this, _state))) {
+    		throw new DestinationIsBusyException();
+    	}
+    	
+    	if (destinationTerminal.isOnState(new Silence(this))) {
+    		throw new DestinationIsSilenceException();
+    	}
+    	
+    	int communicationId = network.getCommunicationsAmount() + 1;
+    	network.addCommunication();
+    	
+    	Communication com = null;
+    	switch (communicationType) {
+    	case "VOICE":
+    		com = new VoiceCommunication(communicationId, this, destinationTerminal);
+    		terminalsCanHandleCommunication(com, destinationTerminal);    		
+    		break;
+    	case "VIDEO": 
+    		com = new VideoCommunication(communicationId, this, destinationTerminal);
+    		terminalsCanHandleCommunication(com, destinationTerminal);
+    		break;
+    	}
+    	
+    	receiveInteractiveCommunication(com);
+    	destinationTerminal.receiveInteractiveCommunication(com);
+    }
+    
+    // Makes sure that terminals are able to handle a certain communication type
+    private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
+		if (!canHandleCommunication(com.toString())) {
+			throw new CommunicationUnsupportedAtOriginException();
+		}
+		
+		if (!destinationTerminal.canHandleCommunication(com.toString())) {
+			throw new CommunicationUnsupportedAtDestinationException();
+		}
+    }
+    
+    private void receiveTextCommunication(int communicationId, Communication communication) {
     	_communications.put(communicationId, communication);
+    }
+    
+    private void receiveInteractiveCommunication(Communication communication) {
+    	_ongoingCommunication = communication;
+    	_state.setState(new Busy(this, _state));
+    }
+    
+    public long endInteractiveCommunication(int duration) {
+    	_ongoingCommunication.endCommunication(duration);
+    	long cost = (long) _ongoingCommunication.getPrice();
+    	
+    	_ongoingCommunication.getReceiver().saveCommunication();
+    	saveCommunication();
+    	
+    	return cost;
+    }
+    
+    private void saveCommunication() {
+    	_communications.put(_ongoingCommunication.getKey(), _ongoingCommunication);
+    	_ongoingCommunication = null;
     }
 
 //  **************************
 //  *          State		 *
 //  **************************
     
-    private void checkIfIsOnSameState(Terminal.TerminalState newState) throws SameTerminalStateException {
-    	if (newState.toString().equals(_state.toString())) {
-    		throw new SameTerminalStateException(newState);
-    	}
-    }
-    
     public void turnOff() throws SameTerminalStateException {
-    	checkIfIsOnSameState(new Off(this, _state));
+    	if (isOnState(new Off(this, _state))) {
+    		throw new SameTerminalStateException(_state);
+    	}
+    	
     	_state.turnOff();
     }
     
     public void turnOn() throws SameTerminalStateException {
-    	checkIfIsOnSameState(new Idle(this));
+    	if (isOnState(new Idle(this))) {
+    		throw new SameTerminalStateException(_state);
+    	}
+    	
     	_state.turnOn();
     }
     
     public void silence() throws SameTerminalStateException {
-    	checkIfIsOnSameState(new Silence(this));
+    	if (isOnState(new Silence(this))) {
+    		throw new SameTerminalStateException(_state);
+    	}
+    	
     	_state.turnOn();
+    }
+    
+    public boolean isOnState(Terminal.TerminalState state) {
+    	return _state.toString().equals(state.toString());
     }
     
     public abstract class TerminalState implements Serializable {
@@ -141,8 +244,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	public abstract void turnOff();
     	public abstract void turnOn();
     	public abstract void becomeBusy();
-    	
-    	public abstract boolean isOnState(TerminalState state);
     	
     	@Override
     	public abstract String toString();
@@ -206,27 +307,31 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	return _communications.values().stream().toList();
     }
     
+    public abstract boolean canHandleCommunication(String communicationType);
+    
     public abstract String getType();
 
 //  **************************
 //  *         Friends	     *
 //  **************************
         
-    public void addFriend(Terminal friend) {
-    	if (isFriendWith(friend.getTerminalKey())) {
+    public void addFriend(String terminalKey, Network network) throws UnknownTerminalKeyException {
+    	Terminal terminal = network.getTerminal(terminalKey);
+    	
+    	if (isFriendWith(terminal)) {
     		return;
     	}
     	
-    	_friends.add(friend);
+    	_friends.add(terminal);
     }
     
-    public void removeFriend(Terminal friend) {
-    	_friends.remove(friend);
+    public void removeFriend(String friendKey, Network network) throws UnknownTerminalKeyException {
+    	_friends.remove(network.getTerminal(friendKey));
     }
     
-    public boolean isFriendWith(String terminalKey) {
+    public boolean isFriendWith(Terminal terminal) {
     	for (Terminal friend : _friends) {
-    		if (friend.getTerminalKey().equals(terminalKey)) {
+    		if (friend.getTerminalKey().equals(terminal.getTerminalKey())) {
     			return true;
     		}
     	}
@@ -245,10 +350,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	return friends.toString();
-    }
-    
-    public void endInteractiveCommunication(int duration) {
-    	
     }
     
     public String showOngoingCommunication() {
