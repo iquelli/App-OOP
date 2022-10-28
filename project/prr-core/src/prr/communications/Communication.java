@@ -24,15 +24,11 @@ public abstract class Communication implements Visitable {
     }
 
 //  **************************
-//  *        Balance		 *
+//  *        General		 *
 //  **************************
 
     public int getKey() {
     	return _key;
-    }
-    
-	public double getPrice() {
-    	return _price;
     }
 	
 	public Terminal getSender() {
@@ -47,6 +43,18 @@ public abstract class Communication implements Visitable {
 		return _finished;
 	}
     
+    public abstract int getUnits();
+    
+    public abstract String getType();
+
+//  **************************
+//  *        Balance		 *
+//  **************************
+    
+	public double getPrice() {
+    	return _price;
+    }
+    
     public abstract int definePrice(Level clientLevel);
     
     public void performPayment() {
@@ -57,10 +65,10 @@ public abstract class Communication implements Visitable {
     	_price = definePrice(_sender.getClient().getLevel());
     	_finished = true;
     }
-    
-    public abstract int getUnits();
-    
-    public abstract String getType();
+
+//  **************************
+//  *        Visitor		 *
+//  **************************
 
     @Override
     public <T> T accept(Visitor<T> visitor) {

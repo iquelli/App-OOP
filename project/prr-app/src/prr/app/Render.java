@@ -31,7 +31,7 @@ public class Render extends Visitor<String> {
 		StringJoiner terminalString = new StringJoiner("|")
 				.add(terminal.getType())
 				.add(terminal.getTerminalKey())
-				.add(terminal.getClientKey())
+				.add(terminal.getClient().getKey())
 				.add(terminal.getState().toString())
 				.add(Integer.toString(terminal.getPaymentsRounded()))
 				.add(Integer.toString(terminal.getDebtsRounded()));

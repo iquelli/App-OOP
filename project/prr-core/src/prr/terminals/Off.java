@@ -1,5 +1,7 @@
 package prr.terminals;
 
+import prr.exceptions.DestinationIsOffException;
+
 public class Off extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
@@ -18,13 +20,13 @@ public class Off extends Terminal.TerminalState {
 	}
 	
 	@Override
-	public boolean canReceiveTextCommunication() {
-		return false;
+	public boolean canReceiveTextCommunication() throws DestinationIsOffException {
+		throw new DestinationIsOffException();
 	}
 	
 	@Override
-	public boolean canReceiveInteractiveCommunication() {
-		return false;
+	public boolean canReceiveInteractiveCommunication() throws DestinationIsOffException {
+		throw new DestinationIsOffException();
 	}
 
 	@Override

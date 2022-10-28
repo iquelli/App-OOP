@@ -55,16 +55,16 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_friends = new ArrayList<Terminal>();
 	}
 
+//  **************************
+//  *        General		 *
+//  **************************
+
     public String getTerminalKey() {
         return _key;
     }
     
     public Client getClient() {
     	return _client;
-    }
-
-    public String getClientKey() {
-        return _client.getKey();
     }
     
     public TerminalState getState() {
@@ -96,100 +96,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      **/
     public boolean canStartCommunication() {
 		return _state.canStartCommunication();
-    }
-    
-    public boolean canReceiveTextCommunication() {
-    	return _state.canReceiveTextCommunication();
-    }
-    
-    public boolean canReceiveInteractiveCommunication() {
-    	return _state.canReceiveInteractiveCommunication();
-    }
-    
-    public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws DestinationIsOffException, UnknownTerminalKeyException {
-    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
-    	
-    	int communicationId = network.getCommunicationsAmount() + 1;
-    	network.addCommunication();
-    	
-    	if (destinationTerminal.isOnState(new Off(this, _state))) {
-    		throw new DestinationIsOffException();
-    	}
-    	    	
-    	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
-    	
-    	_communications.put(communicationId, textCommunication);
-    	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
-    }
-    
-    public void sendInteractiveCommunication(String destinationTerminalKey, String communicationType, Network network) throws 
-    DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
-    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
-    	
-    	if (destinationTerminal.isOnState(new Off(this, _state))) {
-    		throw new DestinationIsOffException();
-    	}
-    	
-    	if (destinationTerminal.isOnState(new Busy(this, _state))) {
-    		throw new DestinationIsBusyException();
-    	}
-    	
-    	if (destinationTerminal.isOnState(new Silence(this))) {
-    		throw new DestinationIsSilenceException();
-    	}
-    	
-    	int communicationId = network.getCommunicationsAmount() + 1;
-    	network.addCommunication();
-    	
-    	Communication com = null;
-    	switch (communicationType) {
-    	case "VOICE":
-    		com = new VoiceCommunication(communicationId, this, destinationTerminal);
-    		terminalsCanHandleCommunication(com, destinationTerminal);    		
-    		break;
-    	case "VIDEO": 
-    		com = new VideoCommunication(communicationId, this, destinationTerminal);
-    		terminalsCanHandleCommunication(com, destinationTerminal);
-    		break;
-    	}
-    	
-    	receiveInteractiveCommunication(com);
-    	destinationTerminal.receiveInteractiveCommunication(com);
-    }
-    
-    // Makes sure that terminals are able to handle a certain communication type
-    private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
-		if (!canHandleCommunication(com.toString())) {
-			throw new CommunicationUnsupportedAtOriginException();
-		}
-		
-		if (!destinationTerminal.canHandleCommunication(com.toString())) {
-			throw new CommunicationUnsupportedAtDestinationException();
-		}
-    }
-    
-    private void receiveTextCommunication(int communicationId, Communication communication) {
-    	_communications.put(communicationId, communication);
-    }
-    
-    private void receiveInteractiveCommunication(Communication communication) {
-    	_ongoingCommunication = communication;
-    	_state.setState(new Busy(this, _state));
-    }
-    
-    public long endInteractiveCommunication(int duration) {
-    	_ongoingCommunication.endCommunication(duration);
-    	long cost = (long) _ongoingCommunication.getPrice();
-    	
-    	_ongoingCommunication.getReceiver().saveCommunication();
-    	saveCommunication();
-    	
-    	return cost;
-    }
-    
-    private void saveCommunication() {
-    	_communications.put(_ongoingCommunication.getKey(), _ongoingCommunication);
-    	_ongoingCommunication = null;
     }
 
 //  **************************
@@ -238,8 +144,9 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	public abstract boolean canStartCommunication();
-    	public abstract boolean canReceiveTextCommunication();
-    	public abstract boolean canReceiveInteractiveCommunication();
+    	public abstract boolean canReceiveTextCommunication() throws DestinationIsOffException;
+    	public abstract boolean canReceiveInteractiveCommunication() throws 
+    	DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException;
     	
     	public abstract void turnOff();
     	public abstract void turnOn();
@@ -351,18 +258,103 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	
     	return friends.toString();
     }
+
+//  **************************
+//  *   Text Communication	 *
+//  **************************
     
-    public String showOngoingCommunication() {
-    	return null;
-    }
-    
-    public String showTerminalBalance() {
-    	return null;
-    }
-    
-    public void startInteractiveCommunication(String terminalToKey, String communicationType) {
+    public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws DestinationIsOffException, UnknownTerminalKeyException {
+    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
     	
+    	destinationTerminal.canReceiveTextCommunication();
+    	
+    	int communicationId = network.getCommunicationsAmount() + 1;
+    	network.addCommunication();
+    	    	
+    	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
+    	
+    	_communications.put(communicationId, textCommunication);
+    	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
     }
+    
+    private boolean canReceiveTextCommunication() throws DestinationIsOffException {
+    	return _state.canReceiveTextCommunication();
+    }
+    
+    private void receiveTextCommunication(int communicationId, Communication communication) {
+    	_communications.put(communicationId, communication);
+    }
+
+//  **************************
+//  *     Interactive Com    *
+//  **************************
+    
+    public void sendInteractiveCommunication(String destinationTerminalKey, String communicationType, Network network) throws 
+    DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
+    	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
+    	
+    	destinationTerminal.canReceiveInteractiveCommunication();
+    	
+    	int communicationId = network.getCommunicationsAmount() + 1;
+    	network.addCommunication();
+    	
+    	Communication com = null;
+    	switch (communicationType) {
+    	case "VOICE":
+    		com = new VoiceCommunication(communicationId, this, destinationTerminal);
+    		terminalsCanHandleCommunication(com, destinationTerminal);    		
+    		break;
+    	case "VIDEO": 
+    		com = new VideoCommunication(communicationId, this, destinationTerminal);
+    		terminalsCanHandleCommunication(com, destinationTerminal);
+    		break;
+    	}
+    	
+    	receiveInteractiveCommunication(com);
+    	destinationTerminal.receiveInteractiveCommunication(com);
+    }
+    
+    private boolean canReceiveInteractiveCommunication() throws DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException {
+    	return _state.canReceiveInteractiveCommunication();
+    }
+    
+    // Makes sure that terminals are able to handle a certain communication type
+    private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
+		if (!canHandleCommunication(com.toString())) {
+			throw new CommunicationUnsupportedAtOriginException();
+		}
+		
+		if (!destinationTerminal.canHandleCommunication(com.toString())) {
+			throw new CommunicationUnsupportedAtDestinationException();
+		}
+    }
+    
+    private void receiveInteractiveCommunication(Communication communication) {
+    	_ongoingCommunication = communication;
+    	_state.setState(new Busy(this, _state));
+    }
+    
+    public long endInteractiveCommunication(int duration) throws SameTerminalStateException {
+    	_ongoingCommunication.endCommunication(duration);
+    	long cost = (long) _ongoingCommunication.getPrice();
+
+    	_ongoingCommunication.getReceiver().turnOn();
+    	turnOn();
+    	
+    	_ongoingCommunication.getReceiver().saveInteractiveCommunication();
+    	saveInteractiveCommunication();
+    	
+    	return cost;
+    }
+    
+    private void saveInteractiveCommunication() {
+    	_communications.put(_ongoingCommunication.getKey(), _ongoingCommunication);
+    	_ongoingCommunication = null;
+    }
+
+//  **************************
+//  * 		  Visitor 	  	 *
+//  **************************
 
     @Override
     public <T> T accept(Visitor<T> visitor) {

@@ -1,5 +1,7 @@
 package prr.terminals;
 
+import prr.exceptions.DestinationIsBusyException;
+
 public class Busy extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
@@ -23,8 +25,8 @@ public class Busy extends Terminal.TerminalState {
 	}
 	
 	@Override
-	public boolean canReceiveInteractiveCommunication() {
-		return false;
+	public boolean canReceiveInteractiveCommunication() throws DestinationIsBusyException {
+		throw new DestinationIsBusyException();
 	}
 
 	@Override

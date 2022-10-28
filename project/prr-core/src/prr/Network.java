@@ -336,10 +336,5 @@ public class Network implements Serializable {
 		
 		return true;
 	}
-	
-	
-	public boolean canReceiveTextCommunications(String terminalKey) throws UnknownTerminalKeyException {
-		return getTerminal(terminalKey).canReceiveTextCommunication();
-	}
 
 }

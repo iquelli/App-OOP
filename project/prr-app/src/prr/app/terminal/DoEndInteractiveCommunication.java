@@ -1,6 +1,7 @@
 package prr.app.terminal;
 
 import prr.Network;
+import prr.exceptions.SameTerminalStateException;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
@@ -23,7 +24,11 @@ class DoEndInteractiveCommunication extends TerminalCommand {
 		
 		int duration = integerField(COMMUNICATION_DURATION_TEXT);
 		
-		long cost = _receiver.endInteractiveCommunication(duration);
-		_display.popup(Message.communicationCost(cost));
+		try {
+			long cost = _receiver.endInteractiveCommunication(duration);
+			_display.popup(Message.communicationCost(cost));
+		} catch (SameTerminalStateException e) {
+			// Empty
+		}
 	}
 }

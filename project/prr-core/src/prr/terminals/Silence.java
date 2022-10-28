@@ -1,5 +1,7 @@
 package prr.terminals;
 
+import prr.exceptions.DestinationIsSilenceException;
+
 public class Silence extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
@@ -20,8 +22,8 @@ public class Silence extends Terminal.TerminalState {
 	}
 	
 	@Override
-	public boolean canReceiveInteractiveCommunication() {
-		return false;
+	public boolean canReceiveInteractiveCommunication() throws DestinationIsSilenceException {
+		throw new DestinationIsSilenceException();
 	}
 
 	@Override
