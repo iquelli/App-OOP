@@ -269,9 +269,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	destinationTerminal.canReceiveTextCommunication();
     	
     	int communicationId = network.getCommunicationsAmount() + 1;
-    	network.addCommunication();
     	    	
     	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
+    	
+    	network.addCommunication(textCommunication);
     	
     	_communications.put(communicationId, textCommunication);
     	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
@@ -296,7 +297,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	destinationTerminal.canReceiveInteractiveCommunication();
     	
     	int communicationId = network.getCommunicationsAmount() + 1;
-    	network.addCommunication();
     	
     	Communication com = null;
     	switch (communicationType) {
@@ -309,6 +309,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     		terminalsCanHandleCommunication(com, destinationTerminal);
     		break;
     	}
+    	network.addCommunication(com);
     	
     	receiveInteractiveCommunication(com);
     	destinationTerminal.receiveInteractiveCommunication(com);

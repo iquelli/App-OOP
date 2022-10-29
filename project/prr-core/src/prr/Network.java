@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import prr.exceptions.DuplicateClientKeyException;
 import prr.exceptions.DuplicateTerminalKeyException;
@@ -20,6 +20,7 @@ import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.client.Client;
+import prr.communications.Communication;
 
 /**
  * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
@@ -36,6 +37,7 @@ public class Network implements Serializable {
 	
 	private final Map<String, Client> _clients = new TreeMap<>();
 	private final Map<String, Terminal> _terminals = new TreeMap<>();
+	private final List<Communication> _communications = new ArrayList<Communication>();
 	
 	private int _communicationsAmount = 0;
 	private boolean _wasModified = false;
@@ -44,25 +46,52 @@ public class Network implements Serializable {
     // FIXME define constructor
     // FIXME define methods
 
+	/**
+	 * Checks if the network was modified.
+	 * 
+	 * @return _wasModified  boolean that tells if the network was modified
+	 */
 	public boolean wasModified() {
 		return _wasModified;
 	}
 	
+	
+	/**
+	 * Registers that the network was modified 
+	 */
 	public void modified() {
 		_wasModified = true;
 	}
 	
+	
+	/**
+	 * Registers that the network was saved and there are no unsaved modifications anymore 
+	 */
 	public void modificationsSaved() {
 		_wasModified = false;
 	}
 	
+	
+	/**
+	 * Gets the number of communications registered in this network
+	 * 
+	 * @return _communicationsAmount  the number of communications registered in the network
+	 */
 	public int getCommunicationsAmount() {
 		return _communicationsAmount;
 	}
 	
-	public void addCommunication() {
+	
+	/**
+	 * Adds a new communication to the network
+	 * 
+	 * @param communication  the communication that is going to be added
+	 */
+	public void addCommunication(Communication communication) {
 		_communicationsAmount++;
+		_communications.add(communication);
 	}
+	
 	
 	/**
 	 * Read text input file and create corresponding domain entities.
@@ -161,8 +190,8 @@ public class Network implements Serializable {
 	 *
 	 *@return _clients  list of all the clients
 	 */
-	public List<Client> getAllClients() {
-		return _clients.values().stream().collect(Collectors.toList());
+	public Collection<Client> getAllClients() {
+		return _clients.values();
 	}
 
 
@@ -204,8 +233,8 @@ public class Network implements Serializable {
 	 *
 	 *@return list of all terminals
 	 */	
-	public List<Terminal> getTerminals() {
-		return _terminals.values().stream().collect(Collectors.toList());
+	public Collection<Terminal> getTerminals() {
+		return _terminals.values();
 	}
 
 
@@ -214,7 +243,7 @@ public class Network implements Serializable {
 	 *
 	 *@return terminalsWithPositiveBalance  list of terminals with positive balance
 	 */	
-	public List<Terminal> getTerminalsWithPositiveBalance() {
+	public Collection<Terminal> getTerminalsWithPositiveBalance() {
 		List<Terminal> terminalsWithPositiveBalance = new ArrayList<Terminal>();
 		
 		for (Terminal terminal : _terminals.values()) {
@@ -281,14 +310,14 @@ public class Network implements Serializable {
 
 
 	/**
-	 * Gets the global balance of registered clients.
+	 * Registers a net terminal in the network.
 	 *
 	 * @param terminalKey  the key that will be associated to the terminal
 	 * @param clientKey  the key from the user who will be the owner
+	 * @param type  the terminal type (BASIC or FANCY)
 	 * @throws InvalidTerminalKeyException  if the key does not have 6 digits
-	 * @throws DuplicateTerminalKeyException  if the key is already associated 
-	 *                                       to an existing terminal
-	 * @throws UnknowClientKeyException if the client key doesnt exist
+	 * @throws DuplicateTerminalKeyException  if the key is already associated to an existing terminal
+	 * @throws UnknowClientKeyException  if the client key does not exist
 	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type) throws 
 	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException {
@@ -310,6 +339,19 @@ public class Network implements Serializable {
 		modified();
 	}
 	
+	
+	/**
+	 * Registers a net terminal in the network and changes its state.
+	 *
+	 * @param terminalKey  the key that will be associated to the terminal
+	 * @param clientKey  the key from the user who will be the owner
+	 * @param type  the terminal type (BASIC or FANCY)
+	 * @param state  the state that the terminal will assume after being registered
+	 * @throws InvalidTerminalKeyException  if the key does not have 6 digits
+	 * @throws DuplicateTerminalKeyException  if the key is already associated to an existing terminal
+	 * @throws UnknowClientKeyException  if the client key does not exist
+	 * @throws UnknowTerminalKeyException  if the terminal key does not exist
+	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type, String state) throws 
 	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException {
 		registerTerminal(terminalKey, clientKey, type);
@@ -321,6 +363,7 @@ public class Network implements Serializable {
 		
 	}
 
+	
 	/**
 	 * See if a terminal key is valid.
 	 *
@@ -335,6 +378,60 @@ public class Network implements Serializable {
 			return false;
 		
 		return true;
+	}
+	
+	
+	/**
+	 * Gets the collection of communications. 
+	 *
+	 *@return _communications  collection of all the communications
+	 */
+	public Collection<Communication> getCommunications() {
+		return _communications;
+	}
+	
+	
+	/**
+	 * Gets the collection of communications sent from a certain client. 
+	 * 
+	 * @param clientKey  the key of the client that sent the communications
+	 * @return communication  collection of all the communications sent from the client which key is clientKey 
+	 */
+	public Collection<Communication> getCommunicationsFromClient(String clientKey) throws UnknownClientKeyException {
+		Client client = getClient(clientKey);
+		
+		List<Communication> communications = new ArrayList<Communication>();
+		for (Terminal terminal : client.getTerminals()) {
+			for (Communication communication : terminal.getPastCommunications()) {
+				if (communication.getSender().getClient().getKey().equals(clientKey)) {
+					communications.add(communication);
+				}
+			}
+		}
+		
+		return communications;
+	}
+	
+	
+	/**
+	 * Gets the collection of communications sent to a certain client. 
+	 * 
+	 * @param clientKey  the key of the client that received the communications
+	 * @return communication  collection of all the communications received by the client which key is clientKey 
+	 */
+	public Collection<Communication> getCommunicationsToClient(String clientKey) throws UnknownClientKeyException {
+		Client client = getClient(clientKey);
+		
+		List<Communication> communications = new ArrayList<Communication>();
+		for (Terminal terminal : client.getTerminals()) {
+			for (Communication communication : terminal.getPastCommunications()) {
+				if (communication.getReceiver().getClient().getKey().equals(clientKey)) {
+					communications.add(communication);
+				}
+			}
+		}
+		
+		return communications;
 	}
 
 }
