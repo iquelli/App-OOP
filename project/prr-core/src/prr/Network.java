@@ -381,7 +381,7 @@ public class Network implements Serializable {
 		return true;
 	}
 	
-<<<<<<< HEAD
+
 	/**
 	 * Changes a client's notifications settings.
 	 * 
@@ -398,7 +398,7 @@ public class Network implements Serializable {
 		case "ENABLE" : client.enableNotifications(); break;
 		case "DISABLE" : client.disableNotifications(); break;
 		}
-=======
+	}
 	
 	/**
 	 * Gets the collection of communications. 
@@ -451,7 +451,6 @@ public class Network implements Serializable {
 		}
 		
 		return communications;
->>>>>>> e59a8bc0f261901502e3a706ce0fd4289c8bc3ba
 	}
 
 }
