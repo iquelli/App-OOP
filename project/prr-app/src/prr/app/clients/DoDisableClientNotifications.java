@@ -10,14 +10,26 @@ import pt.tecnico.uilib.menus.CommandException;
  * Disable client notifications.
  */
 class DoDisableClientNotifications extends Command<Network> {
+	
+	private String keyText = "clientKey";
+	private final String change = "DISABLE";
 
 	DoDisableClientNotifications(Network receiver) {
 		super(Label.DISABLE_CLIENT_NOTIFICATIONS, receiver);
-		//FIXME add command fields
+		addStringField(keyText , Prompt.key());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
+		try {
+			_receiver.changeClientNotifications(stringField(keyText), change);
+		}
+		
+		catch(prr.exceptions.NotificationsAlreadyAtThatState e) {
+			_display.popup(Message.clientNotificationsAlreadyDisabled());
+		}
+		catch(prr.exceptions.UnknownClientKeyException e) {
+			throw new UnknownClientKeyException(e.getKey());
+		}
 	}
 }

@@ -19,6 +19,7 @@ import prr.terminals.BasicTerminal;
 import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
 import prr.exceptions.InvalidTerminalKeyException;
+import prr.exceptions.NotificationsAlreadyAtThatState;
 import prr.client.Client;
 
 /**
@@ -335,6 +336,24 @@ public class Network implements Serializable {
 			return false;
 		
 		return true;
+	}
+	
+	/**
+	 * Changes a client's notifications settings.
+	 * 
+	 * @param clientKey key of the client to change the notification settings.
+	 * @param change indicates whether the notifications should be allowed or not
+	 * @throws UnknownClientKeyException if the client key doesnt exist
+	 * @throws NotificationsAlreadyAtThatState if the notification setting is already at the setting the 
+	 * 										user wants to change it to.
+	 */
+	public void changeClientNotifications(String clientKey, String change) throws UnknownClientKeyException,
+	 NotificationsAlreadyAtThatState{
+		Client client = getClient(clientKey);
+		switch(change) {
+		case "ENABLE" : client.enableNotifications(); break;
+		case "DISABLE" : client.disableNotifications(); break;
+		}
 	}
 
 }

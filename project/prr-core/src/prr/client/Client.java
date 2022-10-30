@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import prr.exceptions.NotificationsAlreadyAtThatState;
+
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
@@ -46,18 +48,6 @@ public class Client implements Serializable, Visitable{
         return _taxId;
     }
     
-    public int getRoundedPayments() {
-        return (int)Math.round(_payments);
-    }
-    
-    public int getRoundedDebts() {
-        return (int)Math.round(_debts);
-    }
-
-    public boolean allowNotifications() {
-        return _allowNotifications;
-    }
-    
     public Level getLevel() {
     	return _level;
     }
@@ -65,6 +55,11 @@ public class Client implements Serializable, Visitable{
     public String getLevelName() {
         return _level.getLevel();
     }
+    
+    
+//  **************************
+//  *        Terminals	     *
+//  **************************
 
 	public List<Terminal> getTerminals() {
 		return _terminals.values().stream().collect(Collectors.toList());
@@ -77,22 +72,41 @@ public class Client implements Serializable, Visitable{
     public void addTerminal(Terminal terminal) {
         _terminals.put(terminal.getTerminalKey(), terminal);
     }
+ 
+    
+//  **************************
+//  *      Notifications	 *
+//  **************************
     
     public boolean canReceiveNotifications() {
     	return _allowNotifications;
     }
     
-    public void enableNotifications() {
+    public void enableNotifications() throws NotificationsAlreadyAtThatState {
+    	if(_allowNotifications)
+    		throw new NotificationsAlreadyAtThatState();
     	_allowNotifications = true;
     }
     
-    public void disableNotifications() {
+    public void disableNotifications() throws NotificationsAlreadyAtThatState {
+    	if(!_allowNotifications)
+    		throw new NotificationsAlreadyAtThatState();
     	_allowNotifications = false;
     }
 
+    
 //  **************************
 //  *        Balance		 *
 //  **************************
+    
+    public int getRoundedPayments() {
+        return (int)Math.round(_payments);
+    }
+    
+    public int getRoundedDebts() {
+        return (int)Math.round(_debts);
+    }
+    
     
     public double getBalance() {
     	return _payments - _debts;

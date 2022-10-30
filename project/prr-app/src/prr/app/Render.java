@@ -19,7 +19,7 @@ public class Render extends Visitor<String> {
 				.add(client.getName())
 				.add(Integer.toString(client.getTaxId()))
 				.add(client.getLevelName())
-				.add(client.allowNotifications() ? "YES" : "NO")
+				.add(client.canReceiveNotifications() ? "YES" : "NO")
 				.add(Integer.toString(client.getAmountOfTerminals()))	
 				.add(Integer.toString(client.getRoundedPayments()))
 				.add(Integer.toString(client.getRoundedDebts()))
