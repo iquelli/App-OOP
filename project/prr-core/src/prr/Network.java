@@ -104,7 +104,7 @@ public class Network implements Serializable {
 	 * @throws IOException if there is an IO error while processing the text file
 	 * @throws InvalidEntryException if the first word of the entry does not correspond
 	 * 								to any option
-	 * @throws NumberFormatException if the string doenst have numbers
+	 * @throws NumberFormatException if the string does not have numbers
 	 * @throws DuplicateClientKeyException if the key given already exist
 	 * @throws UnknownClientKeyException when there is no client with the key
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
@@ -129,7 +129,7 @@ public class Network implements Serializable {
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if the first word of the entry does not correspond
 	 * 								to any option
-	 * @throws NumberFormatException if the string doenst have numbers
+	 * @throws NumberFormatException if the string does not have numbers
 	 * @throws DuplicateClientKeyException if the key given already exists
 	 * @throws UnknownClientKeyException when there is no client with the key
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
@@ -299,7 +299,7 @@ public class Network implements Serializable {
 	 * @throws DuplicateTerminalKeyException if the key is already associated 
 	 *                                       to an existing terminal
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits
-	 * @throws UnknownClientKeyException if the client key doesnt exist
+	 * @throws UnknownClientKeyException if the client key does not exist
 	 * @throws UnknownTerminalKeyException 
 	 * @throws UnrecognizedEntryException 
 	 */
@@ -389,7 +389,7 @@ public class Network implements Serializable {
 	 * 
 	 * @param clientKey key of the client to change the notification settings.
 	 * @param change indicates whether the notifications should be allowed or not
-	 * @throws UnknownClientKeyException if the client key doesnt exist
+	 * @throws UnknownClientKeyException if the client key does not exist
 	 * @throws NotificationsAlreadyAtThatState if the notification setting is already at the setting the 
 	 * 										user wants to change it to.
 	 */
@@ -416,7 +416,8 @@ public class Network implements Serializable {
 	 * Gets the collection of communications sent from a certain client. 
 	 * 
 	 * @param clientKey  the key of the client that sent the communications
-	 * @return communication  collection of all the communications sent from the client which key is clientKey 
+	 * @return communication  collection of all the communications sent from the client which key is clientKey
+	 * @throws UnknownClientKeyException if the client key does not exist 
 	 */
 	public Collection<Communication> getCommunicationsFromClient(String clientKey) throws UnknownClientKeyException {
 		Client client = getClient(clientKey);
@@ -438,7 +439,8 @@ public class Network implements Serializable {
 	 * Gets the collection of communications sent to a certain client. 
 	 * 
 	 * @param clientKey  the key of the client that received the communications
-	 * @return communication  collection of all the communications received by the client which key is clientKey 
+	 * @return communication  collection of all the communications received by the client which key is clientKey
+	 * @throws UnknownClientKeyException if the client key does not exist 
 	 */
 	public Collection<Communication> getCommunicationsToClient(String clientKey) throws UnknownClientKeyException {
 		Client client = getClient(clientKey);
@@ -455,6 +457,14 @@ public class Network implements Serializable {
 		return communications;
 	}
 	
+	
+	/**
+	 * Gets a the payments and debts of a specific client.
+	 * 
+	 * @param clientKey the key of the client we want the payments and debts from
+	 * @return paymentsAndDebts list containing the payments and then the debts
+	 * @throws UnknownClientKeyException if the client key does not exist
+	 */
 	public List<Long> getClientPaymentAndDebts(String clientKey) throws UnknownClientKeyException {
 		Client client = getClient(clientKey);
 		List<Long> paymentsAndDebts = new ArrayList<>();
@@ -463,6 +473,33 @@ public class Network implements Serializable {
 		paymentsAndDebts.add(1, client.getRoundedDebts());
 		
 		return paymentsAndDebts;
+	}
+	
+	/**
+	 * Gets all clients that do not have debts.
+	 * 
+	 * @return clients clients without debt.
+	 */
+	public Collection<Client> getClientsWithoutDebt() {
+		Collection<Client> clients = getAllClients();
+		
+		clients.removeIf(client -> !client.hasDebt());
+		
+		return clients;
+	}
+	
+	
+	/**
+	 * Gets all clients that do not have debts.
+	 * 
+	 * @return clients clients with debt.
+	 */
+	public Collection<Client> getClientsWithDebt() {
+		Collection<Client> clients = getAllClients();
+		
+		clients.removeIf(client -> client.hasDebt());
+		
+		return clients;
 	}
 
 }

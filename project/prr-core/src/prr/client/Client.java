@@ -125,25 +125,11 @@ public class Client implements Serializable, Visitable{
     public void contractDebt(double price) {
     	_debts += price;
     }
- 
     
-//  **************************
-//  *     Communications     *
-//  **************************
-
-    public List<Communication> getUnpaidCommunications () {
-    	List<Terminal> terminals = getTerminals();
-    	int amountOfTerminals = terminals.size();
-    	List<Communication> unpaidComms = new ArrayList<>();
-    	
-    	for(int i = 0; i < amountOfTerminals; i++) {
-    		List<Communication> comms = terminals.get(i).getPastCommunications();
-    		comms.removeIf(element -> !element.getWasPaid());
-    		unpaidComms.addAll(comms);
-    	}
-    	
-		return unpaidComms;
+    public boolean hasDebt() {
+    	return _debts != 0;
     }
+ 
     
     
 //  **************************
