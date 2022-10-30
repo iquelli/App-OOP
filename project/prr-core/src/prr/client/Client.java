@@ -24,8 +24,8 @@ public class Client implements Serializable, Visitable{
     private final String _key;
     private String _name;
     private int _taxId;
-    private double _payments = 0.0;
-    private double _debts = 0.0;
+    private double _payments = 0;
+    private double _debts = 0;
     private Level _level;
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<>();
@@ -127,10 +127,12 @@ public class Client implements Serializable, Visitable{
     }
     
     public boolean hasDebt() {
+    	System.out.println(_debts != 0);
     	return _debts != 0;
     }
  
     
+
     
 //  **************************
 //  *         Visitor		 *

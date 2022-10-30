@@ -483,7 +483,7 @@ public class Network implements Serializable {
 	public Collection<Client> getClientsWithoutDebt() {
 		Collection<Client> clients = getAllClients();
 		
-		clients.removeIf(client -> !client.hasDebt());
+		clients.removeIf(client -> client.hasDebt());
 		
 		return clients;
 	}
@@ -497,7 +497,7 @@ public class Network implements Serializable {
 	public Collection<Client> getClientsWithDebt() {
 		Collection<Client> clients = getAllClients();
 		
-		clients.removeIf(client -> client.hasDebt());
+		clients.removeIf(client -> !client.hasDebt());
 		
 		return clients;
 	}
