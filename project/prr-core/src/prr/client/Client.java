@@ -3,6 +3,7 @@ package prr.client;
 import java.io.Serializable;
 import java.io.Serial;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import prr.exceptions.NotificationsAlreadyAtThatState;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
+import prr.communications.Communication;
 
 public class Client implements Serializable, Visitable{
 
@@ -27,7 +29,6 @@ public class Client implements Serializable, Visitable{
     private Level _level;
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<>();
-    // FIX ME ainda falta metodos por definir (tipo de comunicacao)
 
     public Client(String key, String name, int taxId) {
         _key = key;
@@ -36,6 +37,11 @@ public class Client implements Serializable, Visitable{
         _level = new NormalLevel(); // normal level
     }
 
+    
+//  **************************
+//  *        General		 *
+//  **************************
+    
     public String getKey() {
         return _key;
     }
@@ -99,14 +105,13 @@ public class Client implements Serializable, Visitable{
 //  *        Balance		 *
 //  **************************
     
-    public int getRoundedPayments() {
-        return (int)Math.round(_payments);
+    public long getRoundedPayments() {
+        return (long)Math.round(_payments);
     }
     
-    public int getRoundedDebts() {
-        return (int)Math.round(_debts);
+    public long getRoundedDebts() {
+        return (long)Math.round(_debts);
     }
-    
     
     public double getBalance() {
     	return _payments - _debts;
@@ -116,7 +121,35 @@ public class Client implements Serializable, Visitable{
     	_payments += price;
     	_debts -= price;
     }
+    
+    public void contractDebt(double price) {
+    	_debts += price;
+    }
+ 
+    
+//  **************************
+//  *     Communications     *
+//  **************************
 
+    public List<Communication> getUnpaidCommunications () {
+    	List<Terminal> terminals = getTerminals();
+    	int amountOfTerminals = terminals.size();
+    	List<Communication> unpaidComms = new ArrayList<>();
+    	
+    	for(int i = 0; i < amountOfTerminals; i++) {
+    		List<Communication> comms = terminals.get(i).getPastCommunications();
+    		comms.removeIf(element -> !element.getWasPaid());
+    		unpaidComms.addAll(comms);
+    	}
+    	
+		return unpaidComms;
+    }
+    
+    
+//  **************************
+//  *         Visitor		 *
+//  **************************
+    
     @Override
     public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);

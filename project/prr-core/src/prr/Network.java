@@ -1,11 +1,13 @@
 package prr;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -451,6 +453,16 @@ public class Network implements Serializable {
 		}
 		
 		return communications;
+	}
+	
+	public List<Long> getClientPaymentAndDebts(String clientKey) throws UnknownClientKeyException {
+		Client client = getClient(clientKey);
+		List<Long> paymentsAndDebts = new ArrayList<>();
+		
+		paymentsAndDebts.add(0, client.getRoundedPayments());
+		paymentsAndDebts.add(1, client.getRoundedDebts());
+		
+		return paymentsAndDebts;
 	}
 
 }

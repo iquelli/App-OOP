@@ -21,8 +21,8 @@ public class Render extends Visitor<String> {
 				.add(client.getLevelName())
 				.add(client.canReceiveNotifications() ? "YES" : "NO")
 				.add(Integer.toString(client.getAmountOfTerminals()))	
-				.add(Integer.toString(client.getRoundedPayments()))
-				.add(Integer.toString(client.getRoundedDebts()))
+				.add(Long.toString(client.getRoundedPayments()))
+				.add(Long.toString(client.getRoundedDebts()))
 				.toString();
 	}
 

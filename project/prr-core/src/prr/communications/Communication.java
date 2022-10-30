@@ -11,7 +11,7 @@ public abstract class Communication implements Visitable {
     private Terminal _sender;
     private Terminal _receiver;
     protected double _price;
-    private boolean _wasPaid;
+    private boolean _wasPaid = false;
     private boolean _finished;
     
     public Communication(int key, Terminal sender, Terminal receiver) {
@@ -37,6 +37,10 @@ public abstract class Communication implements Visitable {
 	
 	public Terminal getReceiver() {
 		return _receiver;
+	}
+	
+	public boolean getWasPaid() {
+		return _wasPaid;
 	}
 	
 	public boolean isFinished() {

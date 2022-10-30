@@ -197,6 +197,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	communication.performPayment();
     }
 
+    
 //  **************************
 //  *     Communications	 *
 //  **************************
@@ -217,6 +218,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public abstract boolean canHandleCommunication(String communicationType);
     
     public abstract String getType();
+    
 
 //  **************************
 //  *         Friends	     *
