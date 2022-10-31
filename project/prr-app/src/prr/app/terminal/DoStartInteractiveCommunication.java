@@ -42,7 +42,7 @@ class DoStartInteractiveCommunication extends TerminalCommand {
 		} catch (DestinationIsSilenceException e) {
 			_display.popup(Message.destinationIsSilent(destinationTerminalID));
 		} catch (CommunicationUnsupportedAtOriginException e) {
-			_display.popup(Message.unsupportedAtOrigin(destinationTerminalID, communicationType));
+			_display.popup(Message.unsupportedAtOrigin(_receiver.getTerminalKey(), communicationType));
 		} catch (CommunicationUnsupportedAtDestinationException e) {
 			_display.popup(Message.unsupportedAtDestination(destinationTerminalID, communicationType));
 		}

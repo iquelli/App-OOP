@@ -35,8 +35,8 @@ public class Network implements Serializable {
 	
 	private static final String basicTerminalText = "BASIC";
 	
-	private final Map<String, Client> _clients = new TreeMap<>();
-	private final Map<String, Terminal> _terminals = new TreeMap<>();
+	private final Map<String, Client> _clients = new TreeMap<String, Client>();
+	private final Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 	private final List<Communication> _communications = new ArrayList<Communication>();
 	
 	private int _communicationsAmount = 0;

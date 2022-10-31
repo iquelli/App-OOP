@@ -53,7 +53,7 @@ public class Render extends Visitor<String> {
 				.add(communication.getReceiver().getTerminalKey())
 				.add(Integer.toString(communication.getUnits()))
 				.add(Double.toString(communication.getPrice()))
-				.add(communication.isFinished() ? "ONGOING" : "FINISHED")
+				.add(communication.isFinished() ? "FINISHED" : "ONGOING")
 				.toString();
 	}
 }

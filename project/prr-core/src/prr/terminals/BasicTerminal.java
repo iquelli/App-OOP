@@ -16,8 +16,9 @@ public class BasicTerminal extends Terminal {
 		switch (communicationType) {
 		case "VOICE": return true;
 		case "VIDEO": return false;
-		default: return false;
 		}
+		
+		return false;
 	}
 
 	public String getType() {
