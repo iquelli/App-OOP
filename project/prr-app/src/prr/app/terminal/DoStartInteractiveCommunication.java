@@ -22,13 +22,12 @@ class DoStartInteractiveCommunication extends TerminalCommand {
 
 	DoStartInteractiveCommunication(Network context, Terminal terminal) {
 		super(Label.START_INTERACTIVE_COMMUNICATION, context, terminal, receiver -> receiver.canStartCommunication());
+		addStringField(DESTINATION_TERMINAL_ID_TEXT, Prompt.terminalKey());
+		addOptionField(COMMUNICATION_TYPE_TEXT, Prompt.commType(), "VIDEO", "VOICE");
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-		addStringField(DESTINATION_TERMINAL_ID_TEXT, Prompt.terminalKey());
-		addOptionField(COMMUNICATION_TYPE_TEXT, Prompt.commType(), "VIDEO", "VOICE");
-		
 		String destinationTerminalID = stringField(DESTINATION_TERMINAL_ID_TEXT);
 		String communicationType = optionField(COMMUNICATION_TYPE_TEXT);
 		

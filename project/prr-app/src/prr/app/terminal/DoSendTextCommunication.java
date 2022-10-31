@@ -18,13 +18,12 @@ class DoSendTextCommunication extends TerminalCommand {
 
     DoSendTextCommunication(Network context, Terminal terminal) {
         super(Label.SEND_TEXT_COMMUNICATION, context, terminal, receiver -> receiver.canStartCommunication());
+    	addStringField(DESTINATION_TERMINAL_ID_TEXT, Prompt.terminalKey());
+    	addStringField(COMMUNICATION_MESSAGE_TEXT, Prompt.textMessage());
     }
 
     @Override
     protected final void execute() throws CommandException {
-    	addStringField(DESTINATION_TERMINAL_ID_TEXT, Prompt.terminalKey());
-    	addStringField(COMMUNICATION_MESSAGE_TEXT, Prompt.textMessage());
-    	
     	String destinationTerminalKey = stringField(DESTINATION_TERMINAL_ID_TEXT);
     	String communicationMessage = stringField(COMMUNICATION_MESSAGE_TEXT);
     	
