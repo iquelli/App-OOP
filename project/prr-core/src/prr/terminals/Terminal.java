@@ -86,7 +86,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      *          it was the originator of this communication.
      **/
     public boolean canEndCurrentCommunication() {
-		return _ongoingCommunication != null & _ongoingCommunication.getSender().getTerminalKey().equals(_key);
+		return _ongoingCommunication != null && _ongoingCommunication.getSender().getTerminalKey().equals(_key);
     }
 
     /**
