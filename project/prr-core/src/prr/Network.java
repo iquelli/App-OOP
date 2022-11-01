@@ -153,14 +153,18 @@ public class Network implements Serializable {
 		}
 	}
 	
-
+	
+//  **************************
+//  *     Client Handling  	 *
+//  **************************	
+	
 	/**
 	 * Sees if the entry is a valid client entry.
 	 * 
 	 * @param args array with the input that was on the line
 	 * @throws InvalidEntryException if it is not a valid client entry
 	 * @throws DuplicateClientKeyException if the key given already exists
-	 * @throws NumberFormatException if the string doenst have numbers
+	 * @throws NumberFormatException if the string does not have numbers
 	 */
 	private void evaluateClientEntry(String args[]) throws
 	 UnrecognizedEntryException, DuplicateClientKeyException, NumberFormatException {
@@ -214,8 +218,90 @@ public class Network implements Serializable {
 		_clients.put(key, client);
 		modified();
 	}
-
-
+	
+	
+	/**
+	 * Changes a client's notifications settings.
+	 * 
+	 * @param clientKey key of the client to change the notification settings.
+	 * @param change indicates whether the notifications should be allowed or not
+	 * @throws UnknownClientKeyException if the client key does not exist
+	 * @throws NotificationsAlreadyAtThatState if the notification setting is already at the setting the 
+	 * 										user wants to change it to.
+	 */
+	public void changeClientNotifications(String clientKey, String change) throws UnknownClientKeyException,
+	 NotificationsAlreadyAtThatState{
+		Client client = getClient(clientKey);
+		switch(change) {
+		case "ENABLE" : client.enableNotifications(); break;
+		case "DISABLE" : client.disableNotifications(); break;
+		}
+	}
+	
+	/**
+	 * Gets the global balance of registered clients.
+	 *
+	 * @return globalBalance  sum of every client balance
+	 */
+	public double getGlobalBalance() {
+		double globalBalance = 0;
+		
+		for (Client client : _clients.values()) {
+			globalBalance += client.getBalance();
+		}
+		
+		return globalBalance;
+	}
+	
+	/**
+	 * Gets a the payments and debts of a specific client.
+	 * 
+	 * @param clientKey the key of the client we want the payments and debts from
+	 * @return paymentsAndDebts list containing the payments and then the debts
+	 * @throws UnknownClientKeyException if the client key does not exist
+	 */
+	public List<Long> getClientPaymentAndDebts(String clientKey) throws UnknownClientKeyException {
+		Client client = getClient(clientKey);
+		List<Long> paymentsAndDebts = new ArrayList<>();
+		
+		paymentsAndDebts.add(0, client.getRoundedPayments());
+		paymentsAndDebts.add(1, client.getRoundedDebts());
+		
+		return paymentsAndDebts;
+	}
+	
+	/**
+	 * Gets all clients that do not have debts.
+	 * 
+	 * @return clients clients without debt.
+	 */
+	public Collection<Client> getClientsWithoutDebt() {
+		Collection<Client> clients = getAllClients();
+		
+		clients.removeIf(client -> client.hasDebt());
+		
+		return clients;
+	}
+	
+	/**
+	 * Gets all clients that do not have debts.
+	 * 
+	 * @return clients clients with debt.
+	 */
+	public Collection<Client> getClientsWithDebt() {
+		Collection<Client> clients = getAllClients();
+		
+		clients.removeIf(client -> !client.hasDebt());
+		
+		return clients;
+	}
+	
+	
+	
+//  **************************
+//  *   Terminals Handling 	 *
+//  **************************	
+	
 	/**
 	 * Gets a terminal by its key. 
 	 *
@@ -272,22 +358,6 @@ public class Network implements Serializable {
 		}
 		
 		return terminalsUnused;
-	}
-
-
-	/**
-	 * Gets the global balance of registered clients.
-	 *
-	 * @return globalBalance  sum of every client balance
-	 */
-	public double getGlobalBalance() {
-		double globalBalance = 0;
-		
-		for (Client client : _clients.values()) {
-			globalBalance += client.getBalance();
-		}
-		
-		return globalBalance;
 	}
 
 
@@ -382,25 +452,11 @@ public class Network implements Serializable {
 		
 		return true;
 	}
-	
 
-	/**
-	 * Changes a client's notifications settings.
-	 * 
-	 * @param clientKey key of the client to change the notification settings.
-	 * @param change indicates whether the notifications should be allowed or not
-	 * @throws UnknownClientKeyException if the client key does not exist
-	 * @throws NotificationsAlreadyAtThatState if the notification setting is already at the setting the 
-	 * 										user wants to change it to.
-	 */
-	public void changeClientNotifications(String clientKey, String change) throws UnknownClientKeyException,
-	 NotificationsAlreadyAtThatState{
-		Client client = getClient(clientKey);
-		switch(change) {
-		case "ENABLE" : client.enableNotifications(); break;
-		case "DISABLE" : client.disableNotifications(); break;
-		}
-	}
+
+//  **************************
+//  * Communication Handling *
+//  **************************
 	
 	/**
 	 * Gets the collection of communications. 
@@ -455,51 +511,6 @@ public class Network implements Serializable {
 		}
 		
 		return communications;
-	}
-	
-	
-	/**
-	 * Gets a the payments and debts of a specific client.
-	 * 
-	 * @param clientKey the key of the client we want the payments and debts from
-	 * @return paymentsAndDebts list containing the payments and then the debts
-	 * @throws UnknownClientKeyException if the client key does not exist
-	 */
-	public List<Long> getClientPaymentAndDebts(String clientKey) throws UnknownClientKeyException {
-		Client client = getClient(clientKey);
-		List<Long> paymentsAndDebts = new ArrayList<>();
-		
-		paymentsAndDebts.add(0, client.getRoundedPayments());
-		paymentsAndDebts.add(1, client.getRoundedDebts());
-		
-		return paymentsAndDebts;
-	}
-	
-	/**
-	 * Gets all clients that do not have debts.
-	 * 
-	 * @return clients clients without debt.
-	 */
-	public Collection<Client> getClientsWithoutDebt() {
-		Collection<Client> clients = getAllClients();
-		
-		clients.removeIf(client -> client.hasDebt());
-		
-		return clients;
-	}
-	
-	
-	/**
-	 * Gets all clients that do not have debts.
-	 * 
-	 * @return clients clients with debt.
-	 */
-	public Collection<Client> getClientsWithDebt() {
-		Collection<Client> clients = getAllClients();
-		
-		clients.removeIf(client -> !client.hasDebt());
-		
-		return clients;
 	}
 
 }

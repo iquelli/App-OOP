@@ -43,7 +43,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private double _payments;
 	private double _debts;
 	private List<Terminal> _friends;
-	private List<Notification> _notificationsToBeSend;
 	private Communication _ongoingCommunication;
 	
 	public Terminal(String key, Client client) {
@@ -152,6 +151,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	public abstract void turnOff();
     	public abstract void turnOn();
     	public abstract void becomeBusy();
+    	public abstract boolean isSilent();
     	
     	@Override
     	public abstract String toString();

@@ -1,6 +1,8 @@
 package prr.terminals;
 
+import prr.client.Client;
 import prr.exceptions.DestinationIsSilenceException;
+import prr.notifications.SilentToIdle;
 
 public class Silence extends Terminal.TerminalState {
 
@@ -34,13 +36,22 @@ public class Silence extends Terminal.TerminalState {
 	@Override
 	public void turnOn() {
 		setState(new Idle(getTerminal()));
+		
+		// creates notification
+		Client client = getTerminal().getClient();
+		client.addNotification(new SilentToIdle(getTerminal()));
 	}
 
 	@Override
 	public void becomeBusy() {
 		setState(new Busy(getTerminal(), this));
 	}
-
+	
+	@Override
+	public boolean isSilent() {
+		return true;
+	}
+	
 	@Override
 	public String toString() {
 		return "SILENCE";

@@ -38,6 +38,10 @@ public class Idle extends Terminal.TerminalState {
 	public void becomeBusy() {
 		setState(new Busy(getTerminal(), this));		
 	}
+	
+	public boolean isSilent() {
+		return false;
+	}
 
 	@Override
 	public String toString() {

@@ -8,7 +8,6 @@ public class OffToIdle extends Notification {
 	private static final long serialVersionUID = 202208091753L;
 	
 	private String _type = "O2I";
-	private Terminal _sender;
 	
 	public OffToIdle(Terminal terminal) {
 		super(terminal);

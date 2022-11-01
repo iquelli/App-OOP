@@ -1,6 +1,9 @@
 package prr.terminals;
 
+import prr.client.Client;
 import prr.exceptions.DestinationIsBusyException;
+import prr.notifications.BusyToIdle;
+
 
 public class Busy extends Terminal.TerminalState {
 
@@ -36,12 +39,22 @@ public class Busy extends Terminal.TerminalState {
 
 	@Override
 	public void turnOn() {
-		setState(_previousState);		
+		setState(_previousState);
+		
+		// creates notification
+		Client client = getTerminal().getClient();
+		
+		if(!_previousState.isSilent()) 
+			client.addNotification(new BusyToIdle(getTerminal()));	
 	}
 
 	@Override
 	public void becomeBusy() {
 		// Empty		
+	}
+	
+	public boolean isSilent() {
+		return false;
 	}
 	
 	@Override

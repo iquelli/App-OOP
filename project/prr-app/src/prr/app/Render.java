@@ -13,7 +13,7 @@ public class Render extends Visitor<String> {
 
 	@Override
 	public String visit(Client client) {
-		return new StringJoiner("|")
+		String clientString = new StringJoiner("|")
 				.add("CLIENT")
 				.add(client.getKey())
 				.add(client.getName())
@@ -24,6 +24,12 @@ public class Render extends Visitor<String> {
 				.add(Long.toString(client.getRoundedPayments()))
 				.add(Long.toString(client.getRoundedDebts()))
 				.toString();
+		
+		if(client.canReceiveNotifications() && client.getAmountOfNotifications() != 0) {
+			clientString += "\n" + client.getNotifications();
+		}
+		
+		return clientString;
 	}
 
 	@Override

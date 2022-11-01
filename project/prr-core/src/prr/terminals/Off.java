@@ -1,6 +1,9 @@
 package prr.terminals;
 
+import prr.client.Client;
 import prr.exceptions.DestinationIsOffException;
+import prr.notifications.OffToIdle;
+import prr.notifications.OffToSilent;
 
 public class Off extends Terminal.TerminalState {
 
@@ -37,12 +40,25 @@ public class Off extends Terminal.TerminalState {
 	@Override
 	public void turnOn() {
 		setState(_previousState);
+		
+		// creates notification
+		Client client = getTerminal().getClient();
+		
+		if(_previousState.isSilent()) {
+			client.addNotification(new OffToSilent(getTerminal()));	
+		}
+		client.addNotification(new OffToIdle(getTerminal()));
 	}
 
 	@Override
 	public void becomeBusy() {
 		// Empty
 	}
+	
+	public boolean isSilent() {
+		return false;
+	}
+	
 
 	@Override
 	public String toString() {

@@ -4,19 +4,25 @@ import java.io.Serializable;
 
 import prr.terminals.Terminal;
 
-public  class Notification  implements Serializable {
+public abstract  class Notification  implements Serializable {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
-	private Terminal _sender;
+	private Terminal _receiver;
 	
-	public Notification(Terminal sender) {
-		_sender = sender;
+	public Notification(Terminal receiver) {
+		_receiver = receiver;
 	}
 	
-	public Terminal getSender() {
-		return _sender;
+	public String getTerminalId() {
+		return _receiver.getTerminalKey();
 	}
+	
+	public Terminal getTerminal() {
+		return _receiver;
+	}
+	
+	public abstract String getType();
 }
 

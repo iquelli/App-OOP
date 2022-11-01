@@ -5,11 +5,12 @@ import java.io.Serial;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import prr.exceptions.NotificationsAlreadyAtThatState;
-
+import prr.notifications.Notification;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
@@ -29,6 +30,7 @@ public class Client implements Serializable, Visitable{
     private Level _level;
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<>();
+	private List<Notification> _notifications;
 
     public Client(String key, String name, int taxId) {
         _key = key;
@@ -99,7 +101,25 @@ public class Client implements Serializable, Visitable{
     		throw new NotificationsAlreadyAtThatState();
     	_allowNotifications = false;
     }
-
+    
+    public String getNotifications() {
+    	StringJoiner notifications = new StringJoiner("\n");
+    	int comp = _notifications.size();
+    	
+    	for(int i = 0; i < comp; i++) {
+    		notifications.add(_notifications.get(i).getType() + "|" + _notifications.get(i).getTerminalId());
+    	}
+    	return notifications.toString();
+    }
+    
+    public int getAmountOfNotifications() {
+    	return _notifications.size();
+    }
+    
+    public void addNotification(Notification notif) {
+    	_notifications.add(notif);
+    }
+    
     
 //  **************************
 //  *        Balance		 *
