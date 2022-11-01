@@ -104,11 +104,13 @@ public class Client implements Serializable, Visitable{
     
     public String getNotifications() {
     	StringJoiner notifications = new StringJoiner("\n");
-    	int comp = _notifications.size();
     	
-    	for(int i = 0; i < comp; i++) {
-    		notifications.add(_notifications.get(i).getType() + "|" + _notifications.get(i).getTerminalId());
+    	for(Notification notif : _notifications) {
+    		notifications.add(notif.getType() + "|" + notif.getTerminalId());
     	}
+    	
+    	_notifications.clear();
+    	
     	return notifications.toString();
     }
     
