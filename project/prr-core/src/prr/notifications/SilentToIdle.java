@@ -8,17 +8,12 @@ public class SilentToIdle extends Notification {
 	private static final long serialVersionUID = 202208091753L;
 	
 	private String _type = "S2I";
-	private Terminal _sender;
 	
 	public SilentToIdle(Terminal terminal) {
-		_sender = terminal;
+		super(terminal);
 	}
 	
 	public String getType() {
 		return _type;
-	}
-	
-	public Terminal getSender() {
-		return _sender;
 	}
 }
