@@ -16,12 +16,11 @@ class DoEndInteractiveCommunication extends TerminalCommand {
 
 	DoEndInteractiveCommunication(Network context, Terminal terminal) {
 		super(Label.END_INTERACTIVE_COMMUNICATION, context, terminal, receiver -> receiver.canEndCurrentCommunication());
+		addIntegerField(COMMUNICATION_DURATION_TEXT, Prompt.duration());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-		addIntegerField(COMMUNICATION_DURATION_TEXT, Prompt.duration());
-		
 		int duration = integerField(COMMUNICATION_DURATION_TEXT);
 		
 		try {

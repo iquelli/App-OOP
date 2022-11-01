@@ -16,8 +16,9 @@ public class FancyTerminal extends Terminal {
 		switch (communicationType) {
 		case "VOICE": return true;
 		case "VIDEO": return true;
-		default: return false;
 		}
+		
+		return false;
 	}
 
 	public String getType() {

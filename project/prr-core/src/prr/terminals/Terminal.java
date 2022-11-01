@@ -332,11 +332,11 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     
     // Makes sure that terminals are able to handle a certain communication type
     private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
-		if (!canHandleCommunication(com.toString())) {
+		if (!canHandleCommunication(com.getType())) {
 			throw new CommunicationUnsupportedAtOriginException();
 		}
 		
-		if (!destinationTerminal.canHandleCommunication(com.toString())) {
+		if (!destinationTerminal.canHandleCommunication(com.getType())) {
 			throw new CommunicationUnsupportedAtDestinationException();
 		}
     }
