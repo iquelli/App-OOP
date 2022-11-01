@@ -1,8 +1,5 @@
 package prr.communications;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import prr.client.Level;
 import prr.terminals.Terminal;
 
@@ -22,17 +19,7 @@ public class TextCommunication extends Communication {
 	public int definePrice(Level clientLevel) {
 		int length = _message.length();
 		
-		List<Integer> prices = new ArrayList<Integer>(); // FIXME (tiago) Obter a lista dos valores que se pode cobrar com x plano tarifario
-		
-		if (length < 50) {
-			return prices.get(0);
-		}
-		
-		if (length < 100) {
-			return prices.get(1);
-		}
-		
-		return prices.get(2);		
+		return clientLevel.getTariff().getMessagePrice(length);
 	}
 	
 	@Override

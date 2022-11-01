@@ -30,7 +30,7 @@ import prr.visits.Visitor;
 /**
  * Abstract terminal.
  */
-abstract public class Terminal implements Serializable, Visitable /* FIXME maybe addd more interfaces */{
+abstract public class Terminal implements Serializable, Visitable /* FIXME maybe add more interfaces */{
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
@@ -54,6 +54,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_friends = new ArrayList<Terminal>();
 	}
 
+	
 //  **************************
 //  *        General		 *
 //  **************************
@@ -96,6 +97,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public boolean canStartCommunication() {
 		return _state.canStartCommunication();
     }
+    
 
 //  **************************
 //  *          State		 *
@@ -155,6 +157,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	@Override
     	public abstract String toString();
     }
+    
 
 //  **************************
 //  *        Balance		 *
@@ -265,6 +268,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	return friends.toString();
     }
 
+    
 //  **************************
 //  *   Text Communication	 *
 //  **************************
@@ -292,8 +296,9 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	_communications.put(communicationId, communication);
     }
 
+    
 //  **************************
-//  *     Interactive Com    *
+//  *   Interactive Comms    *
 //  **************************
     
     public void sendInteractiveCommunication(String destinationTerminalKey, String communicationType, Network network) throws 
@@ -359,6 +364,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	_ongoingCommunication = null;
     }
 
+    
 //  **************************
 //  * 		  Visitor 	  	 *
 //  **************************

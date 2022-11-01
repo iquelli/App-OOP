@@ -15,7 +15,7 @@ public class VoiceCommunication extends Communication {
 
 	@Override
 	public int definePrice(Level clientLevel) {
-		return 0;
+		return clientLevel.getTariff().getVoicePrice(_duration);
 	}
 	
 	@Override

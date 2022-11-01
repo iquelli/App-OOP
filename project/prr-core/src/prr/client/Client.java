@@ -3,7 +3,6 @@ package prr.client;
 import java.io.Serializable;
 import java.io.Serial;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.TreeMap;
@@ -14,7 +13,6 @@ import prr.notifications.Notification;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
-import prr.communications.Communication;
 
 public class Client implements Serializable, Visitable{
 
@@ -80,7 +78,7 @@ public class Client implements Serializable, Visitable{
     public void addTerminal(Terminal terminal) {
         _terminals.put(terminal.getTerminalKey(), terminal);
     }
- 
+    
     
 //  **************************
 //  *      Notifications	 *
@@ -152,7 +150,6 @@ public class Client implements Serializable, Visitable{
     	System.out.println(_debts != 0);
     	return _debts != 0;
     }
- 
     
 
     
