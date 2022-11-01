@@ -24,7 +24,6 @@ import prr.exceptions.UnknownCommunicationKeyException;
 import prr.exceptions.UnknownTerminalKeyException;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
-import prr.notifications.Notification;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 

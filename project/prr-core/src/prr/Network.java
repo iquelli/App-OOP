@@ -1,13 +1,11 @@
 package prr;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,6 +18,8 @@ import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.BasicTerminal;
 import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
+import prr.util.ClientKeyComparator;
+import prr.util.TerminalKeyComparator;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.exceptions.NotificationsAlreadyAtThatState;
 import prr.client.Client;
@@ -38,8 +38,8 @@ public class Network implements Serializable {
 	
 	private static final String basicTerminalText = "BASIC";
 	
-	private final Map<String, Client> _clients = new TreeMap<>();
-	private final Map<String, Terminal> _terminals = new TreeMap<>();
+	private final Map<String, Client> _clients = new TreeMap<>(new ClientKeyComparator());
+	private final Map<String, Terminal> _terminals = new TreeMap<>(new TerminalKeyComparator());
 	private final List<Communication> _communications = new ArrayList<Communication>();
 	
 	private int _communicationsAmount = 0;
