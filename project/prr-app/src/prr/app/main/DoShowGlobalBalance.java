@@ -16,6 +16,6 @@ class DoShowGlobalBalance extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
+		_display.popup(Double.toString(_receiver.getGlobalBalance()));
 	}
 }
