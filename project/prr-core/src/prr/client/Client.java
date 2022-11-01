@@ -14,7 +14,7 @@ import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
 
-public class Client implements Serializable, Visitable{
+public class Client implements Serializable, Visitable {
 
     @Serial
 	/** Serial number for serialization. */
@@ -29,6 +29,7 @@ public class Client implements Serializable, Visitable{
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<>();
 	private List<Notification> _notifications;
+	private int _amountOfNotifications = 0;
 
     public Client(String key, String name, int taxId) {
         _key = key;
@@ -88,6 +89,10 @@ public class Client implements Serializable, Visitable{
     	return _allowNotifications;
     }
     
+    public int getAmountOfNotifications() {
+    	return _amountOfNotifications;
+    }
+    
     public void enableNotifications() throws NotificationsAlreadyAtThatState {
     	if(_allowNotifications)
     		throw new NotificationsAlreadyAtThatState();
@@ -108,16 +113,14 @@ public class Client implements Serializable, Visitable{
     	}
     	
     	_notifications.clear();
+    	_amountOfNotifications = 0;
     	
     	return notifications.toString();
     }
     
-    public int getAmountOfNotifications() {
-    	return _notifications.size();
-    }
-    
     public void addNotification(Notification notif) {
     	_notifications.add(notif);
+    	_amountOfNotifications++;
     }
     
     
