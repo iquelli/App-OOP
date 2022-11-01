@@ -38,8 +38,8 @@ public class Network implements Serializable {
 	
 	private static final String basicTerminalText = "BASIC";
 	
-	private final Map<String, Client> _clients = new TreeMap<>(new ClientKeyComparator());
-	private final Map<String, Terminal> _terminals = new TreeMap<>(new TerminalKeyComparator());
+	private final Map<String, Client> _clients = new TreeMap<String, Client>(new ClientKeyComparator());
+	private final Map<String, Terminal> _terminals = new TreeMap<String, Terminal>(new TerminalKeyComparator());
 	private final List<Communication> _communications = new ArrayList<Communication>();
 	
 	private int _communicationsAmount = 0;
