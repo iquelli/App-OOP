@@ -147,7 +147,9 @@ public class Network implements Serializable {
 			case "FANCY" :
 				evaluateTerminalEntry(args);
 				break;
-			// FIXME falta adicionar o caso FRIENDS
+			case "FRIENDS" :
+				addTerminalFriends(args[1], args[2]);
+				break;
 			
 			default : throw new UnrecognizedEntryException(args[0]);
 		}
@@ -451,6 +453,26 @@ public class Network implements Serializable {
 			return false;
 		
 		return true;
+	}
+	
+	
+	/**
+	 * Adds friends to a terminal.
+	 * 
+	 * @param terminalKey key of the terminal to add friends to
+	 * @param terminalFriends friends to add to the terminal
+	 * @throws UnknownTerminalKeyException if a terminal key does not exist
+	 */
+	public void addTerminalFriends(String terminalKey, String terminalFriends) throws UnknownTerminalKeyException {
+		Terminal terminal = getTerminal(terminalKey);
+		
+		String[] friends = terminalFriends.split(",");
+		
+		for(String friend : friends) {
+			terminal.addFriend(friend, this);
+		}
+		
+		
 	}
 
 

@@ -232,6 +232,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     		return;
     	}
     	
+    	if(terminalKey.equals(_key)) {
+    		return;
+    	}
+    	
     	_friends.add(terminal);
     }
     
