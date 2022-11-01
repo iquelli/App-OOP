@@ -24,6 +24,7 @@ import prr.exceptions.UnknownCommunicationKeyException;
 import prr.exceptions.UnknownTerminalKeyException;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
+import prr.notifications.Notification;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -42,7 +43,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private double _payments;
 	private double _debts;
 	private List<Terminal> _friends;
-//	private List<Notification> _notificationsToBeSend;
+	private List<Notification> _notificationsToBeSend;
 	private Communication _ongoingCommunication;
 	
 	public Terminal(String key, Client client) {
@@ -86,7 +87,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
      *          it was the originator of this communication.
      **/
     public boolean canEndCurrentCommunication() {
-		return _ongoingCommunication != null & _ongoingCommunication.getSender().getTerminalKey().equals(_key);
+		return _ongoingCommunication != null && _ongoingCommunication.getSender().getTerminalKey().equals(_key);
     }
 
     /**
