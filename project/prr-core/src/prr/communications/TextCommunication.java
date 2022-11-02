@@ -18,8 +18,9 @@ public class TextCommunication extends Communication {
 	@Override
 	public int definePrice(Level clientLevel) {
 		int length = _message.length();
-		
-		return clientLevel.getTariff().getMessagePrice(length);
+
+		int normalPrice = clientLevel.getTariff().getMessagePrice(length);
+		return getSender().isFriendWith(getReceiver()) ? normalPrice / 2 : normalPrice;
 	}
 	
 	@Override

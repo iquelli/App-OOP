@@ -15,12 +15,14 @@ public class VideoCommunication extends Communication {
 
 	@Override
 	public int definePrice(Level clientLevel) {
-		return clientLevel.getTariff().getVideoPrice(_duration);
+		int normalPrice = clientLevel.getTariff().getVideoPrice(_duration);
+		return getSender().isFriendWith(getReceiver()) ? normalPrice / 2 : normalPrice;
 	}
 	
 	@Override
 	public void endCommunication(int duration) {
 		_duration = duration;
+		super.endCommunication(duration);
 	}
 	
 	@Override

@@ -355,6 +355,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public long endInteractiveCommunication(int duration) throws SameTerminalStateException {
     	_ongoingCommunication.endCommunication(duration);
     	long cost = (long) _ongoingCommunication.getPrice();
+    	addDebt(cost);
 
     	_ongoingCommunication.getReceiver().turnOn();
     	turnOn();
