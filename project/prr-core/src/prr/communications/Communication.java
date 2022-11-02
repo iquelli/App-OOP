@@ -59,6 +59,10 @@ public abstract class Communication implements Visitable {
     	return _price;
     }
     
+	public int getPriceRounded() {
+    	return (int)Math.round(_price);
+    }
+	
     public abstract int definePrice(Level clientLevel);
     
     public void performPayment() {

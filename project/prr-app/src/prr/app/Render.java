@@ -25,7 +25,7 @@ public class Render extends Visitor<String> {
 				.add(Long.toString(client.getRoundedDebts()))
 				.toString();
 		
-		if(client.canReceiveNotifications() && client.getAmountOfNotifications() != 0) {
+		if (client.getAmountOfNotifications() != 0) {
 			clientString += "\n" + client.getNotifications();
 		}
 		
@@ -58,7 +58,7 @@ public class Render extends Visitor<String> {
 				.add(communication.getSender().getTerminalKey())
 				.add(communication.getReceiver().getTerminalKey())
 				.add(Integer.toString(communication.getUnits()))
-				.add(Double.toString(communication.getPrice()))
+				.add(Integer.toString(communication.getPriceRounded()))
 				.add(communication.isFinished() ? "FINISHED" : "ONGOING")
 				.toString();
 	}

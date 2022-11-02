@@ -2,6 +2,7 @@ package prr.client;
 
 import java.io.Serializable;
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -27,8 +28,8 @@ public class Client implements Serializable, Visitable {
     private double _debts = 0;
     private Level _level;
     private boolean _allowNotifications = true;
-	private Map<String, Terminal> _terminals = new TreeMap<>();
-	private List<Notification> _notifications;
+	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
+	private List<Notification> _notifications = new ArrayList<Notification>();
 	private int _amountOfNotifications = 0;
 
     public Client(String key, String name, int taxId) {
@@ -144,17 +145,14 @@ public class Client implements Serializable, Visitable {
     	_payments += price;
     	_debts -= price;
     }
-    
-    public void contractDebt(double price) {
-    	_debts += price;
-    }
+	
+	public void addDebt(double debt) {
+		_debts += debt;
+	}
     
     public boolean hasDebt() {
-    	System.out.println(_debts != 0);
     	return _debts != 0;
     }
-    
-
     
 //  **************************
 //  *         Visitor		 *

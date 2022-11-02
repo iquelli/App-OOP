@@ -199,6 +199,11 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	_client.performPayment(price);
     	communication.performPayment();
     }
+	
+	public void addDebt(double debt) {
+		_debts += debt;
+		_client.addDebt(debt);
+	}
 
     
 //  **************************
@@ -283,6 +288,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
     	
     	network.addCommunication(textCommunication);
+		addDebt(textCommunication.getPrice());
     	
     	_communications.put(communicationId, textCommunication);
     	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);

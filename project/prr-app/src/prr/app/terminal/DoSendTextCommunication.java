@@ -28,7 +28,7 @@ class DoSendTextCommunication extends TerminalCommand {
     	String communicationMessage = stringField(COMMUNICATION_MESSAGE_TEXT);
     	
     	try {
-			_receiver.sendTextCommunication(destinationTerminalKey, communicationMessage, _network);			
+			_receiver.sendTextCommunication(destinationTerminalKey, communicationMessage, _network);
 		} catch (prr.exceptions.UnknownTerminalKeyException e) {
 			throw new UnknownTerminalKeyException(destinationTerminalKey);
 		} catch (DestinationIsOffException e) {

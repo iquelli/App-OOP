@@ -1,8 +1,8 @@
 package prr.app.terminals;
 
 import prr.Network;
-import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.app.exceptions.DuplicateTerminalKeyException;
+import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
@@ -35,7 +35,7 @@ class DoRegisterTerminal extends Command<Network> {
 			_receiver.registerTerminal(terminalKey, clientKey, type);
 		}
 		catch (prr.exceptions.InvalidTerminalKeyException e) {
-			throw new UnknownTerminalKeyException(terminalKey);
+			throw new InvalidTerminalKeyException(terminalKey);
 		} 
 		catch (prr.exceptions.UnknownClientKeyException e) {
 			throw new UnknownClientKeyException(clientKey);

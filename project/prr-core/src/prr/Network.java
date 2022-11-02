@@ -22,6 +22,7 @@ import prr.util.ClientKeyComparator;
 import prr.util.TerminalKeyComparator;
 import prr.exceptions.InvalidTerminalKeyException;
 import prr.exceptions.NotificationsAlreadyAtThatState;
+import prr.exceptions.SameTerminalStateException;
 import prr.client.Client;
 import prr.communications.Communication;
 
@@ -110,10 +111,11 @@ public class Network implements Serializable {
 	 * @throws InvalidTerminalKeyException if the key does not have 6 digits 
 	 * @throws DuplicateTerminalKeyException if the key given already exists
 	 * @throws UnknownTerminalKeyException 
+	 * @throws SameTerminalStateException 
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException,
 	 UnrecognizedEntryException, NumberFormatException, DuplicateClientKeyException, UnknownClientKeyException, 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException { 
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownTerminalKeyException, SameTerminalStateException { 
 		try (BufferedReader text = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while((line = text.readLine()) != null) {
@@ -136,9 +138,10 @@ public class Network implements Serializable {
 	 * @throws DuplicateTerminalKeyException  if the key given already exists
 	 * @throws UnknownTerminalKeyException 
 	 * @throws UnrecognizedEntryException 
+	 * @throws SameTerminalStateException 
 	 */
 	private void interpretsLine(String args[]) throws NumberFormatException,
-	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException, UnrecognizedEntryException{
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException, UnrecognizedEntryException, SameTerminalStateException{
 		switch (args[0]) {
 			case "CLIENT": 
 				evaluateClientEntry(args);
@@ -374,9 +377,10 @@ public class Network implements Serializable {
 	 * @throws UnknownClientKeyException if the client key does not exist
 	 * @throws UnknownTerminalKeyException 
 	 * @throws UnrecognizedEntryException 
+	 * @throws SameTerminalStateException 
 	 */
 	public void evaluateTerminalEntry(String args[]) throws DuplicateTerminalKeyException, 
-					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, UnrecognizedEntryException {
+					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, UnrecognizedEntryException, SameTerminalStateException {
 		if (args.length != 4)
 			throw new UnrecognizedEntryException(args[0]);
 		else 
@@ -424,16 +428,21 @@ public class Network implements Serializable {
 	 * @param state  the state that the terminal will assume after being registered
 	 * @throws InvalidTerminalKeyException  if the key does not have 6 digits
 	 * @throws DuplicateTerminalKeyException  if the key is already associated to an existing terminal
+	 * @throws SameTerminalStateException 
 	 * @throws UnknowClientKeyException  if the client key does not exist
 	 * @throws UnknowTerminalKeyException  if the terminal key does not exist
 	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type, String state) throws 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException {
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, SameTerminalStateException {
 		registerTerminal(terminalKey, clientKey, type);
 		Terminal terminal = getTerminal(terminalKey);
 		switch (state) {
-		case "OFF": terminal.getState().turnOff();
-		case "SILENCE": terminal.getState().turnOn();
+		case "OFF": 
+			terminal.turnOff();
+			break;
+		case "SILENCE": 
+			terminal.silence();
+			break;
 		}
 		
 	}
@@ -470,9 +479,7 @@ public class Network implements Serializable {
 		
 		for(String friend : friends) {
 			terminal.addFriend(friend, this);
-		}
-		
-		
+		}		
 	}
 
 
