@@ -304,6 +304,13 @@ public class Network implements Serializable {
 	}
 	
 	
+	/**
+	 * Gets all the notifications from a client.
+	 * 
+	 * @param clientKey key of the client
+	 * @return notifs list with the notifications from the client
+	 * @throws UnknownClientKeyException when the client does not exist
+	 */
 	public List<Notification> getAllNotif(String clientKey) throws UnknownClientKeyException {
 		Client client = getClient(clientKey);
 		List<Notification> notifs = new ArrayList<Notification>();
