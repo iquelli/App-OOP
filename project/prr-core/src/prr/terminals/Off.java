@@ -59,9 +59,6 @@ public class Off extends Terminal.TerminalState {
 		// creates notification
 		for(Terminal terminal : terminalsThatAttemptedComm) {
 			Client client = terminal.getClient();
-			if(_previousState.isSilent()) {
-				client.addNotification(new OffToSilent(getTerminal()));	
-			}
 			client.addNotification(new OffToIdle(getTerminal()));
 		}
 		
