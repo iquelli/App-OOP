@@ -3,10 +3,12 @@ package prr.terminals;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import prr.Network;
 import prr.client.Client;
@@ -23,6 +25,7 @@ import prr.exceptions.NoOngoingCommunicationException;
 import prr.exceptions.SameTerminalStateException;
 import prr.exceptions.UnknownCommunicationKeyException;
 import prr.exceptions.UnknownTerminalKeyException;
+import prr.util.TerminalKeyComparator;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
 
@@ -268,12 +271,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     		return null;
     	}
     	
-    	StringJoiner friends = new StringJoiner(", ");
-    	for (Terminal friend : _friends) {
-    		friends.add(friend.getTerminalKey());
-    	}
+    	List<String> friends = _friends.stream().map(friend -> friend.getTerminalKey()).collect(Collectors.toList());
+    	friends.sort(new TerminalKeyComparator());
     	
-    	return friends.toString();
+    	return String.join(", ", friends);
     }
 
     
