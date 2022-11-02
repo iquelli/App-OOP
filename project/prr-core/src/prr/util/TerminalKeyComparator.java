@@ -16,6 +16,10 @@ public class TerminalKeyComparator implements Comparator<String>, Serializable{
 
 	@Override
 	public int compare(String terminal1, String terminal2) {
+		
+		if(terminal1.length() != terminal2.length())
+			return -1;
+		
 		try {
 			int terminalKey1 = Integer.parseInt(terminal1);
 			int terminalKey2 = Integer.parseInt(terminal2);
