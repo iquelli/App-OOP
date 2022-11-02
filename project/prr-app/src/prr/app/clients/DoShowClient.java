@@ -27,6 +27,9 @@ class DoShowClient extends Command<Network> {
         try{
 			Render renderer = new Render();
 			_display.popup(_receiver.getClient(stringField(keyText)).accept(renderer));
+			
+			_receiver.getAllNotif(stringField(keyText)).stream().map(v -> v.accept(renderer)).forEach(_display::popup);
+
 		} catch(prr.exceptions.UnknownClientKeyException e) {
 			throw new UnknownClientKeyException(e.getKey());
 		}

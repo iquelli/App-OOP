@@ -5,7 +5,6 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,7 @@ public class Client implements Serializable, Visitable {
     private boolean _allowNotifications = true;
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 	private List<Notification> _notifications = new ArrayList<Notification>();
-	private int _amountOfNotifications = 0;
-
+	
     public Client(String key, String name, int taxId) {
         _key = key;
         _name = name;
@@ -90,10 +88,6 @@ public class Client implements Serializable, Visitable {
     	return _allowNotifications;
     }
     
-    public int getAmountOfNotifications() {
-    	return _amountOfNotifications;
-    }
-    
     public void enableNotifications() throws NotificationsAlreadyAtThatState {
     	if(_allowNotifications)
     		throw new NotificationsAlreadyAtThatState();
@@ -106,22 +100,16 @@ public class Client implements Serializable, Visitable {
     	_allowNotifications = false;
     }
     
-    public String getNotifications() {
-    	StringJoiner notifications = new StringJoiner("\n");
-    	
-    	for(Notification notif : _notifications) {
-    		notifications.add(notif.getType() + "|" + notif.getTerminalId());
-    	}
-    	
+    public List<Notification> getNotifications() {
+    	return _notifications;    	
+    }
+    
+    public void clearNotifications() {
     	_notifications.clear();
-    	_amountOfNotifications = 0;
-    	
-    	return notifications.toString();
     }
     
     public void addNotification(Notification notif) {
     	_notifications.add(notif);
-    	_amountOfNotifications++;
     }
     
     

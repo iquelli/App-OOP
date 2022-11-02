@@ -3,6 +3,7 @@ package prr.app;
 import java.util.StringJoiner;
 
 import prr.client.Client;
+import prr.notifications.Notification;
 import prr.communications.Communication;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
@@ -25,11 +26,16 @@ public class Render extends Visitor<String> {
 				.add(Long.toString(client.getRoundedDebts()))
 				.toString();
 		
-		if (client.getAmountOfNotifications() != 0) {
-			clientString += "\n" + client.getNotifications();
-		}
-		
 		return clientString;
+	}
+	
+	@Override
+	public String visit(Notification notif) {
+		String notifString = new StringJoiner("|")
+				.add(notif.getType())
+				.add(notif.getTerminalId())
+				.toString();
+		return notifString;
 	}
 
 	@Override

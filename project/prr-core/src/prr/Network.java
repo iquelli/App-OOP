@@ -9,12 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import prr.exceptions.DuplicateClientKeyException;
 import prr.exceptions.DuplicateTerminalKeyException;
 import prr.exceptions.UnknownClientKeyException;
 import prr.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.UnrecognizedEntryException;
+import prr.notifications.Notification;
 import prr.terminals.BasicTerminal;
 import prr.terminals.FancyTerminal;
 import prr.terminals.Terminal;
@@ -299,6 +301,18 @@ public class Network implements Serializable {
 		clients.removeIf(client -> !client.hasDebt());
 		
 		return clients;
+	}
+	
+	
+	public List<Notification> getAllNotif(String clientKey) throws UnknownClientKeyException {
+		Client client = getClient(clientKey);
+		List<Notification> notifs = new ArrayList<Notification>();
+		if(client.canReceiveNotifications()) {
+			notifs = client.getNotifications().stream().collect(Collectors.toList());
+			client.clearNotifications();
+			return notifs;
+		}
+		return notifs;
 	}
 	
 	
