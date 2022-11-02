@@ -329,11 +329,16 @@ public class Network implements Serializable {
 	 *@return Terminal  terminal associated with the key
 	 *@throws UnknownTerminalKeyException  when there is no terminal with the key
 	 */
-	public Terminal getTerminal(String key) throws UnknownTerminalKeyException {
+	public Terminal getTerminal(String key) throws UnknownTerminalKeyException, NumberFormatException {
 		if (!_terminals.containsKey(key))
 			throw new UnknownTerminalKeyException(key);
 		
-		return _terminals.get(key);
+		try {
+			return _terminals.get(key);
+		} catch(NumberFormatException e) {
+			throw new UnknownTerminalKeyException(key);
+		}
+		
 	}
 	
 

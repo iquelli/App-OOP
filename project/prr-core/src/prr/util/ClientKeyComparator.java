@@ -32,7 +32,7 @@ public class ClientKeyComparator implements Comparator<String>, Serializable {
         			-1 : extractInt(key1) - extractInt(key2);
         }
 
-        return text1.compareTo(text2);
+        return text1.compareToIgnoreCase(text2);
     }
 
     /**
