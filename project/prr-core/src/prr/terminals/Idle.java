@@ -1,12 +1,21 @@
 package prr.terminals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Idle extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
+	private List<Terminal> terminalsThatAttemptedComm = new ArrayList<Terminal>();
 	
 	public Idle(Terminal terminal) {
 		terminal.super();
+	}
+	
+	@Override
+	public List<Terminal> getTerminalsThatAttemptedComm() {
+		return terminalsThatAttemptedComm;
 	}
 	
 	@Override
@@ -15,12 +24,12 @@ public class Idle extends Terminal.TerminalState {
 	}
 	
 	@Override
-	public boolean canReceiveTextCommunication() {
+	public boolean canReceiveTextCommunication(Terminal terminal) {
 		return true;
 	}
 	
 	@Override
-	public boolean canReceiveInteractiveCommunication() {
+	public boolean canReceiveInteractiveCommunication(Terminal terminal) {
 		return true;
 	}
 

@@ -27,7 +27,7 @@ public class ClientKeyComparator implements Comparator<String>, Serializable {
         String text1 = extractString(key1);
         String text2 = extractString(key2);
 
-        if ((text1.isEmpty() && text2.isEmpty()) || text1.equals(text2)) {
+        if ((text1.isEmpty() && text2.isEmpty()) || text1.equalsIgnoreCase(text2)) {
         	return text1.equalsIgnoreCase(key1) || text2.equalsIgnoreCase(key2) ? 
         			-1 : extractInt(key1) - extractInt(key2);
         }

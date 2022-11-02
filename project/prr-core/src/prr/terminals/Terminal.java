@@ -2,6 +2,7 @@ package prr.terminals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -145,8 +146,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	}
     	
     	public abstract boolean canStartCommunication();
-    	public abstract boolean canReceiveTextCommunication() throws DestinationIsOffException;
-    	public abstract boolean canReceiveInteractiveCommunication() throws 
+    	public abstract boolean canReceiveTextCommunication(Terminal terminal) throws DestinationIsOffException;
+    	public abstract boolean canReceiveInteractiveCommunication(Terminal terminal) throws 
     	DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException;
     	
     	public abstract void turnOff();
@@ -156,6 +157,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	
     	@Override
     	public abstract String toString();
+
+		protected abstract Collection<Terminal> getTerminalsThatAttemptedComm();
     }
     
 
@@ -281,7 +284,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws DestinationIsOffException, UnknownTerminalKeyException {
     	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
     	
-    	destinationTerminal.canReceiveTextCommunication();
+    	destinationTerminal.canReceiveTextCommunication(this);
     	
     	int communicationId = network.getCommunicationsAmount() + 1;
     	    	
@@ -294,8 +297,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
     }
     
-    private boolean canReceiveTextCommunication() throws DestinationIsOffException {
-    	return _state.canReceiveTextCommunication();
+    private boolean canReceiveTextCommunication(Terminal terminal) throws DestinationIsOffException {
+    	return _state.canReceiveTextCommunication(terminal);
     }
     
     private void receiveTextCommunication(int communicationId, Communication communication) {
@@ -311,7 +314,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
     	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
     	
-    	destinationTerminal.canReceiveInteractiveCommunication();
+    	destinationTerminal.canReceiveInteractiveCommunication(this);
     	
     	int communicationId = network.getCommunicationsAmount() + 1;
     	
@@ -332,8 +335,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	destinationTerminal.receiveInteractiveCommunication(com);
     }
     
-    private boolean canReceiveInteractiveCommunication() throws DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException {
-    	return _state.canReceiveInteractiveCommunication();
+    private boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException {
+    	return _state.canReceiveInteractiveCommunication(terminal);
     }
     
     // Makes sure that terminals are able to handle a certain communication type

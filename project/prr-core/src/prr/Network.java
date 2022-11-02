@@ -28,8 +28,6 @@ import prr.exceptions.SameTerminalStateException;
 import prr.client.Client;
 import prr.communications.Communication;
 
-/**
- * FIXME add more import if needed (cannot import from pt.tecnico or prr.app) */ 
 
 /**
  * Class Store implements a store.
@@ -47,10 +45,6 @@ public class Network implements Serializable {
 	
 	private int _communicationsAmount = 0;
 	private boolean _wasModified = false;
-
-    // FIXME define attributes
-    // FIXME define constructor
-    // FIXME define methods
 
 	/**
 	 * Checks if the network was modified.

@@ -5,7 +5,9 @@ import java.util.Comparator;
 import java.io.Serial;
 import java.io.Serializable;
 
-
+/**
+ * This class serves to sort terminal keys.
+ */
 public class TerminalKeyComparator implements Comparator<String>, Serializable {
 	
     /** Serial number for serialization. */

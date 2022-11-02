@@ -1,5 +1,8 @@
 package prr.terminals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import prr.client.Client;
 import prr.exceptions.DestinationIsSilenceException;
 import prr.notifications.SilentToIdle;
@@ -8,9 +11,15 @@ public class Silence extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
+	private List<Terminal> terminalsThatAttemptedComm = new ArrayList<Terminal>();
 	
 	public Silence(Terminal terminal) {
 		terminal.super();
+	}
+	
+	@Override
+	public List<Terminal> getTerminalsThatAttemptedComm() {
+		return terminalsThatAttemptedComm;
 	}
 	
 	@Override
@@ -19,12 +28,14 @@ public class Silence extends Terminal.TerminalState {
 	}
 	
 	@Override
-	public boolean canReceiveTextCommunication() {
+	public boolean canReceiveTextCommunication(Terminal terminal) {
 		return true;
 	}
 	
 	@Override
-	public boolean canReceiveInteractiveCommunication() throws DestinationIsSilenceException {
+	public boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsSilenceException {
+		if(!terminalsThatAttemptedComm.contains(terminal))
+			terminalsThatAttemptedComm.add(terminal);
 		throw new DestinationIsSilenceException();
 	}
 
@@ -38,8 +49,12 @@ public class Silence extends Terminal.TerminalState {
 		setState(new Idle(getTerminal()));
 		
 		// creates notification
-		Client client = getTerminal().getClient();
-		client.addNotification(new SilentToIdle(getTerminal()));
+		for(Terminal terminal : terminalsThatAttemptedComm) {
+			Client client = terminal.getClient();
+			client.addNotification(new SilentToIdle(getTerminal()));
+		}
+		
+		terminalsThatAttemptedComm.clear();
 	}
 
 	@Override
