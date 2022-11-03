@@ -5,6 +5,7 @@ import java.util.List;
 
 import prr.client.Client;
 import prr.exceptions.DestinationIsSilenceException;
+import prr.exceptions.SameTerminalStateException;
 import prr.notifications.SilentToIdle;
 
 public class Silence extends Terminal.TerminalState {
@@ -60,6 +61,11 @@ public class Silence extends Terminal.TerminalState {
 	@Override
 	public void becomeBusy() {
 		setState(new Busy(getTerminal(), this));
+	}
+	
+	@Override
+	public void becomeSilent() throws SameTerminalStateException {
+		throw new SameTerminalStateException(this);
 	}
 	
 	@Override

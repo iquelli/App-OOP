@@ -3,10 +3,8 @@ package prr.terminals;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -108,31 +106,15 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  **************************
     
     public void turnOff() throws SameTerminalStateException {
-    	if (isOnState(new Off(this, _state))) {
-    		throw new SameTerminalStateException(_state);
-    	}
-    	
     	_state.turnOff();
     }
     
     public void turnOn() throws SameTerminalStateException {
-    	if (isOnState(new Idle(this))) {
-    		throw new SameTerminalStateException(_state);
-    	}
-    	
     	_state.turnOn();
     }
     
     public void silence() throws SameTerminalStateException {
-    	if (isOnState(new Silence(this))) {
-    		throw new SameTerminalStateException(_state);
-    	}
-    	
-    	_state.turnOn();
-    }
-    
-    public boolean isOnState(Terminal.TerminalState state) {
-    	return _state.toString().equals(state.toString());
+    	_state.becomeSilent();
     }
     
     public abstract class TerminalState implements Serializable {
@@ -153,9 +135,10 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	public abstract boolean canReceiveInteractiveCommunication(Terminal terminal) throws 
     	DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException;
     	
-    	public abstract void turnOff();
-    	public abstract void turnOn();
+    	public abstract void turnOff() throws SameTerminalStateException;
+    	public abstract void turnOn() throws SameTerminalStateException;
     	public abstract void becomeBusy();
+    	public abstract void becomeSilent() throws SameTerminalStateException;
     	public abstract boolean isSilent();
     	
     	@Override
@@ -375,6 +358,14 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	_ongoingCommunication = null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof Terminal)) {
+    		return false;
+    	}
+    	
+    	return ((Terminal)o).getTerminalKey().equals(_key);
+    }
     
 //  **************************
 //  * 		  Visitor 	  	 *

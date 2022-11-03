@@ -69,6 +69,11 @@ public class Busy extends Terminal.TerminalState {
 		// Empty		
 	}
 	
+	@Override
+	public void becomeSilent() {
+		// Empty
+	}
+	
 	public boolean isSilent() {
 		return false;
 	}

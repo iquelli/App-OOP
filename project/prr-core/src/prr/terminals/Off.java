@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import prr.client.Client;
 import prr.exceptions.DestinationIsOffException;
+import prr.exceptions.SameTerminalStateException;
 import prr.notifications.OffToIdle;
-import prr.notifications.OffToSilent;
 
 public class Off extends Terminal.TerminalState {
 
@@ -48,13 +48,13 @@ public class Off extends Terminal.TerminalState {
 	}
 
 	@Override
-	public void turnOff() {
-		// Empty
+	public void turnOff() throws SameTerminalStateException {
+		throw new SameTerminalStateException(this);
 	}
 
 	@Override
 	public void turnOn() {
-		setState(_previousState);
+		setState(new Idle(getTerminal()));
 		
 		// creates notification
 		for(Terminal terminal : terminalsThatAttemptedComm) {
@@ -68,6 +68,19 @@ public class Off extends Terminal.TerminalState {
 	@Override
 	public void becomeBusy() {
 		// Empty
+	}
+	
+	@Override
+	public void becomeSilent() {
+		setState(new Silence(getTerminal()));
+		
+		// creates notification
+		for(Terminal terminal : terminalsThatAttemptedComm) {
+			Client client = terminal.getClient();
+			client.addNotification(new OffToIdle(getTerminal()));
+		}
+		
+		terminalsThatAttemptedComm.clear();
 	}
 	
 	public boolean isSilent() {

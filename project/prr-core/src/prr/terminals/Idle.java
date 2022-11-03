@@ -3,6 +3,8 @@ package prr.terminals;
 import java.util.ArrayList;
 import java.util.List;
 
+import prr.exceptions.SameTerminalStateException;
+
 public class Idle extends Terminal.TerminalState {
 
 	/** Serial number for serialization. */
@@ -39,13 +41,18 @@ public class Idle extends Terminal.TerminalState {
 	}
 
 	@Override
-	public void turnOn() {
-		setState(new Silence(getTerminal()));
+	public void turnOn() throws SameTerminalStateException {
+		throw new SameTerminalStateException(this);
 	}
 
 	@Override
 	public void becomeBusy() {
 		setState(new Busy(getTerminal(), this));		
+	}
+	
+	@Override
+	public void becomeSilent() {
+		setState(new Silence(getTerminal()));
 	}
 	
 	public boolean isSilent() {
