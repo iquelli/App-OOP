@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import prr.exceptions.NotificationsAlreadyAtThatState;
 import prr.notifications.Notification;
+import prr.tariffs.Tariff;
 import prr.terminals.Terminal;
 import prr.visits.Visitor;
 import prr.visits.Visitable;
@@ -34,7 +35,7 @@ public class Client implements Serializable, Visitable {
         _key = key;
         _name = name;
         _taxId = taxId;
-        _level = new NormalLevel(); // normal level
+        _level = new NormalLevel(this); // normal level
     }
 
     
@@ -118,6 +119,45 @@ public class Client implements Serializable, Visitable {
 //  *        Balance		 *
 //  **************************
     
+    public void becomeNormal() {
+    	_level.becomeNormal();
+    }
+    
+    public void becomeGold() {
+    	_level.becomeGold();
+    }
+    
+    public void becomePlat() {
+    	_level.becomeGold();
+    }
+    
+    public abstract class Level implements Serializable {
+        
+        @Serial
+    	/** Serial number for serialization. */
+        private static final long serialVersionUID = 202208091753L;
+        
+        protected void setLevel(Level level) {
+        	_level = level;
+        }
+        
+        protected Client getClient() {
+        	return Client.this;
+        }
+        
+        /**
+         * Obtains the client's level in string.
+         * 
+         * @return String clients' level in string format
+         */
+        public abstract String getLevel();
+        public abstract Tariff getTariff();
+        public abstract void becomeNormal();
+        public abstract void becomeGold();
+        public abstract void becomePlat();
+    }
+
+    
     public long getRoundedPayments() {
         return (long)Math.round(_payments);
     }
@@ -133,6 +173,10 @@ public class Client implements Serializable, Visitable {
     public void performPayment(double price) {
     	_payments += price;
     	_debts -= price;
+    	
+    	if(getBalance() > 500 && getLevel().equals("NORMAL")) {
+    		becomeGold();
+    	}
     }
 	
 	public void addDebt(double debt) {

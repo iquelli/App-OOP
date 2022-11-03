@@ -1,6 +1,6 @@
 package prr.communications;
 
-import prr.client.Level;
+import prr.client.Client.Level;
 import prr.terminals.Terminal;
 
 public class TextCommunication extends Communication {

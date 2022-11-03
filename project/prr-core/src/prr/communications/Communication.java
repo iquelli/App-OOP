@@ -1,6 +1,6 @@
 package prr.communications;
 
-import prr.client.Level;
+import prr.client.Client.Level;
 import prr.terminals.Terminal;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
@@ -63,7 +63,7 @@ public abstract class Communication implements Visitable {
     	return (int)Math.round(_price);
     }
 	
-    public abstract int definePrice(Level clientLevel);
+    public abstract int definePrice(Level level);
     
     public void performPayment() {
     	_wasPaid = true;
