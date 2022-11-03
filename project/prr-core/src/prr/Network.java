@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -293,6 +294,9 @@ public class Network implements Serializable {
 		Collection<Client> clients = getAllClients();
 		
 		clients.removeIf(client -> !client.hasDebt());
+		
+		Collections.sort((List<Client>) clients, (cli1, cli2) -> 
+			(int) (((Client) cli1).getDebt() - ((Client) cli2).getDebt()));
 		
 		return clients;
 	}
