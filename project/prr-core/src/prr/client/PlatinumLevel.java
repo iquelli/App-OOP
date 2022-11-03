@@ -12,9 +12,11 @@ public class PlatinumLevel extends Client.Level{
     private static final long serialVersionUID = 202208091753L;
     
     private Tariff _tariff = new PlatTariff();
+	private int _consecutiveCommunications;	
     
     public PlatinumLevel(Client client) {
     	client.super();
+    	_consecutiveCommunications = 0;
     }
 
     /**
@@ -32,19 +34,29 @@ public class PlatinumLevel extends Client.Level{
     }
 
 	@Override
-	public void becomeNormal() {
-		setLevel(new NormalLevel(getClient()));
+	public void updateLevel() {
+		if (getClient().getBalance() < 0) {
+			setLevel(new NormalLevel(getClient()));
+			return;
+		}
 		
+		if (_consecutiveCommunications == 2) {
+			setLevel(new GoldLevel(getClient()));
+		}
+	}
+	
+	@Override
+	public void madeVideoCommunication() {
+		_consecutiveCommunications = 0;	
 	}
 
 	@Override
-	public void becomeGold() {
-		setLevel(new GoldLevel(getClient()));
+	public void madeVoiceCommunication() {
+		_consecutiveCommunications = 0;	
 	}
 
 	@Override
-	public void becomePlat() {
-		// already Platinum
-		
+	public void madeTextCommunication() {
+		_consecutiveCommunications++;	
 	}
 }

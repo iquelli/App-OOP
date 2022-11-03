@@ -1,7 +1,6 @@
 package prr.terminals;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 	private Map<Integer, Communication> _communications;
 	private double _payments;
 	private double _debts;
-	private List<Terminal> _friends;
+	private Map<String, Terminal> _friends;
 	private Communication _ongoingCommunication;
 	
 	public Terminal(String key, Client client) {
@@ -53,7 +52,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_communications = new TreeMap<Integer, Communication>();
 		_payments = 0.0;
 		_debts = 0.0;
-		_friends = new ArrayList<Terminal>();
+		_friends = new TreeMap<String, Terminal>(new TerminalKeyComparator());
 	}
 
 	
@@ -232,21 +231,15 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     		return;
     	}
     	
-    	_friends.add(terminal);
+    	_friends.put(terminalKey, terminal);
     }
     
-    public void removeFriend(String friendKey, Network network) throws UnknownTerminalKeyException {
-    	_friends.remove(network.getTerminal(friendKey));
+    public void removeFriend(String friendKey) throws UnknownTerminalKeyException {
+    	_friends.remove(friendKey);
     }
     
     public boolean isFriendWith(Terminal terminal) {
-    	for (Terminal friend : _friends) {
-    		if (friend.getTerminalKey().equals(terminal.getTerminalKey())) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+    	return _friends.containsKey(terminal.getTerminalKey());
     }
     
     public String getFriends() {
@@ -254,10 +247,7 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     		return null;
     	}
     	
-    	List<String> friends = _friends.stream().map(friend -> friend.getTerminalKey()).collect(Collectors.toList());
-    	friends.sort(new TerminalKeyComparator());
-    	
-    	return String.join(", ", friends);
+    	return String.join(", ", _friends.keySet().stream().collect(Collectors.toList()));
     }
 
     
@@ -275,7 +265,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	TextCommunication textCommunication = new TextCommunication(communicationId, this, destinationTerminal, message);
     	
     	network.addCommunication(textCommunication);
-		addDebt(textCommunication.getPrice());
     	
     	_communications.put(communicationId, textCommunication);
     	destinationTerminal.receiveTextCommunication(communicationId, textCommunication);
@@ -342,7 +331,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     public long endInteractiveCommunication(int duration) throws SameTerminalStateException {
     	_ongoingCommunication.endCommunication(duration);
     	long cost = (long) _ongoingCommunication.getPrice();
-    	addDebt(cost);
 
     	_ongoingCommunication.getReceiver().turnOn();
     	turnOn();

@@ -32,17 +32,24 @@ public class NormalLevel extends Client.Level {
     }
 
 	@Override
-	public void becomeNormal() {
-		// already normal	
+	public void updateLevel() {
+    	if(getClient().getBalance() > 500) {
+    		setLevel(new GoldLevel(getClient()));
+    	}
+	}
+	
+	@Override
+	public void madeVideoCommunication() {
+		//Empty
 	}
 
 	@Override
-	public void becomeGold() {
-		setLevel(new GoldLevel(getClient()));
+	public void madeVoiceCommunication() {
+		//Empty		
 	}
 
 	@Override
-	public void becomePlat() {
-		// not possible	
+	public void madeTextCommunication() {
+		//Empty		
 	}
 }

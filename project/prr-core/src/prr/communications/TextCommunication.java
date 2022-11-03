@@ -13,6 +13,7 @@ public class TextCommunication extends Communication {
 		super(key, sender, receiver);
 		_message = message;
 		super.endCommunication(0);
+		super.getSender().getClient().madeTextCommunication();
 	}
 	
 	@Override

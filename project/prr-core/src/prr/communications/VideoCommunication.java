@@ -23,6 +23,7 @@ public class VideoCommunication extends Communication {
 	public void endCommunication(int duration) {
 		_duration = duration;
 		super.endCommunication(duration);
+		super.getSender().getClient().madeVideoCommunication();
 	}
 	
 	@Override

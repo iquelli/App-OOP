@@ -114,21 +114,24 @@ public class Client implements Serializable, Visitable {
     		_notifications.add(notif);
     }
     
+    public void madeVideoCommunication() {
+    	_level.madeVideoCommunication();
+    }
+
+    public void madeVoiceCommunication() {
+    	_level.madeVoiceCommunication();
+    }
+
+    public void madeTextCommunication() {
+    	_level.madeTextCommunication();
+    }
     
 //  **************************
 //  *        Balance		 *
 //  **************************
     
-    public void becomeNormal() {
-    	_level.becomeNormal();
-    }
-    
-    public void becomeGold() {
-    	_level.becomeGold();
-    }
-    
-    public void becomePlat() {
-    	_level.becomeGold();
+    public void updateLevel() {
+    	_level.updateLevel();
     }
     
     public abstract class Level implements Serializable {
@@ -152,9 +155,10 @@ public class Client implements Serializable, Visitable {
          */
         public abstract String getLevel();
         public abstract Tariff getTariff();
-        public abstract void becomeNormal();
-        public abstract void becomeGold();
-        public abstract void becomePlat();
+        public abstract void updateLevel();
+        public abstract void madeVideoCommunication();
+        public abstract void madeVoiceCommunication();
+        public abstract void madeTextCommunication();
     }
 
     
@@ -174,9 +178,7 @@ public class Client implements Serializable, Visitable {
     	_payments += price;
     	_debts -= price;
     	
-    	if(getBalance() > 500 && getLevel().equals("NORMAL")) {
-    		becomeGold();
-    	}
+    	updateLevel();
     }
 	
 	public void addDebt(double debt) {

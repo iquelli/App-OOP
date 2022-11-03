@@ -71,6 +71,8 @@ public abstract class Communication implements Visitable {
     
     public void endCommunication(int duration) {
     	_price = definePrice(_sender.getClient().getLevel());
+    	_sender.addDebt(_price);
+    	_sender.getClient().updateLevel();
     	_finished = true;
     }
 

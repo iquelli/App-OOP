@@ -12,9 +12,11 @@ public class GoldLevel extends Client.Level{
     private static final long serialVersionUID = 202208091753L;
     
     private Tariff _tariff = new GoldTariff();
+    private int _consecutiveCommunications;
     
     public GoldLevel(Client client) {
     	client.super();
+    	_consecutiveCommunications = 0;
     }
 
     /**
@@ -32,21 +34,30 @@ public class GoldLevel extends Client.Level{
     }
 
 	@Override
-	public void becomeNormal() {
-		setLevel(new NormalLevel(getClient()));
+	public void updateLevel() {
+		if (getClient().getBalance() < 0) {
+			setLevel(new NormalLevel(getClient()));
+			return;
+		}
 		
+		if (_consecutiveCommunications == 5) {
+			setLevel(new PlatinumLevel(getClient()));
+		}
+	}
+	
+	@Override
+	public void madeVideoCommunication() {
+		_consecutiveCommunications++;
 	}
 
 	@Override
-	public void becomeGold() {
-		// already Gold
-		
+	public void madeVoiceCommunication() {
+		_consecutiveCommunications = 0;	
 	}
 
 	@Override
-	public void becomePlat() {
-		setLevel(new PlatinumLevel(getClient()));
-		
+	public void madeTextCommunication() {
+		_consecutiveCommunications = 0;	
 	}
     
 }
