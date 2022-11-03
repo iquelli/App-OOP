@@ -27,6 +27,15 @@ public abstract  class Notification implements Serializable, Visitable {
 	
 	public abstract String getType();
 	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof Notification) {
+			Notification notif = (Notification) other;
+			return notif.getTerminal().getClient().getKey().
+					equals(this.getTerminal().getClient().getKey());
+		}
+		return false;
+	}
 	
 //  **************************
 //  *         Visitor		 *

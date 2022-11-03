@@ -109,7 +109,8 @@ public class Client implements Serializable, Visitable {
     }
     
     public void addNotification(Notification notif) {
-    	_notifications.add(notif);
+    	if(!_notifications.contains(notif))
+    		_notifications.add(notif);
     }
     
     

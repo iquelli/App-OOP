@@ -8,6 +8,7 @@ import prr.client.Client;
 import prr.exceptions.DestinationIsOffException;
 import prr.exceptions.SameTerminalStateException;
 import prr.notifications.OffToIdle;
+import prr.notifications.OffToSilent;
 
 public class Off extends Terminal.TerminalState {
 
@@ -77,7 +78,7 @@ public class Off extends Terminal.TerminalState {
 		// creates notification
 		for(Terminal terminal : terminalsThatAttemptedComm) {
 			Client client = terminal.getClient();
-			client.addNotification(new OffToIdle(getTerminal()));
+			client.addNotification(new OffToSilent(getTerminal()));
 		}
 		
 		terminalsThatAttemptedComm.clear();
