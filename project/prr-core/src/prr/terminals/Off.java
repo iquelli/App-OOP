@@ -36,14 +36,14 @@ public class Off extends Terminal.TerminalState {
 	
 	@Override
 	public boolean canReceiveTextCommunication(Terminal terminal) throws DestinationIsOffException {
-		if(!terminalsThatAttemptedComm.contains(terminal))
+		if(!terminalsThatAttemptedComm.contains(terminal) && terminal.getClient().canReceiveNotifications())
 			terminalsThatAttemptedComm.add(terminal);
 		throw new DestinationIsOffException();
 	}
 	
 	@Override
 	public boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsOffException {
-		if(!terminalsThatAttemptedComm.contains(terminal))
+		if(!terminalsThatAttemptedComm.contains(terminal) && terminal.getClient().canReceiveNotifications())
 			terminalsThatAttemptedComm.add(terminal);
 		throw new DestinationIsOffException();
 	}

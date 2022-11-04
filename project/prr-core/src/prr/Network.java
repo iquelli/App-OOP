@@ -312,11 +312,8 @@ public class Network implements Serializable {
 	public List<Notification> getAllNotif(String clientKey) throws UnknownClientKeyException {
 		Client client = getClient(clientKey);
 		List<Notification> notifs = new ArrayList<Notification>();
-		if(client.canReceiveNotifications()) {
-			notifs = client.getNotifications().stream().collect(Collectors.toList());
-			client.clearNotifications();
-			return notifs;
-		}
+		notifs = client.getNotifications().stream().filter(n -> n.isRegisteredOnApp()).collect(Collectors.toList());
+		client.clearNotifications();
 		return notifs;
 	}
 	

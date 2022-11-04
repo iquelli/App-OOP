@@ -35,7 +35,7 @@ public class Silence extends Terminal.TerminalState {
 	
 	@Override
 	public boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsSilenceException {
-		if(!terminalsThatAttemptedComm.contains(terminal))
+		if(!terminalsThatAttemptedComm.contains(terminal) && terminal.getClient().canReceiveNotifications())
 			terminalsThatAttemptedComm.add(terminal);
 		throw new DestinationIsSilenceException();
 	}

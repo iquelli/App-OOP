@@ -40,7 +40,7 @@ public class Busy extends Terminal.TerminalState {
 	
 	@Override
 	public boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsBusyException {
-		if(!terminalsThatAttemptedComm.contains(terminal))
+		if(!terminalsThatAttemptedComm.contains(terminal) && terminal.getClient().canReceiveNotifications())
 			terminalsThatAttemptedComm.add(terminal);
 		throw new DestinationIsBusyException();
 	}

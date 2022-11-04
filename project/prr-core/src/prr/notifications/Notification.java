@@ -12,9 +12,16 @@ public abstract  class Notification implements Serializable, Visitable {
 	private static final long serialVersionUID = 202208091753L;
 
 	private Terminal _receiver;
+	private DeliveryMethod _deliveryMethod;
 	
 	public Notification(Terminal receiver) {
 		_receiver = receiver;
+		_deliveryMethod = new RegisterOnApp();
+	}
+	
+	public Notification(Terminal receiver, DeliveryMethod deliveryMethod) {
+		_receiver = receiver;
+		_deliveryMethod = deliveryMethod;
 	}
 	
 	public String getTerminalId() {
@@ -23,6 +30,10 @@ public abstract  class Notification implements Serializable, Visitable {
 	
 	public Terminal getTerminal() {
 		return _receiver;
+	}
+	
+	public boolean isRegisteredOnApp() {
+		return _deliveryMethod.getType().equals("RegisterOnApp");
 	}
 	
 	public abstract String getType();
