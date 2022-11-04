@@ -6,7 +6,6 @@ import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-//FIXME add more imports if needed
 
 /**
  * Register terminal.
@@ -22,7 +21,6 @@ class DoRegisterTerminal extends Command<Network> {
 		addStringField(keyText, Prompt.terminalKey());
 		addOptionField(typeText, Prompt.terminalType(), "BASIC", "FANCY");
 		addStringField(clientKeyText, Prompt.clientKey());
-		//FIXME add command fields
 	}
 
 	@Override

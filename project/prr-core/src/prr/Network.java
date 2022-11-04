@@ -29,7 +29,6 @@ import prr.exceptions.SameTerminalStateException;
 import prr.client.Client;
 import prr.communications.Communication;
 
-
 /**
  * Class Store implements a store.
  */
@@ -138,7 +137,8 @@ public class Network implements Serializable {
 	 * @throws SameTerminalStateException 
 	 */
 	private void interpretsLine(String args[]) throws NumberFormatException,
-	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , DuplicateTerminalKeyException, UnknownTerminalKeyException, UnrecognizedEntryException, SameTerminalStateException{
+	 DuplicateClientKeyException, UnknownClientKeyException, InvalidTerminalKeyException , 
+	 DuplicateTerminalKeyException, UnknownTerminalKeyException, UnrecognizedEntryException, SameTerminalStateException {
 		switch (args[0]) {
 			case "CLIENT": 
 				evaluateClientEntry(args);
@@ -402,7 +402,8 @@ public class Network implements Serializable {
 	 * @throws SameTerminalStateException 
 	 */
 	public void evaluateTerminalEntry(String args[]) throws DuplicateTerminalKeyException, 
-					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, UnrecognizedEntryException, SameTerminalStateException {
+					InvalidTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException,
+					UnrecognizedEntryException, SameTerminalStateException {
 		if (args.length != 4)
 			throw new UnrecognizedEntryException(args[0]);
 		else 
@@ -455,7 +456,8 @@ public class Network implements Serializable {
 	 * @throws UnknowTerminalKeyException  if the terminal key does not exist
 	 */
 	public void registerTerminal(String terminalKey, String clientKey, String type, String state) throws 
-	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, UnknownTerminalKeyException, SameTerminalStateException {
+	 InvalidTerminalKeyException, DuplicateTerminalKeyException, UnknownClientKeyException, 
+	 UnknownTerminalKeyException, SameTerminalStateException {
 		registerTerminal(terminalKey, clientKey, type);
 		Terminal terminal = getTerminal(terminalKey);
 		switch (state) {

@@ -27,7 +27,6 @@ public class NetworkManager {
 
 	/** The network itself. */
 	private Network _network = new Network();
-        //FIXME  addmore fields if needed
 	
 	/** The network manager. */
 	private String _fileName = "";
@@ -48,9 +47,9 @@ public class NetworkManager {
 
 	/**
 	 * @param filename name of the file containing the serialized application's state
-         *        to load.
+     *        to load.
 	 * @throws UnavailableFileException if the specified file does not exist or there is
-         *         an error while processing this file.
+     *         an error while processing this file.
 	 */
 	public void load(String filename) throws UnavailableFileException {
 		try (ObjectInputStream ois = new ObjectInputStream(

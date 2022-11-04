@@ -4,7 +4,6 @@ import prr.Network;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import prr.app.Render;
-//FIXME add more imports if needed
 
 /**
  * Show all clients.

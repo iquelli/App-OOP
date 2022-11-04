@@ -4,7 +4,6 @@ import prr.Network;
 import prr.app.Render;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-//FIXME more imports if needed
 
 /**
  * Show clients with positive balance.

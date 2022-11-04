@@ -4,7 +4,6 @@ import prr.Network;
 import prr.exceptions.UnknownCommunicationKeyException;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
-// Add more imports if needed
 
 /**
  * Perform payment.

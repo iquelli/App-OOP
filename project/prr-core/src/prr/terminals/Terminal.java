@@ -26,12 +26,10 @@ import prr.util.TerminalKeyComparator;
 import prr.visits.Visitable;
 import prr.visits.Visitor;
 
-// FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
-
 /**
  * Abstract terminal.
  */
-abstract public class Terminal implements Serializable, Visitable /* FIXME maybe add more interfaces */{
+abstract public class Terminal implements Serializable, Visitable {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
@@ -54,7 +52,6 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 		_debts = 0.0;
 		_friends = new TreeMap<String, Terminal>(new TerminalKeyComparator());
 	}
-
 	
 //  **************************
 //  *        General		 *
@@ -255,7 +252,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  *   Text Communication	 *
 //  **************************
     
-    public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws DestinationIsOffException, UnknownTerminalKeyException {
+    public void sendTextCommunication(String destinationTerminalKey, String message, Network network) throws 
+    DestinationIsOffException, UnknownTerminalKeyException {
     	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
     	
     	destinationTerminal.canReceiveTextCommunication(this);
@@ -284,7 +282,8 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
 //  **************************
     
     public void sendInteractiveCommunication(String destinationTerminalKey, String communicationType, Network network) throws 
-    DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
+    DestinationIsOffException, DestinationIsBusyException, DestinationIsSilenceException, UnknownTerminalKeyException, 
+    CommunicationUnsupportedAtOriginException, CommunicationUnsupportedAtDestinationException {
     	Terminal destinationTerminal = network.getTerminal(destinationTerminalKey);
     	
     	destinationTerminal.canReceiveInteractiveCommunication(this);
@@ -308,12 +307,14 @@ abstract public class Terminal implements Serializable, Visitable /* FIXME maybe
     	destinationTerminal.receiveInteractiveCommunication(com);
     }
     
-    private boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsOffException, DestinationIsSilenceException, DestinationIsBusyException {
+    private boolean canReceiveInteractiveCommunication(Terminal terminal) throws DestinationIsOffException, 
+    DestinationIsSilenceException, DestinationIsBusyException {
     	return _state.canReceiveInteractiveCommunication(terminal);
     }
     
     // Makes sure that terminals are able to handle a certain communication type
-    private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
+    private void terminalsCanHandleCommunication(Communication com, Terminal destinationTerminal) throws 
+    CommunicationUnsupportedAtDestinationException, CommunicationUnsupportedAtOriginException {
 		if (!canHandleCommunication(com.getType())) {
 			throw new CommunicationUnsupportedAtOriginException();
 		}

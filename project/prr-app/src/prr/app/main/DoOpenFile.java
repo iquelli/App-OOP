@@ -4,7 +4,6 @@ import prr.NetworkManager;
 import prr.app.exceptions.FileOpenFailedException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-//Add more imports if needed
 
 /**
  * Command to open a file.

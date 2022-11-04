@@ -1,15 +1,9 @@
 package prr.app.clients;
 
-import java.util.PropertyPermission;
-
 import prr.Network;
 import prr.app.exceptions.DuplicateClientKeyException;
-import prr.exceptions.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-import prr.app.exceptions.DuplicateClientKeyException;
-
-//FIXME add more imports if needed
 
 /**
  * Register new client.
@@ -25,20 +19,16 @@ class DoRegisterClient extends Command<Network> {
 		addStringField(keyText, Prompt.key());
 		addStringField(nameText, Prompt.name());
 		addIntegerField(taxIdText, Prompt.taxId());
-                //FIXME add command fields
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-
 		try {
 	        String clientKey = stringField(keyText);
 			String clientName = stringField(nameText);
 			int clientTaxId = integerField(taxIdText);
 						
 			_receiver.registerClient(clientKey, clientName, clientTaxId);
-			
-
 		}
 		catch(prr.exceptions.DuplicateClientKeyException e) {
 			throw new DuplicateClientKeyException(e.getKey());

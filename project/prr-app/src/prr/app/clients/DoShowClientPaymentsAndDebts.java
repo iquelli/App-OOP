@@ -5,7 +5,6 @@ import prr.app.exceptions.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import java.util.List;
-//FIXME add more imports if needed
 
 /**
  * Show the payments and debts of a client.

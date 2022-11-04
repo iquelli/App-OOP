@@ -170,6 +170,10 @@ public class Client implements Serializable, Visitable {
         return (long)Math.round(_debts);
     }
     
+    public double getDebt() {
+    	return _debts;
+    }
+    
     public double getBalance() {
     	return _payments - _debts;
     }
